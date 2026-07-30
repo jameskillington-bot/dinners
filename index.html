@@ -159,8 +159,12 @@ ol.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--mo
 .kbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .kbar button{background:transparent;border:1.5px solid var(--line);border-radius:100px;padding:7px 13px;font-size:12.5px;color:var(--ink-2)}
 .kbar button:hover{border-color:var(--ink);color:var(--ink)}
-.addrow{display:flex;gap:8px;margin:10px 0 0}
-.addrow input{flex:1;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:11px 13px;font-size:14px}
+.addrow{display:flex;gap:8px;margin:10px 0 0;flex-wrap:wrap}
+.addrow input{flex:1 1 150px;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:11px 13px;font-size:14px}
+.addrow select{flex:0 1 auto;max-width:100%;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:11px 10px;font-size:13.5px;font-family:inherit;color:var(--ink)}
+.kitem>.klab{display:flex;gap:9px;align-items:center;flex:1;min-width:0;cursor:pointer}
+.kitem .drop{flex:0 0 auto;background:transparent;border:0;color:var(--paprika);font-size:17px;line-height:1;padding:0 1px;opacity:.45}
+.kitem .drop:hover{opacity:1}
 textarea.copybox{width:100%;min-height:150px;font-family:var(--mono);font-size:12.5px;padding:13px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink);resize:vertical}
 
 .cook{position:fixed;inset:0;background:var(--ink);color:var(--chalk);z-index:60;display:none;flex-direction:column;padding:22px}
@@ -293,6 +297,41 @@ const PANTRY={
 };
 const LABEL={}, kitchen=new Set();
 Object.values(PANTRY).flat().forEach(([k,l,d])=>{LABEL[k]=l; if(d) kitchen.add(k)});
+const SECTIONS=Object.keys(PANTRY);
+
+/* ============================================================
+   ITEMS YOU ADD YOURSELF
+   Filed into one of the real sections above, so an added item
+   appears in the right place in the panel and on the shopping
+   list. The guess below is only the first suggestion — whatever
+   is chosen in the dropdown wins. Order matters here: the more
+   specific patterns must come before the looser ones, so
+   "coconut milk" lands in tins rather than dairy.
+   ============================================================ */
+const GUESS=[
+  [/frozen|ice cream|fish finger|oven chip/i,"Freezer"],
+  [/peanut butter|almond butter|sesame/i,"Sauces & condiments"],
+  [/black pepper|peppercorn/i,"Store cupboard"],
+  [/coconut milk|chopped tomato|passata|tinned|tin of|jar of|canned|chickpea|lentil|kidney bean|butter bean|cannellini|baked bean|olives?\b|gherkin|cornichon|caper|artichoke|sweetcorn|pickle/i,"Tins & jars"],
+  [/chicken|beef|pork|lamb|mince|steak|sausage|bacon|\bham\b|turkey|duck|fish|salmon|\bcod\b|tuna|prawn|shrimp|haddock|mackerel|sardine|anchovy|chorizo|salami|seafood|meatball|mussel|scallop/i,"Meat & fish"],
+  [/milk|cheese|cheddar|halloumi|feta|mozzarella|parmesan|yogh?urt|butter|cream|custard|\beggs?\b|margarine|tofu|hummus|houmous|quark|mascarpone|ricotta|brie|paneer|mayo/i,"Dairy & chilled"],
+  [/onion|garlic|potato|carrot|broccoli|tomato|cucumber|lemon|lime|lettuce|salad|leaves|avocado|peppers|spinach|mushroom|courgette|aubergine|cabbage|cauliflower|leek|celery|ginger|chill?i|parsley|coriander|basil|\bmint\b|thyme|rosemary|apple|banana|orange|berr(y|ies)|grape|\bpear\b|melon|kale|sprout|beetroot|radish|squash|pumpkin|asparagus|rocket|shallot|parsnip|swede|turnip|fruit|\bveg\b|cress|fennel/i,"Fresh veg & fruit"],
+  [/sauce|ketchup|mustard|\bsoy\b|vinegar|honey|\bjam\b|marmite|worcester|sriracha|harissa|tahini|syrup|dressing|chutney|relish|marinade|\bpaste\b|maple/i,"Sauces & condiments"],
+  [/pasta|spaghetti|penne|fusilli|macaroni|\brice\b|noodle|couscous|quinoa|bulgur|flour|sugar|\boats?\b|porridge|cereal|bread|wrap|tortilla|pitta|naan|stock|spice|herb|cumin|paprika|cinnamon|\boil\b|\bnuts?\b|almond|cashew|walnut|seed|raisin|sultana|cracker|breadcrumb|cornflour|baking|yeast|\btea\b|coffee|chocolate|biscuit|crisp|popcorn/i,"Store cupboard"]
+];
+const guessSection=t=>{ for(const [re,g] of GUESS) if(re.test(t)) return g; return "Store cupboard" };
+
+let ADDED=[];                                    // [{key,label,section}]
+const isMine=k=>String(k).startsWith("x_");
+function applyAdded(){
+  delete PANTRY["Added by you"];                 // retire the old catch-all bucket
+  Object.keys(PANTRY).forEach(g=>{PANTRY[g]=PANTRY[g].filter(([k])=>!isMine(k))});
+  ADDED.forEach(it=>{
+    if(!SECTIONS.includes(it.section)) it.section=guessSection(it.label);
+    PANTRY[it.section].push([it.key,it.label,0]);
+    LABEL[it.key]=it.label;
+  });
+}
 
 /* ============================================================
    RECIPE POOL — ingredient format: [qty, unit, name, pantryKey]
@@ -532,8 +571,12 @@ const rec=id=>POOL.find(r=>r.id===id);
 const SAVED=STORE.get();
 if(SAVED){
   if(Array.isArray(SAVED.added)&&SAVED.added.length){
-    PANTRY["Added by you"]=SAVED.added;
-    SAVED.added.forEach(([k,l])=>LABEL[k]=l);
+    // older saves stored [key,label,1] with no section — file those by guess
+    ADDED=SAVED.added.map(a=>Array.isArray(a)
+      ? {key:a[0],label:a[1],section:typeof a[2]==="string"&&a[2]?a[2]:guessSection(a[1]||"")}
+      : {key:a&&a.key,label:a&&a.label,section:(a&&a.section)||guessSection((a&&a.label)||"")}
+    ).filter(a=>a.key&&a.label);
+    applyAdded();
   }
   if(Array.isArray(SAVED.kitchen)){kitchen.clear();SAVED.kitchen.forEach(k=>kitchen.add(k))}
   if(Array.isArray(SAVED.week)&&SAVED.week.length===7&&SAVED.week.every(rec)) week=SAVED.week;
@@ -542,7 +585,7 @@ if(SAVED){
   picked=new Set(Array.isArray(SAVED.picked)?SAVED.picked.filter(rec):week);
 }
 function save(){
-  STORE.set({kitchen:[...kitchen],added:PANTRY["Added by you"]||[],week,spares,custom,picked:[...picked]});
+  STORE.set({kitchen:[...kitchen],added:ADDED,week,spares,custom,picked:[...picked]});
 }
 let genPool=[], genPicked=new Set();
 const FR={0.25:"¼",0.5:"½",0.75:"¾"};
@@ -792,20 +835,28 @@ function paintKitchen(){
         <button data-all="1">Tick everything</button>
         <button data-all="0">Clear everything</button>
         <button data-copy>Copy list as text</button>
-        <button data-wipe>Start again from the original list</button>
+        <button data-wipe>Reset ticks to the original list</button>
       </div>
       ${Object.entries(PANTRY).map(([g,items])=>`
         <p class="section-title">${g}</p>
-        <div class="kgrid">${items.map(([k,l])=>`
+        <div class="kgrid">${items.map(([k,l])=>isMine(k)?`
+          <div class="kitem${kitchen.has(k)?" on":""}">
+            <label class="klab"><input type="checkbox" data-k="${k}" ${kitchen.has(k)?"checked":""}><span>${esc(l)}</span></label>
+            <button class="drop" data-drop="${esc(k)}" aria-label="Remove ${esc(l)} from the list">×</button>
+          </div>`:`
           <label class="kitem${kitchen.has(k)?" on":""}">
-            <input type="checkbox" data-k="${k}" ${kitchen.has(k)?"checked":""}>${l}</label>`).join("")}</div>`).join("")}
+            <input type="checkbox" data-k="${k}" ${kitchen.has(k)?"checked":""}>${esc(l)}</label>`).join("")}</div>`).join("")}
       <p class="section-title">Something not listed</p>
       <div class="addrow">
-        <input id="newitem" placeholder="e.g. Halloumi" aria-label="Add an item">
+        <input id="newitem" placeholder="e.g. Halloumi" aria-label="Add an item" autocomplete="off">
+        <select id="newsection" aria-label="Which section it belongs in">
+          ${SECTIONS.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join("")}
+        </select>
         <button class="btn" data-addnew style="flex:0 0 auto">Add</button>
       </div>
       <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin-top:10px">
-        Added items are recorded for your shopping list but won't unlock new recipes on their own.</p>
+        The section is guessed as you type — change it if it guesses wrong. Added items are kept
+        for good and shared with anyone using your code, but won't unlock new recipes on their own.</p>
       <div class="sheet-actions">
         <button class="btn" data-close>Done</button>
       </div>
@@ -814,6 +865,14 @@ function paintKitchen(){
 document.getElementById("open-kitchen").onclick=()=>{paintKitchen();show("kitchen-overlay")};
 document.getElementById("kitchen-overlay").onclick=e=>{
   if(e.target.id==="kitchen-overlay"||e.target.closest("[data-close]")){shut("kitchen-overlay");draw();return}
+  const dr=e.target.closest("[data-drop]");
+  if(dr){ e.preventDefault();
+    const key=dr.dataset.drop, it=ADDED.find(a=>a.key===key);
+    if(it&&confirm(`Remove “${it.label}” from your kitchen list for good?`)){
+      ADDED=ADDED.filter(a=>a.key!==key); kitchen.delete(key);
+      applyAdded(); save(); paintKitchen();
+    }
+    return }
   const k=e.target.closest("[data-k]");
   if(k){ k.checked?kitchen.add(k.dataset.k):kitchen.delete(k.dataset.k);
     k.closest(".kitem").classList.toggle("on",k.checked);
@@ -825,13 +884,24 @@ document.getElementById("kitchen-overlay").onclick=e=>{
     save(); paintKitchen(); return }
   if(e.target.closest("[data-addnew]")){
     const v=document.getElementById("newitem").value.trim();
-    if(v){ const key="x_"+v.toLowerCase().replace(/\W+/g,"_");
-      if(!PANTRY["Added by you"]) PANTRY["Added by you"]=[];
-      if(!LABEL[key]){PANTRY["Added by you"].push([key,v,1]);LABEL[key]=v}
-      kitchen.add(key); save(); paintKitchen() }
+    if(v){
+      // if it is already on the list under that name, just tick it rather than duplicate
+      const twin=Object.keys(LABEL).find(x=>!isMine(x)&&LABEL[x].toLowerCase()===v.toLowerCase());
+      if(twin){ kitchen.add(twin); save(); paintKitchen(); return }
+      const sel=document.getElementById("newsection");
+      const section=sel&&SECTIONS.includes(sel.value)?sel.value:guessSection(v);
+      const key="x_"+v.toLowerCase().replace(/\W+/g,"_");
+      const mine=ADDED.find(a=>a.key===key);
+      if(mine){ mine.label=v; mine.section=section } else ADDED.push({key,label:v,section});
+      applyAdded(); kitchen.add(key); save(); paintKitchen();
+      const box=document.getElementById("newitem"); if(box) box.focus();
+    }
     return }
   if(e.target.closest("[data-wipe]")){
-    STORE.wipe(); location.reload(); return }
+    if(!confirm("Put every tick back to the original list? Items you added yourself are kept.")) return;
+    kitchen.clear();
+    Object.values(PANTRY).flat().forEach(([key,,d])=>{ if(d&&!isMine(key)) kitchen.add(key) });
+    save(); paintKitchen(); return }
   if(e.target.closest("[data-copy]")){
     const txt=Object.entries(PANTRY).map(([g,items])=>{
       const have=items.filter(([k])=>kitchen.has(k)).map(([,l])=>l);
@@ -845,6 +915,23 @@ document.getElementById("kitchen-overlay").onclick=e=>{
     e.target.textContent="Copied — or select the box below";
     return }
 };
+/* guess the section while you type, until the dropdown is set by hand */
+document.getElementById("kitchen-overlay").addEventListener("input",e=>{
+  if(e.target.id!=="newitem") return;
+  const sel=document.getElementById("newsection");
+  if(!sel||sel.dataset.touched==="1") return;
+  const v=e.target.value.trim();
+  if(v.length>1) sel.value=guessSection(v);
+});
+document.getElementById("kitchen-overlay").addEventListener("change",e=>{
+  if(e.target.id==="newsection") e.target.dataset.touched="1";
+});
+document.getElementById("kitchen-overlay").addEventListener("keydown",e=>{
+  if(e.target.id==="newitem"&&e.key==="Enter"){
+    e.preventDefault();
+    document.querySelector("#kitchen-overlay [data-addnew]").click();
+  }
+});
 
 /* ---------- shopping list ---------- */
 function paintList(){
