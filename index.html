@@ -1,0 +1,905 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>This Week's Dinners</title>
+<meta name="description" content="Seven dinners a week, built from what's already in the kitchen.">
+<meta name="theme-color" content="#16211B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="This Week">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16211B; --ink-2:#3D4A43; --chalk:#ECEFE8; --paper:#FFFFFF;
+  --turmeric:#F2B705; --herb:#2F6D4F; --paprika:#A8281B; --line:#D3D8CE; --radius:3px;
+  --display:"Archivo Black","Archivo","Haettenschweiler","Arial Narrow",sans-serif;
+  --body:"Archivo","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--chalk);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
+:focus-visible{outline:3px solid var(--turmeric);outline-offset:2px}
+
+.masthead{background:var(--ink);color:var(--chalk);padding:max(26px,env(safe-area-inset-top)) 20px 0;border-bottom:6px solid var(--turmeric)}
+.mast-inner{max-width:1120px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--turmeric);margin:0 0 10px}
+.wordmark{font-family:var(--display);font-size:clamp(30px,6.2vw,64px);line-height:.88;letter-spacing:-.02em;text-transform:uppercase;margin:0 0 14px}
+.wordmark em{font-style:normal;color:var(--turmeric)}
+.mast-sub{max-width:56ch;color:#B9C3BB;font-size:15px;margin:0 0 20px}
+.mast-bar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;border-top:1px solid #2E3B34;padding:12px 0}
+.mast-stat{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8FA096;margin-right:16px}
+.mast-stat b{color:var(--chalk);font-weight:600}
+.mast-bar .spacer{flex:1}
+.act{border:1.5px solid #3E4E45;background:transparent;color:var(--chalk);font-family:var(--mono);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:9px 14px;border-radius:var(--radius)}
+.act:hover{border-color:var(--turmeric);color:var(--turmeric)}
+.act.primary{background:var(--turmeric);border-color:var(--turmeric);color:var(--ink)}
+.act.primary:hover{background:#ffc93c;color:var(--ink)}
+
+.shelf{background:var(--paprika);color:#fff;padding:14px 20px}
+.shelf-inner{max-width:1120px;margin:0 auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.shelf h2{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin:0;white-space:nowrap;opacity:.85}
+.tickets{display:flex;gap:7px;flex-wrap:wrap}
+.ticket{background:#fff;color:var(--paprika);border:0;font-family:var(--mono);font-size:12px;font-weight:600;padding:6px 11px;border-radius:var(--radius);box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.ticket:hover{background:var(--turmeric);color:var(--ink)}
+
+.wrap{max-width:1120px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-left)) env(safe-area-inset-bottom)}
+.strip{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:20px 0 4px}
+.search{flex:1;min-width:190px;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:12px 15px;font-size:15px;color:var(--ink)}
+.search::placeholder{color:#93A099}
+.pills{display:flex;flex-wrap:wrap;gap:7px}
+.pill{background:transparent;border:1.5px solid var(--line);color:var(--ink-2);border-radius:100px;padding:8px 14px;font-size:13px;font-weight:500}
+.pill:hover{border-color:var(--ink);color:var(--ink)}
+.pill[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--chalk)}
+
+.band{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:1.5px solid var(--ink);margin-top:26px;padding-top:10px;flex-wrap:wrap}
+.band h2{font-family:var(--display);text-transform:uppercase;font-size:18px;margin:0}
+.band p{font-family:var(--mono);font-size:11px;color:var(--ink-2);margin:0}
+.band .reset{background:none;border:0;font-family:var(--mono);font-size:11px;color:var(--paprika);text-decoration:underline}
+
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));padding:16px 0 0}
+.card{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);display:flex;flex-direction:column;overflow:hidden;transition:transform .14s ease,box-shadow .14s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 0 -4px rgba(22,33,27,.16)}
+.card-head{position:relative;height:92px;display:flex;align-items:flex-end;justify-content:flex-end;padding:12px;color:#fff;overflow:hidden}
+.card-head::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(-52deg,rgba(255,255,255,.09) 0 2px,transparent 2px 13px)}
+.day{position:absolute;top:8px;left:12px;z-index:2;font-family:var(--display);text-transform:uppercase;font-size:25px;line-height:1}
+.tagline{position:relative;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;background:rgba(0,0,0,.34);padding:4px 8px;border-radius:var(--radius)}
+.card-body{padding:15px;display:flex;flex-direction:column;flex:1}
+.card h3{font-family:var(--display);font-size:19px;line-height:1.08;text-transform:uppercase;margin:0 0 8px}
+.blurb{font-size:13.5px;color:var(--ink-2);margin:0 0 13px;flex:1}
+.buy-flag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:4px 8px;border-radius:var(--radius);margin-bottom:12px;align-self:flex-start}
+.buy-none{background:#E4F0E7;color:var(--herb)}
+.buy-some{background:#FDF1CE;color:#7A5B00}
+.meta{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--ink-2);border-top:1px solid var(--line);padding-top:10px;margin-bottom:12px}
+.card-actions{display:flex;gap:8px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--chalk);border-radius:var(--radius);padding:10px 12px;font-size:13px;font-weight:600;flex:1}
+.btn:hover{background:#0C130F}
+.btn.ghost{background:transparent;color:var(--ink);flex:0 0 auto}
+.btn.ghost:hover{background:var(--turmeric);border-color:var(--turmeric)}
+.btn.ghost[aria-pressed="true"]{background:var(--turmeric);border-color:var(--turmeric)}
+.spare .card-head{background:#3D4A43!important}
+.empty{grid-column:1/-1;border:2px dashed var(--line);border-radius:var(--radius);padding:36px 24px;text-align:center;color:var(--ink-2)}
+.empty strong{display:block;font-family:var(--display);text-transform:uppercase;font-size:18px;color:var(--ink);margin-bottom:6px}
+.footnote{font-family:var(--mono);font-size:11px;color:var(--ink-2);padding:30px 0 60px;border-top:1px solid var(--line);margin-top:36px;line-height:1.7}
+
+.overlay{position:fixed;inset:0;background:rgba(12,19,15,.62);display:none;z-index:50;overflow-y:auto}
+.overlay.open{display:block}
+.sheet{background:var(--chalk);max-width:820px;margin:0 auto;min-height:100%}
+.sheet-head{position:relative;padding:26px;color:#fff;overflow:hidden}
+.sheet-head::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(-52deg,rgba(255,255,255,.08) 0 2px,transparent 2px 14px)}
+.sheet-head>*{position:relative;z-index:2}
+.close{position:absolute;top:16px;right:16px;z-index:5;background:rgba(0,0,0,.36);color:#fff;border:0;border-radius:100px;width:36px;height:36px;font-size:19px;line-height:1}
+.close:hover{background:#000}
+.daytag{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;background:rgba(0,0,0,.34);padding:4px 8px;border-radius:var(--radius)}
+.sheet-head h2{font-family:var(--display);text-transform:uppercase;line-height:.95;font-size:clamp(25px,5.4vw,40px);margin:12px 0 10px;max-width:16ch}
+.sheet-meta{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;opacity:.92}
+.sheet-body{padding:24px 26px 90px}
+.section-title{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);border-bottom:1.5px solid var(--ink);padding-bottom:7px;margin:28px 0 14px}
+.section-title:first-child{margin-top:0}
+
+.dial{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--ink);border-radius:var(--radius);padding:14px 16px;color:var(--chalk)}
+.dial-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#94A69B}
+.dial-set{display:flex;border:2px solid var(--turmeric);border-radius:var(--radius);overflow:hidden}
+.dial-set button{background:transparent;color:var(--turmeric);border:0;font-family:var(--mono);font-weight:600;font-size:16px;padding:9px 20px}
+.dial-set button+button{border-left:2px solid var(--turmeric)}
+.dial-set button[aria-pressed="true"]{background:var(--turmeric);color:var(--ink)}
+.dial-note{font-family:var(--mono);font-size:11px;color:#94A69B;margin-left:auto}
+
+ul.ing{list-style:none;margin:0;padding:0}
+ul.ing li{border-bottom:1px solid var(--line)}
+ul.ing label{display:flex;gap:12px;align-items:baseline;padding:11px 4px;cursor:pointer}
+ul.ing input{margin:0;width:17px;height:17px;accent-color:var(--herb);flex:0 0 auto;position:relative;top:3px}
+.qty{font-family:var(--mono);font-weight:600;font-size:14px;color:var(--herb);min-width:74px;flex:0 0 auto}
+.iname{flex:1}
+ul.ing input:checked~.iname,ul.ing input:checked~.qty{opacity:.42;text-decoration:line-through}
+.buy-chip{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--turmeric);color:var(--ink);padding:2px 6px;border-radius:var(--radius);margin-left:8px;vertical-align:2px}
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+ol.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-weight:600;color:var(--turmeric);background:var(--ink);border-radius:var(--radius);padding:3px 7px;height:fit-content;font-size:12px;flex:0 0 auto}
+.nutri{display:grid;grid-template-columns:repeat(auto-fit,minmax(94px,1fr));gap:10px}
+.nutri div{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:12px}
+.nutri b{display:block;font-family:var(--mono);font-size:20px}
+.nutri span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.tip{background:var(--paper);border-left:5px solid var(--turmeric);padding:14px 16px;font-size:14.5px;color:var(--ink-2)}
+.sheet-actions{position:sticky;bottom:0;background:var(--chalk);border-top:1.5px solid var(--ink);padding:14px 26px;display:flex;gap:10px;flex-wrap:wrap;margin:0 -26px -90px}
+.sheet-actions .btn{flex:1;min-width:128px}
+.sheet-actions .btn:disabled{opacity:.35;cursor:not-allowed}
+
+/* menu generator */
+.opt{display:flex;gap:13px;align-items:flex-start;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:13px;margin-bottom:9px;cursor:pointer}
+.opt:hover{border-color:var(--ink-2)}
+.opt.on{border-color:var(--herb);background:#F4FAF5;box-shadow:inset 3px 0 0 var(--herb)}
+.opt.disabled{opacity:.45}
+.opt input{margin:3px 0 0;width:18px;height:18px;accent-color:var(--herb);flex:0 0 auto}
+.opt-main{flex:1;min-width:0}
+.opt-main h4{margin:0 0 3px;font-size:15.5px;font-weight:600}
+.opt-main p{margin:0;font-size:13px;color:var(--ink-2)}
+.opt-tags{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin-top:6px;display:flex;gap:12px;flex-wrap:wrap}
+.opt-tags .miss{color:#7A5B00}
+.opt-tags .none{color:var(--herb)}
+.counter{position:sticky;top:0;z-index:4;background:var(--ink);color:var(--chalk);border-radius:var(--radius);padding:12px 15px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.counter b{font-family:var(--mono);font-size:20px;color:var(--turmeric)}
+.counter span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94A69B}
+.counter .reroll{margin-left:auto;background:transparent;border:1.5px solid #3E4E45;color:var(--chalk);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;border-radius:var(--radius)}
+.counter .reroll:hover{border-color:var(--turmeric);color:var(--turmeric)}
+
+/* kitchen */
+.kgroup{margin-bottom:6px}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:6px}
+.kitem{display:flex;gap:9px;align-items:center;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:9px 11px;font-size:13.5px;cursor:pointer}
+.kitem.on{border-color:var(--herb);background:#F4FAF5}
+.kitem input{margin:0;width:16px;height:16px;accent-color:var(--herb);flex:0 0 auto}
+.kbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.kbar button{background:transparent;border:1.5px solid var(--line);border-radius:100px;padding:7px 13px;font-size:12.5px;color:var(--ink-2)}
+.kbar button:hover{border-color:var(--ink);color:var(--ink)}
+.addrow{display:flex;gap:8px;margin:10px 0 0}
+.addrow input{flex:1;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:11px 13px;font-size:14px}
+textarea.copybox{width:100%;min-height:150px;font-family:var(--mono);font-size:12.5px;padding:13px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink);resize:vertical}
+
+.cook{position:fixed;inset:0;background:var(--ink);color:var(--chalk);z-index:60;display:none;flex-direction:column;padding:22px}
+.cook.open{display:flex}
+.cook{padding-top:max(22px,env(safe-area-inset-top));padding-bottom:max(22px,env(safe-area-inset-bottom))}
+.cook-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cook-top h3{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#94A69B;margin:0}
+.cook-step{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:740px;margin:0 auto;width:100%}
+.cook-num{font-family:var(--display);font-size:clamp(50px,13vw,112px);line-height:.9;color:var(--turmeric);margin-bottom:16px}
+.cook-text{font-size:clamp(20px,3.5vw,31px);line-height:1.35}
+.cook-nav{display:flex;gap:10px;max-width:740px;margin:0 auto;width:100%}
+.cook-nav button{flex:1;background:transparent;border:2px solid var(--turmeric);color:var(--turmeric);border-radius:var(--radius);padding:16px;font-weight:600;font-size:15px}
+.cook-nav button:hover:not(:disabled){background:var(--turmeric);color:var(--ink)}
+.cook-nav button:disabled{opacity:.3;cursor:not-allowed}
+.progress{height:5px;background:#2E3B34;margin:18px 0;border-radius:100px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--turmeric);transition:width .2s ease}
+
+.list-recipes{display:flex;flex-wrap:wrap;gap:7px}
+.chip{background:var(--paper);border:1.5px solid var(--line);border-radius:100px;padding:6px 12px;font-size:12.5px;display:inline-flex;gap:8px;align-items:center}
+.chip button{background:none;border:0;color:var(--paprika);font-size:15px;line-height:1;padding:0}
+.list-empty{color:var(--ink-2);padding:22px 0}
+
+@media (max-width:640px){
+  .sheet-body,.sheet-head{padding-left:18px;padding-right:18px}
+  .sheet-actions{margin-left:-18px;margin-right:-18px;padding-left:18px;padding-right:18px}
+  .dial-note{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .masthead,.shelf,.strip,.grid,.band,.footnote,.sheet-actions,.close,.counter,.overlay:not(.open){display:none!important}
+  body,.overlay,.sheet{background:#fff;position:static;overflow:visible}
+  .overlay.open{display:block;position:static}
+  .sheet-head{color:#000;background:#fff!important;border-bottom:3px solid #000;padding:0 0 12px}
+  .sheet-head::after{display:none}
+  .daytag{background:#eee;color:#000}
+  .sheet-body{padding:0}
+}
+</style>
+
+<header class="masthead">
+  <div class="mast-inner">
+    <p class="eyebrow">One shop · Seven nights · Built from your kitchen</p>
+    <h1 class="wordmark">The week,<br><em>already</em> in<br>your kitchen</h1>
+    <p class="mast-sub">Seven dinners, one for each night. Tell it what's in the kitchen and it works out the only things you'd need to buy. Generate a fresh menu whenever the week gets repetitive.</p>
+    <div class="mast-bar">
+      <span class="mast-stat"><b id="stat-quick">0</b> under 30 min</span>
+      <span class="mast-stat"><b id="stat-buy">0</b> to buy</span>
+      <span class="spacer"></span>
+      <button class="act" id="open-kitchen">My kitchen</button>
+      <button class="act" id="open-gen">Generate menu</button>
+      <button class="act primary" id="open-list">Shopping list · <span id="list-count">7</span></button>
+    </div>
+  </div>
+</header>
+
+<section class="shelf">
+  <div class="shelf-inner">
+    <h2>Use up first</h2>
+    <div class="tickets" id="tickets"></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="strip">
+    <input class="search" id="search" type="search" placeholder="Search an ingredient — try “chickpeas” or “bacon”" aria-label="Search recipes and ingredients">
+    <div class="pills" id="filters"></div>
+  </div>
+
+  <div class="band">
+    <h2 id="week-title">The week</h2>
+    <p id="week-note">Monday to Sunday</p>
+    <button class="reset" id="reset-week" hidden>Back to the suggested week</button>
+  </div>
+  <div class="grid" id="week"></div>
+
+  <div class="band" id="spare-band"><h2>Two spares</h2><p>Under 20 minutes</p></div>
+  <div class="grid" id="spares"></div>
+
+  <p class="footnote">Nutrition figures are estimates per serving.<br>
+  Your kitchen list and chosen menu save on this device, so they survive closing the tab. They don't sync between phones — you and your wife each keep your own.<br>
+  Ingredient ticks inside a recipe are deliberately temporary and clear when you close it.</p>
+</div>
+
+<div class="overlay" id="recipe-overlay" role="dialog" aria-modal="true" aria-label="Recipe"></div>
+<div class="overlay" id="list-overlay" role="dialog" aria-modal="true" aria-label="Shopping list"></div>
+<div class="overlay" id="gen-overlay" role="dialog" aria-modal="true" aria-label="Generate menu"></div>
+<div class="overlay" id="kitchen-overlay" role="dialog" aria-modal="true" aria-label="My kitchen"></div>
+
+<div class="cook" id="cook" role="dialog" aria-modal="true" aria-label="Cooking mode">
+  <div class="cook-top">
+    <h3 id="cook-title"></h3>
+    <button class="close" style="position:static" id="cook-close" aria-label="Leave cooking mode">×</button>
+  </div>
+  <div class="progress"><i id="cook-bar"></i></div>
+  <div class="cook-step"><div class="cook-num" id="cook-num"></div><p class="cook-text" id="cook-text"></p></div>
+  <div class="cook-nav"><button id="cook-prev">Back</button><button id="cook-next">Next step</button></div>
+</div>
+
+<script>
+
+/* ============================================================
+   SAVING
+   Works on a hosted site (github.io) and on a downloaded copy.
+   Falls back to memory-only if the browser blocks storage —
+   private tabs and some embedded previews do.
+   ============================================================ */
+const STORE={
+  ok:(()=>{try{localStorage.setItem("__t","1");localStorage.removeItem("__t");return true}catch(e){return false}})(),
+  get(){ if(!this.ok) return null;
+    try{const v=localStorage.getItem("kitchenweek_v1");return v?JSON.parse(v):null}catch(e){return null} },
+  set(o){ if(!this.ok) return;
+    try{localStorage.setItem("kitchenweek_v1",JSON.stringify(o))}catch(e){} },
+  wipe(){ if(!this.ok) return; try{localStorage.removeItem("kitchenweek_v1")}catch(e){} }
+};
+
+/* ============================================================
+   KITCHEN INVENTORY
+   [key, label, 1 = you have it by default]
+   Edit the 1/0 values here to change what the file assumes
+   you own permanently, or use the "My kitchen" panel.
+   ============================================================ */
+const PANTRY={
+"Meat & fish":[["chicken","Chicken breasts",1],["mince","Lean beef mince",1],["salmon","Salmon fillets",1],["bacon","Smoked back bacon",1],["tuna","Tuna chunks",1],["seafood","Frozen seafood mix",1],["ham","Ham & cooked meats",1]],
+"Dairy & chilled":[["yogurt","Greek yogurt",1],["cheese","Cheese",1],["parmesan","Parmesan",1],["butter","Butter",1],["mayo","Mayonnaise",1],["eggs","Eggs",0],["milk","Milk",0],["cream","Double cream",0]],
+"Fresh veg & fruit":[["onion","Onions",1],["garlic","Garlic",1],["potatoes","Potatoes",1],["carrots","Carrots",1],["broccoli","Broccoli",1],["tenderstem","Tenderstem broccoli",1],["tomatoes","Tomatoes",1],["cherrytom","Cherry tomatoes",1],["cucumber","Cucumber",1],["lemon","Lemons",1],["lime","Limes",1],["leaves","Salad leaves",1],["avocado","Avocado",1],["peppers","Peppers",1],["spinach","Baby spinach",0],["mushrooms","Mushrooms",0],["springonion","Spring onions",0],["parsley","Parsley",0],["coriander","Coriander",0]],
+"Tins & jars":[["chickpeas","Chickpeas",1],["coconut","Coconut milk",1],["beans","Baked beans",1],["choptom","Chopped tomatoes",1],["pastasauce","Red pasta sauce",1],["pesto","Green pesto",1],["cornichons","Cornichons",1],["sweetcorn","Sweetcorn",0]],
+"Freezer":[["frozenveg","Frozen mixed veg",1],["peas","Frozen peas",1],["greenbeans","Green beans",0]],
+"Store cupboard":[["pasta","Pasta",1],["rice","Rice",1],["couscous","Couscous",1],["oats","Porridge oats",1],["stock","Stock cubes",1],["spices","Spices & dried herbs",1],["oil","Olive oil",1]],
+"Sauces & condiments":[["soy","Soy sauce",1],["sesame","Sesame oil",1],["hotsauce","Hot sauce",1],["fajita","Fajita paste",1],["mustard","Mustard",1],["honey","Honey or sugar",1],["worcs","Worcestershire sauce",1],["vinegar","Vinegar",1],["peanut","Peanut butter",0]]
+};
+const LABEL={}, kitchen=new Set();
+Object.values(PANTRY).flat().forEach(([k,l,d])=>{LABEL[k]=l; if(d) kitchen.add(k)});
+
+/* ============================================================
+   RECIPE POOL — ingredient format: [qty, unit, name, pantryKey]
+   pantryKey 0 = salt, pepper and the like: always assumed.
+   Quantities are for 4 servings and scale from there.
+   ============================================================ */
+const COL={Chicken:"#B5651D",Beef:"#7A2A20",Fish:"#1F5F73",Vegetarian:"#2F6D4F",Comfort:"#5A4A7A"};
+
+const POOL=[
+{id:1,t:"Lemon Chicken & Couscous",c:"Chicken",tags:["Quick","Healthy"],time:25,kcal:468,p:45,cb:47,f:11,
+ b:"Bright and fast. The couscous cooks itself in a bowl while you do the chicken.",
+ ing:[[4,"","chicken breasts","chicken"],[2,"","lemons","lemon"],[250,"g","couscous","couscous"],[350,"ml","hot chicken stock","stock"],[200,"g","cherry tomatoes, halved","cherrytom"],[1,"","cucumber, diced","cucumber"],[1,"","small bunch parsley","parsley"],[2,"tbsp","olive oil","oil"],[1,"tsp","dried oregano","spices"]],
+ s:["Zest one lemon over the chicken, add its juice, the oregano, half the oil, salt and pepper. Leave it while you sort everything else.",
+    "Couscous into a bowl, pour over the hot stock, cover with a plate and forget about it for 8 minutes.",
+    "Hot griddle or frying pan. Chicken on, 5–6 minutes a side depending on thickness. Rest it 3 minutes before slicing.",
+    "Fork the couscous through — properly, until every grain separates.",
+    "Stir in the tomatoes, cucumber, chopped parsley, remaining oil and the juice of the second lemon.",
+    "Slice the chicken across and lay it over the top with all the resting juices."],
+ tip:"Resting juices are half the flavour. Pour them over the couscous, don't leave them on the board."},
+
+{id:2,t:"Chickpea Coconut Curry",c:"Vegetarian",tags:["Quick","One pot","Healthy"],time:30,kcal:512,p:16,cb:71,f:19,
+ b:"Cheap, fast, and better than most curries with meat in them.",
+ ing:[[800,"g","chickpeas, drained","chickpeas"],[400,"ml","coconut milk","coconut"],[1,"","onion, diced","onion"],[4,"","garlic cloves","garlic"],[150,"g","baby spinach","spinach"],[300,"g","rice","rice"],[200,"g","chopped tomatoes","choptom"],[2,"tsp","ground cumin","spices"],[2,"tsp","ground coriander","spices"],[1,"tsp","turmeric","spices"],[1,"tsp","chilli flakes","spices"],[1,"tbsp","oil","oil"],[1,"","lime","lime"]],
+ s:["Onion into the oil on medium, 8 minutes until genuinely soft and golden at the edges.",
+    "Garlic and all the spices in. Thirty seconds, stirring hard — you're toasting them, not burning them.",
+    "Tomatoes in, cook down 3 minutes until they darken.",
+    "Chickpeas and coconut milk in. Simmer 15 minutes uncovered, crushing a ladleful of chickpeas against the side of the pan to thicken it.",
+    "Rice on alongside.",
+    "Spinach stirred through at the end until wilted, lime squeezed in, seasoned to taste."],
+ tip:"Crushing some of the chickpeas is what turns thin coconut sauce into something that clings."},
+
+{id:3,t:"Teriyaki Salmon",c:"Fish",tags:["Quick","Healthy","BBQ"],time:25,kcal:534,p:39,cb:52,f:18,
+ b:"Four ingredients make the glaze. On the table in twenty-five minutes.",
+ ing:[[4,"","salmon fillets","salmon"],[4,"tbsp","soy sauce","soy"],[1,"tbsp","sesame oil","sesame"],[2,"tbsp","honey or brown sugar","honey"],[2,"","garlic cloves","garlic"],[250,"g","tenderstem broccoli","tenderstem"],[300,"g","rice","rice"],[2,"","spring onions","springonion"]],
+ s:["Rice on. Mix the soy, honey, grated garlic and half the sesame oil in a small bowl.",
+    "Pat the salmon skin bone dry — this is the difference between crisp skin and sad skin. Season it.",
+    "Remaining sesame oil into a hot non-stick pan. Salmon skin-side down, press it flat for 10 seconds, then leave it alone for 4–5 minutes.",
+    "Flip, 2 minutes on the flesh side, then pour the sauce in around the fish.",
+    "Let it bubble and thicken for a minute, spooning it over until the fillets are lacquered.",
+    "Steam or boil the broccoli 3 minutes. Plate up, sauce poured over, spring onions scattered."],
+ tip:"The glaze burns fast because of the sugar. It goes in at the end, on a lower heat."},
+
+{id:4,t:"Bacon, Broccoli & Cheese Pasta",c:"Comfort",tags:["Quick","One pot"],time:22,kcal:648,p:32,cb:70,f:26,
+ b:"Nothing clever, always eaten. Twenty-two minutes and one pan.",
+ ing:[[400,"g","pasta","pasta"],[8,"","rashers smoked back bacon","bacon"],[350,"g","broccoli florets","broccoli"],[120,"g","cheese, grated","cheese"],[40,"g","parmesan","parmesan"],[150,"g","Greek yogurt","yogurt"],[2,"","garlic cloves","garlic"],[1,"tbsp","olive oil","oil"],[null,"","black pepper",0]],
+ s:["Pasta on in salted water. Broccoli joins for the final 4 minutes.",
+    "Chop the bacon and fry it in the oil until the edges are crisp and the fat has rendered out.",
+    "Sliced garlic into the bacon fat for 30 seconds.",
+    "Save a mug of pasta water, then drain the pasta and broccoli.",
+    "Everything into the bacon pan off the heat: pasta, yogurt, both cheeses and a good splash of that water.",
+    "Toss until it turns into a sauce. Then far more black pepper than feels sensible."],
+ tip:"Off the heat before the yogurt goes in. Boiling yogurt splits and won't come back."},
+
+{id:5,t:"Chicken Fajita Bowls",c:"Chicken",tags:["Quick","BBQ","Healthy"],time:25,kcal:538,p:44,cb:58,f:14,
+ b:"The fajita paste does the heavy lifting. Pan, grill or barbecue.",
+ ing:[[4,"","chicken breasts","chicken"],[3,"tbsp","Mexican smoky fajita paste","fajita"],[3,"","peppers, sliced","peppers"],[1,"","red onion, sliced","onion"],[300,"g","rice","rice"],[1,"","avocado","avocado"],[1,"","lime","lime"],[4,"tbsp","Greek yogurt","yogurt"],[1,"tbsp","olive oil","oil"],[null,"","fresh coriander","coriander"]],
+ s:["Slice the chicken into thick strips and toss with the fajita paste. Ten minutes on the side is enough; an hour is better.",
+    "Rice on to cook.",
+    "Screaming hot pan, no crowding. Chicken in, undisturbed for 2 minutes so it catches, then keep it moving until cooked. Out onto a plate.",
+    "Peppers and onion into the same pan with the oil. Blistered but still with bite — 5 minutes, not 15.",
+    "Build the bowls: rice, chicken, peppers, sliced avocado.",
+    "Yogurt on top, a hard squeeze of lime over everything, coriander torn on."],
+ tip:"Barbecue version: thread onto skewers with pepper chunks, 10–12 minutes over the coals, turning."},
+
+{id:6,t:"Beef Chilli",c:"Beef",tags:["One pot","Batch","Healthy"],time:60,kcal:542,p:38,cb:63,f:15,
+ b:"Baked beans in a chilli sounds wrong and tastes right. Makes enough for lunch the next day.",
+ ing:[[500,"g","lean beef mince","mince"],[1,"","red onion, diced","onion"],[3,"","garlic cloves","garlic"],[400,"g","baked beans","beans"],[400,"g","chopped tomatoes","choptom"],[300,"g","rice","rice"],[1,"","avocado","avocado"],[1,"","lime","lime"],[4,"tbsp","Greek yogurt","yogurt"],[2,"tsp","ground cumin","spices"],[1,"tsp","smoked paprika","spices"],[1,"tsp","chilli powder","spices"],[1,"tbsp","hot sauce","hotsauce"]],
+ s:["Brown the mince in a dry hot pan in two batches. Crowding it steams it grey.",
+    "Onion and garlic in, then the spices straight into the fat for 30 seconds — this wakes them up.",
+    "Tomatoes, baked beans and hot sauce in. Simmer uncovered 40 minutes, stirring now and then.",
+    "Rice on for the last 15 minutes.",
+    "Taste and season, then sharpen the whole thing with a squeeze of lime.",
+    "Serve over the rice with sliced avocado and a spoon of yogurt."],
+ tip:"The bean sauce brings its own sweetness, so skip any sugar or ketchup you'd normally add."},
+
+{id:7,t:"Pesto Chicken & Roast Veg",c:"Chicken",tags:["One pot","BBQ"],time:45,kcal:521,p:47,cb:38,f:20,
+ b:"One tray, one spoon of pesto, forty minutes of doing nothing at all.",
+ ing:[[4,"","chicken breasts","chicken"],[4,"tbsp","green pesto","pesto"],[600,"g","potatoes, cubed","potatoes"],[1,"","head of broccoli","broccoli"],[1,"","red onion, wedged","onion"],[200,"g","cherry tomatoes","cherrytom"],[2,"tbsp","olive oil","oil"],[null,"","salt and black pepper",0]],
+ s:["Oven to 200°C fan. Potatoes into a large roasting tray with the oil, salt and pepper. Twenty minutes on their own — they need the head start.",
+    "Meanwhile rub 2 tablespoons of the pesto all over the chicken.",
+    "Pull the tray out. Push the potatoes to the edges, add the onion, broccoli and tomatoes, and sit the chicken in the middle.",
+    "Back in for 22–25 minutes, until the chicken is cooked through and the broccoli tips are crisping.",
+    "Spoon the remaining pesto over everything while the tray is still hot so it loosens into a sauce."],
+ tip:"Cut the potatoes small — 2cm — or they'll still be hard when the chicken is done."},
+
+{id:8,t:"Broccoli & Pesto Pasta",c:"Vegetarian",tags:["Quick","One pot"],time:18,kcal:558,p:20,cb:74,f:21,
+ b:"Broccoli cooks in the pasta water. One pan, eighteen minutes.",
+ ing:[[400,"g","pasta","pasta"],[400,"g","broccoli florets","broccoli"],[5,"tbsp","green pesto","pesto"],[50,"g","parmesan","parmesan"],[1,"","lemon","lemon"],[2,"tbsp","olive oil","oil"],[1,"","garlic clove","garlic"],[null,"","salt and black pepper",0]],
+ s:["Pasta into well-salted boiling water.",
+    "Four minutes before the pasta is done, tip the broccoli into the same pan.",
+    "Scoop out a large mug of the cooking water, then drain everything.",
+    "Straight back into the warm pan off the heat with the pesto, grated garlic, oil and half the parmesan.",
+    "Add the cooking water a splash at a time, tossing hard, until the sauce turns creamy and coats every piece.",
+    "Lemon zest and juice, remaining parmesan, a lot of black pepper."],
+ tip:"That starchy water is the sauce. Throw it away and you get oily pasta with pesto sitting on top."},
+
+{id:9,t:"Mediterranean Chickpea Salad",c:"Vegetarian",tags:["Quick","Healthy"],time:12,kcal:352,p:13,cb:38,f:17,
+ b:"Twelve minutes, no cooking at all. Make it once and eat it for days.",
+ ing:[[800,"g","chickpeas, drained","chickpeas"],[1,"","cucumber, diced","cucumber"],[300,"g","cherry tomatoes, halved","cherrytom"],[1,"","red onion, finely diced","onion"],[1,"","lemon","lemon"],[4,"tbsp","olive oil","oil"],[10,"","cornichons, chopped","cornichons"],[1,"tsp","dried oregano","spices"],[null,"","salt and black pepper",0]],
+ s:["Soak the diced red onion in cold water for 5 minutes, then drain. This takes the harsh edge off it.",
+    "Everything else into a big bowl.",
+    "Dress with the lemon juice, oil, oregano, salt and plenty of pepper.",
+    "Toss and leave 10 minutes before eating so the chickpeas take on the dressing."],
+ tip:"Keeps three days and improves on day two. Add feta or halloumi if you've got it in."},
+
+{id:10,t:"Creamy Tuscan Chicken",c:"Chicken",tags:["Quick","One pot"],time:30,kcal:412,p:46,cb:11,f:19,
+ b:"Yogurt instead of cream — same silk, half the guilt.",
+ ing:[[4,"","chicken breasts","chicken"],[250,"g","cherry tomatoes","cherrytom"],[120,"g","baby spinach","spinach"],[40,"g","parmesan, grated","parmesan"],[150,"g","Greek yogurt","yogurt"],[3,"","garlic cloves","garlic"],[1,"tbsp","olive oil","oil"],[1,"tsp","smoked paprika","spices"],[200,"ml","chicken stock","stock"],[null,"","salt and black pepper",0]],
+ s:["Butterfly each chicken breast so it cooks flat and fast. Season both sides hard with salt, pepper and the paprika.",
+    "Get a wide pan properly hot with the oil. Sear the chicken 4–5 minutes a side until deep golden, then lift onto a plate.",
+    "Drop the heat. Sliced garlic in for 30 seconds, then the halved cherry tomatoes. Squash a few with the back of a spoon.",
+    "Pour in the stock, scrape up everything stuck to the pan, and let it bubble down by half.",
+    "Take the pan off the heat before the yogurt goes in. Stir in the yogurt and parmesan until glossy.",
+    "Back on a low heat, add the spinach and let it collapse. Return the chicken and its juices, warm through, serve."],
+ tip:"Off the heat before the yogurt. Every single time."},
+
+{id:11,t:"Chicken Satay Stir Fry",c:"Chicken",tags:["Quick","BBQ"],time:25,kcal:596,p:45,cb:56,f:22,
+ b:"Peanut butter, soy and sesame — a five-ingredient sauce that tastes like a takeaway.",
+ ing:[[3,"","chicken breasts","chicken"],[4,"tbsp","peanut butter","peanut"],[3,"tbsp","soy sauce","soy"],[1,"tbsp","sesame oil","sesame"],[200,"g","tenderstem broccoli","tenderstem"],[2,"","carrots, matchsticked","carrots"],[300,"g","rice","rice"],[2,"","garlic cloves","garlic"],[1,"","lime","lime"],[120,"ml","hot water",0]],
+ s:["Rice on. Slice the chicken thinly across the grain.",
+    "Whisk the peanut butter, soy, half the sesame oil and the hot water into a pourable sauce. It'll look split at first — keep going.",
+    "Remaining sesame oil in a hot wok. Chicken in, spread out, 3–4 minutes until it's got colour.",
+    "Garlic, carrots and broccoli in. Two minutes of constant movement.",
+    "Pour the sauce over, toss so everything is coated, and let it tighten for a minute.",
+    "Lime squeezed over off the heat. Serve on the rice."],
+ tip:"Sauce too thick? Splash in more hot water. It thickens as it cools, so don't over-correct in the pan."},
+
+{id:12,t:"Proper Spaghetti Bolognese",c:"Beef",tags:["One pot","Batch"],time:75,kcal:612,p:38,cb:71,f:19,
+ b:"No shortcuts on the simmer. Ninety minutes if you have it, sixty if you don't.",
+ ing:[[500,"g","lean beef mince","mince"],[1,"","onion, finely diced","onion"],[2,"","carrots, finely diced","carrots"],[3,"","garlic cloves","garlic"],[400,"g","red pasta sauce","pastasauce"],[400,"g","chopped tomatoes","choptom"],[400,"g","spaghetti","pasta"],[40,"g","parmesan","parmesan"],[1,"tbsp","olive oil","oil"],[1,"","beef stock cube","stock"],[1,"tsp","dried oregano","spices"]],
+ s:["Onion and carrot into the oil on a low heat with a pinch of salt. Ten minutes, soft and sweet, not coloured.",
+    "Garlic in for a minute, then crank the heat and add the mince. Break it up and leave it alone until it browns properly — grey mince makes grey sauce.",
+    "Pasta sauce, chopped tomatoes, crumbled stock cube, a splash of water and the oregano.",
+    "Lid slightly ajar, lowest heat, 60–90 minutes. Stir occasionally. It should reduce and darken.",
+    "Season at the end, not the start. Cook the spaghetti in well-salted water.",
+    "Drain, holding back a mugful of the water. Toss the pasta through the sauce with a splash of that water, then parmesan."],
+ tip:"Makes double what you need for four. Freeze half — it's better the second time."},
+
+{id:13,t:"Cottage Pie",c:"Beef",tags:["Batch"],time:80,kcal:578,p:36,cb:52,f:24,
+ b:"The Sunday-afternoon one. Freezes beautifully, reheats even better.",
+ ing:[[500,"g","lean beef mince","mince"],[1,"","onion, diced","onion"],[2,"","carrots, diced","carrots"],[150,"g","frozen peas","peas"],[1,"kg","potatoes","potatoes"],[60,"g","butter","butter"],[80,"ml","milk","milk"],[400,"g","red pasta sauce","pastasauce"],[1,"","beef stock cube","stock"],[1,"tbsp","Worcestershire sauce","worcs"],[60,"g","cheese, grated","cheese"]],
+ s:["Brown the mince hard in a wide pan. Lift it out, then soften the onion and carrot in the fat left behind.",
+    "Mince back in with the pasta sauce, crumbled stock cube, a splash of water and the Worcestershire. Simmer 30 minutes until thick — a wet filling makes a sunken pie.",
+    "Meanwhile boil the potatoes until a knife slides through with no resistance. Drain and let them steam dry for 2 minutes.",
+    "Mash with the butter and milk, season generously.",
+    "Stir the peas through the mince, tip into a baking dish, spread the mash over and rough the top up with a fork.",
+    "Cheese on, 200°C fan for 25 minutes until the peaks are dark and crisp."],
+ tip:"Those fork ridges aren't decoration — they're what catches and crisps in the oven."},
+
+{id:14,t:"Beef Meatballs in Tomato Sauce",c:"Beef",tags:["Batch"],time:50,kcal:604,p:40,cb:66,f:20,
+ b:"Oats instead of breadcrumbs. Nobody has ever noticed.",
+ ing:[[500,"g","lean beef mince","mince"],[1,"","egg","eggs"],[50,"g","porridge oats","oats"],[40,"g","parmesan","parmesan"],[2,"","garlic cloves","garlic"],[500,"g","red pasta sauce","pastasauce"],[400,"g","pasta","pasta"],[1,"tbsp","olive oil","oil"],[1,"tsp","dried oregano","spices"],[null,"","salt and black pepper",0]],
+ s:["Mince, egg, oats, half the parmesan, grated garlic, oregano and plenty of seasoning into a bowl. Mix with your hands but stop as soon as it comes together — overworked mince goes bouncy.",
+    "Roll into balls slightly smaller than a golf ball. Wet hands make this painless.",
+    "Brown them in the oil in batches, turning for colour on all sides. They don't need to be cooked through yet.",
+    "Pour the pasta sauce in around them, half-fill the empty jar with water and add that too.",
+    "Lid on, gentle simmer, 20 minutes. Don't stir aggressively — shake the pan instead.",
+    "Pasta cooked and drained, meatballs and sauce over, remaining parmesan on top."],
+ tip:"Rolling twenty meatballs is the whole job. Do it once, freeze half raw on a tray."},
+
+{id:15,t:"Mediterranean Salmon Tray Bake",c:"Fish",tags:["One pot","Healthy"],time:35,kcal:489,p:38,cb:22,f:27,
+ b:"Everything on one tray. Nothing to wash but the tray.",
+ ing:[[4,"","salmon fillets","salmon"],[300,"g","cherry tomatoes","cherrytom"],[1,"","red onion, wedged","onion"],[1,"","lemon","lemon"],[250,"g","broccoli florets","broccoli"],[3,"tbsp","olive oil","oil"],[2,"","garlic cloves","garlic"],[1,"tsp","dried oregano","spices"],[null,"","salt and black pepper",0]],
+ s:["Oven to 200°C fan. Tomatoes, onion, broccoli and sliced garlic onto a tray with 2 tablespoons of the oil, the oregano and seasoning.",
+    "Fifteen minutes in — the tomatoes need to start collapsing before the fish arrives.",
+    "Make gaps and nestle the salmon in, skin-side down. Remaining oil over the fish, lemon sliced and tucked around.",
+    "Twelve to fourteen minutes, until the salmon flakes when you press it with a fork.",
+    "Squeeze one of the roasted lemon slices over the lot before serving."],
+ tip:"Roasted lemon is sweeter and rounder than raw. Don't skip squeezing it at the end."},
+
+{id:16,t:"Tuna Pasta Bake",c:"Fish",tags:["Batch"],time:45,kcal:596,p:41,cb:68,f:17,
+ b:"Store-cupboard comfort food, kept lighter than the version you grew up on.",
+ ing:[[400,"g","pasta","pasta"],[320,"g","tuna chunks, drained","tuna"],[300,"g","Greek yogurt","yogurt"],[150,"g","cheese, grated","cheese"],[200,"g","sweetcorn","sweetcorn"],[1,"","onion, diced","onion"],[2,"","garlic cloves","garlic"],[1,"tbsp","olive oil","oil"],[200,"ml","milk","milk"],[1,"tsp","mustard","mustard"]],
+ s:["Cook the pasta two minutes short of the packet time. It finishes in the oven.",
+    "Soften the onion and garlic in the oil while that happens.",
+    "Off the heat, stir the yogurt, milk, mustard and two-thirds of the cheese into the onions until smooth.",
+    "Fold in the drained tuna, sweetcorn and pasta. Season well — tuna bakes are usually under-seasoned.",
+    "Into a baking dish, remaining cheese over the top.",
+    "200°C fan for 20 minutes until blistered and bubbling at the edges."],
+ tip:"Off the heat before the yogurt, same as everything else in this book."},
+
+{id:17,t:"Tuna Niçoise Salad",c:"Fish",tags:["Quick","Healthy"],time:30,kcal:441,p:35,cb:31,f:20,
+ b:"A proper dinner salad. The potatoes make it a meal rather than a side.",
+ ing:[[320,"g","tuna chunks, drained","tuna"],[600,"g","new potatoes","potatoes"],[4,"","eggs","eggs"],[200,"g","green beans","greenbeans"],[250,"g","tomatoes, wedged","tomatoes"],[100,"g","salad leaves","leaves"],[8,"","cornichons, sliced","cornichons"],[3,"tbsp","olive oil","oil"],[1,"tbsp","vinegar","vinegar"],[1,"tsp","mustard","mustard"]],
+ s:["Potatoes into salted boiling water, 15 minutes until tender. Green beans join for the last 3 minutes.",
+    "Separate pan: eggs into boiling water for exactly 7 minutes, then straight into cold water. Jammy yolk, not chalky.",
+    "Whisk the oil, vinegar and mustard with salt and pepper into a dressing.",
+    "Dress the potatoes and beans while they're still warm — warm potato drinks dressing, cold potato repels it.",
+    "Build on a platter: leaves, potatoes and beans, tomatoes, flaked tuna, halved eggs.",
+    "Cornichons scattered over, remaining dressing spooned across."],
+ tip:"Seven minutes for the eggs. Set a timer — this is the one step where thirty seconds shows."},
+
+{id:18,t:"Moroccan Chickpea Couscous",c:"Vegetarian",tags:["Quick","Healthy"],time:20,kcal:436,p:15,cb:69,f:12,
+ b:"Twenty minutes, one bowl, barely any real cooking.",
+ ing:[[800,"g","chickpeas, drained","chickpeas"],[250,"g","couscous","couscous"],[350,"ml","hot vegetable stock","stock"],[250,"g","tomatoes, diced","tomatoes"],[1,"","lemon","lemon"],[1,"","red onion, finely sliced","onion"],[2,"tsp","ground cumin","spices"],[2,"tsp","smoked paprika","spices"],[1,"tsp","cinnamon","spices"],[3,"tbsp","olive oil","oil"],[1,"","small bunch parsley","parsley"]],
+ s:["Couscous into a bowl, hot stock poured over, plate on top. Eight minutes.",
+    "Meanwhile fry the chickpeas in 1 tablespoon of the oil over a high heat with the cumin, paprika and cinnamon. Six minutes, until some have gone crisp and blistered.",
+    "Fork the couscous through until fluffy and separate.",
+    "Fold in the tomatoes, onion, chopped parsley, remaining oil and the juice of the whole lemon.",
+    "Spiced chickpeas over the top, seasoned, served warm or at room temperature."],
+ tip:"Frying the chickpeas until they blister is the whole point. Soft chickpeas make a dull bowl."},
+
+{id:19,t:"Loaded Jacket Potatoes",c:"Comfort",tags:["Batch"],time:80,kcal:624,p:29,cb:72,f:25,
+ b:"Ninety minutes of oven, five minutes of work.",
+ ing:[[4,"","large baking potatoes","potatoes"],[400,"g","baked beans","beans"],[150,"g","cheese, grated","cheese"],[6,"","rashers smoked back bacon","bacon"],[4,"tbsp","Greek yogurt","yogurt"],[2,"","spring onions","springonion"],[1,"tbsp","olive oil","oil"],[2,"tsp","flaky salt",0]],
+ s:["Oven to 200°C fan. Prick the potatoes all over, rub with the oil and roll in the salt.",
+    "Straight onto the oven shelf, not a tray — air all around is what gives you crisp skin. Seventy-five to ninety minutes.",
+    "Grill or fry the bacon until properly crisp, then chop it.",
+    "Heat the beans.",
+    "Split the potatoes, push the flesh up with a fork, and season inside.",
+    "Beans in, cheese over so it melts on contact, bacon and spring onions on top, yogurt to finish."],
+ tip:"Salted skin, no foil, no tray. Foil steams the potato and you lose the best part."},
+
+{id:20,t:"Homemade Fried Rice",c:"Comfort",tags:["Quick","One pot"],time:20,kcal:512,p:33,cb:64,f:14,
+ b:"Built for leftovers. Yesterday's rice, whatever's in the freezer, done in twenty minutes.",
+ ing:[[2,"","chicken breasts","chicken"],[400,"g","cooked cold rice","rice"],[3,"","eggs","eggs"],[300,"g","frozen mixed vegetables","frozenveg"],[3,"tbsp","soy sauce","soy"],[1,"tbsp","sesame oil","sesame"],[3,"","garlic cloves","garlic"],[2,"","spring onions","springonion"],[1,"tbsp","oil","oil"],[1,"tsp","hot sauce","hotsauce"]],
+ s:["Cold rice only. Warm rice turns to porridge in the wok — cook it the day before or spread it on a tray to cool fast.",
+    "Diced chicken into a very hot wok with the oil. Four minutes until cooked and catching. Out onto a plate.",
+    "Beaten eggs into the wok, scramble hard and fast, break them up, out onto the same plate.",
+    "Garlic and frozen vegetables in, 3 minutes until hot through and the water has driven off.",
+    "Rice in, breaking up any clumps with the back of your spoon. Spread it out and let it sit for 30 seconds at a time so it toasts.",
+    "Chicken and egg back in, soy, sesame oil and hot sauce tossed through. Spring onions on at the end."],
+ tip:"Let the rice sit still between stirs. Constant stirring steams it; stillness toasts it."}
+];
+
+const DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const SUGGESTED=[1,2,3,4,5,6,7], SUGGESTED_SPARES=[8,9];
+const SHELF=["Avocado","Cherry tomatoes","Salmon","Cucumber","Broccoli","Salad leaves"];
+const FILTERS=["All","Under 30 min","Nothing to buy","Chicken","Fish","Meat-free"];
+
+/* ---------- state ---------- */
+let week=[...SUGGESTED], spares=[...SUGGESTED_SPARES], custom=false;
+let picked=new Set(week), filter="All", q="", servings=4, open=null, step=0;
+
+const rec=id=>POOL.find(r=>r.id===id);
+
+const SAVED=STORE.get();
+if(SAVED){
+  if(Array.isArray(SAVED.added)&&SAVED.added.length){
+    PANTRY["Added by you"]=SAVED.added;
+    SAVED.added.forEach(([k,l])=>LABEL[k]=l);
+  }
+  if(Array.isArray(SAVED.kitchen)){kitchen.clear();SAVED.kitchen.forEach(k=>kitchen.add(k))}
+  if(Array.isArray(SAVED.week)&&SAVED.week.length===7&&SAVED.week.every(rec)) week=SAVED.week;
+  if(Array.isArray(SAVED.spares)&&SAVED.spares.every(rec)) spares=SAVED.spares;
+  custom=!!SAVED.custom;
+  picked=new Set(Array.isArray(SAVED.picked)?SAVED.picked.filter(rec):week);
+}
+function save(){
+  STORE.set({kitchen:[...kitchen],added:PANTRY["Added by you"]||[],week,spares,custom,picked:[...picked]});
+}
+let genPool=[], genPicked=new Set();
+const FR={0.25:"¼",0.5:"½",0.75:"¾"};
+
+const missing=r=>r.ing.filter(i=>i[3]&&!kitchen.has(i[3]));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function fmt(v,u,scale){
+  if(v==null) return "";
+  let x=v*(scale===undefined?servings/4:scale);
+  x = x<10 ? Math.round(x*4)/4 : Math.round(x);
+  const w=Math.floor(x), fr=+(x-w).toFixed(2);
+  const num = fr&&FR[fr] ? (w?w:"")+FR[fr] : String(x);
+  return u ? num+(u==="g"||u==="ml"?"":" ")+u : num;
+}
+function shut(id){document.getElementById(id).classList.remove("open");document.body.style.overflow=""}
+function show(id){document.getElementById(id).classList.add("open");document.body.style.overflow="hidden"}
+
+/* ---------- chrome ---------- */
+document.getElementById("filters").innerHTML=FILTERS.map(f=>
+  `<button class="pill" data-f="${f}" aria-pressed="${f==="All"}">${f}</button>`).join("");
+document.getElementById("tickets").innerHTML=SHELF.map(s=>
+  `<button class="ticket" data-shelf="${s}">${s}</button>`).join("");
+document.getElementById("filters").onclick=e=>{
+  const b=e.target.closest("[data-f]"); if(!b) return;
+  filter=b.dataset.f;
+  [...e.currentTarget.children].forEach(p=>p.setAttribute("aria-pressed",p.dataset.f===filter));
+  draw();
+};
+document.getElementById("tickets").onclick=e=>{
+  const b=e.target.closest("[data-shelf]"); if(!b) return;
+  q=b.dataset.shelf.toLowerCase(); document.getElementById("search").value=b.dataset.shelf;
+  filter="All";
+  document.querySelectorAll("#filters .pill").forEach(p=>p.setAttribute("aria-pressed",p.dataset.f==="All"));
+  draw();
+};
+document.getElementById("search").oninput=e=>{q=e.target.value.toLowerCase().trim();draw()};
+document.getElementById("reset-week").onclick=()=>{
+  week=[...SUGGESTED];spares=[...SUGGESTED_SPARES];custom=false;picked=new Set(week);draw()};
+
+/* ---------- week grid ---------- */
+function match(r){
+  if(filter==="Under 30 min"&&r.time>30) return false;
+  if(filter==="Nothing to buy"&&missing(r).length) return false;
+  if(filter==="Chicken"&&r.c!=="Chicken") return false;
+  if(filter==="Fish"&&r.c!=="Fish") return false;
+  if(filter==="Meat-free"&&r.c!=="Vegetarian") return false;
+  if(q){
+    const hay=(r.t+" "+r.c+" "+r.tags.join(" ")+" "+r.b+" "+r.ing.map(i=>i[2]).join(" ")).toLowerCase();
+    if(!hay.includes(q)) return false;
+  }
+  return true;
+}
+function card(r,day,spare){
+  const n=missing(r).length;
+  return `<article class="card${spare?" spare":""}">
+    <div class="card-head" style="background:${COL[r.c]}">
+      <span class="day">${day}</span>
+      <span class="tagline">${r.c} · ${r.time} min</span>
+    </div>
+    <div class="card-body">
+      <h3>${esc(r.t)}</h3>
+      <p class="blurb">${esc(r.b)}</p>
+      <span class="buy-flag ${n?"buy-some":"buy-none"}">${n?`Buy ${n} thing${n>1?"s":""}`:"Nothing to buy"}</span>
+      <div class="meta"><span>${r.kcal} kcal</span><span>${r.p}g protein</span><span>${r.tags[0]}</span></div>
+      <div class="card-actions">
+        <button class="btn" data-open="${r.id}">Open recipe</button>
+        <button class="btn ghost" data-add="${r.id}" aria-pressed="${picked.has(r.id)}" title="Shopping list">${picked.has(r.id)?"On list":"+ List"}</button>
+      </div>
+    </div></article>`;
+}
+function draw(){
+  const wk=week.map((id,i)=>[rec(id),DAYS[i]]).filter(([r])=>match(r));
+  const sp=spares.map(id=>[rec(id),"Spare"]).filter(([r])=>match(r));
+  const filtering=filter!=="All"||q;
+  document.getElementById("week-title").textContent=filtering?"Matching nights":(custom?"Your menu":"The week");
+  document.getElementById("week-note").textContent=filtering
+    ? `${wk.length+sp.length} of ${week.length+spares.length} showing`
+    : "Monday to Sunday";
+  document.getElementById("reset-week").hidden=!custom||filtering;
+  document.getElementById("week").innerHTML=wk.length
+    ? wk.map(([r,d])=>card(r,d)).join("")
+    : `<div class="empty"><strong>No nights match</strong>Try a single ingredient — “chickpeas”, “bacon”, “salmon” — or pick All.</div>`;
+  document.getElementById("spares").innerHTML=sp.map(([r,d])=>card(r,d,1)).join("");
+  document.getElementById("spare-band").hidden=!sp.length;
+  document.getElementById("list-count").textContent=picked.size;
+  document.getElementById("stat-quick").textContent=week.filter(id=>rec(id).time<=30).length;
+  document.getElementById("stat-buy").textContent=
+    new Set(week.flatMap(id=>missing(rec(id)).map(i=>i[3]))).size;
+  save();
+}
+document.querySelectorAll("#week,#spares").forEach(g=>g.onclick=e=>{
+  const o=e.target.closest("[data-open]"), a=e.target.closest("[data-add]");
+  if(o) showRecipe(+o.dataset.open);
+  if(a){toggle(+a.dataset.add);draw()}
+});
+function toggle(id){picked.has(id)?picked.delete(id):picked.add(id)}
+
+/* ---------- recipe sheet ---------- */
+function showRecipe(id){open=rec(id);servings=4;paint();show("recipe-overlay")}
+function paint(){
+  const r=open;
+  document.getElementById("recipe-overlay").innerHTML=`<div class="sheet">
+    <button class="close" data-close aria-label="Close recipe">×</button>
+    <div class="sheet-head" style="background:${COL[r.c]}">
+      <span class="daytag">${r.c} · ${r.tags.join(" · ")}</span>
+      <h2>${esc(r.t)}</h2>
+      <div class="sheet-meta"><span>${r.time} minutes</span><span>${missing(r).length?missing(r).length+" to buy":"Nothing to buy"}</span></div>
+    </div>
+    <div class="sheet-body">
+      <div class="dial">
+        <span class="dial-label">Cooking for</span>
+        <div class="dial-set">${[2,4,6].map(v=>`<button data-serv="${v}" aria-pressed="${v===servings}">${v}</button>`).join("")}</div>
+        <span class="dial-note">Quantities below rescale instantly</span>
+      </div>
+      <p class="section-title">Ingredients — tick as you gather</p>
+      <ul class="ing">${r.ing.map(i=>{
+        const buy=i[3]&&!kitchen.has(i[3]);
+        return `<li><label><input type="checkbox"><span class="qty">${fmt(i[0],i[1])}</span>
+        <span class="iname">${esc(i[2])}${buy?'<span class="buy-chip">buy</span>':""}</span></label></li>`}).join("")}</ul>
+      <p class="section-title">Method</p>
+      <ol class="steps">${r.s.map(x=>`<li><span>${esc(x)}</span></li>`).join("")}</ol>
+      <p class="section-title">Worth knowing</p>
+      <p class="tip">${esc(r.tip)}</p>
+      <p class="section-title">Estimated per serving</p>
+      <div class="nutri">
+        <div><b>${r.kcal}</b><span>kcal</span></div><div><b>${r.p}g</b><span>protein</span></div>
+        <div><b>${r.cb}g</b><span>carbs</span></div><div><b>${r.f}g</b><span>fat</span></div></div>
+      <div class="sheet-actions">
+        <button class="btn" data-cook>Start cooking mode</button>
+        <button class="btn ghost" data-add2>${picked.has(r.id)?"Remove from list":"Add to list"}</button>
+        <button class="btn ghost" data-print>Print card</button>
+      </div>
+    </div></div>`;
+}
+document.getElementById("recipe-overlay").onclick=e=>{
+  if(e.target.id==="recipe-overlay"||e.target.closest("[data-close]")) return shut("recipe-overlay");
+  const sv=e.target.closest("[data-serv]");
+  if(sv){servings=+sv.dataset.serv;paint();return}
+  if(e.target.closest("[data-cook]")) return startCook();
+  if(e.target.closest("[data-add2]")){toggle(open.id);paint();draw();return}
+  if(e.target.closest("[data-print]")) return window.print();
+};
+
+/* ---------- cooking mode ---------- */
+function startCook(){step=0;document.getElementById("cook").classList.add("open");paintCook()}
+function paintCook(){
+  const r=open,n=r.s.length;
+  document.getElementById("cook-title").textContent=`${r.t} — step ${step+1} of ${n}`;
+  document.getElementById("cook-num").textContent=String(step+1).padStart(2,"0");
+  document.getElementById("cook-text").textContent=r.s[step];
+  document.getElementById("cook-bar").style.width=((step+1)/n*100)+"%";
+  document.getElementById("cook-prev").disabled=step===0;
+  document.getElementById("cook-next").textContent=step===n-1?"Finish":"Next step";
+}
+document.getElementById("cook-prev").onclick=()=>{if(step>0){step--;paintCook()}};
+document.getElementById("cook-next").onclick=()=>{
+  if(step<open.s.length-1){step++;paintCook()} else document.getElementById("cook").classList.remove("open")};
+document.getElementById("cook-close").onclick=()=>document.getElementById("cook").classList.remove("open");
+
+/* ---------- menu generator ---------- */
+function buildOptions(){
+  // round-robin across categories so the twelve are never all chicken,
+  // and inside each category the ones needing least shopping come first
+  const cats=["Chicken","Vegetarian","Fish","Beef","Comfort"];
+  const buckets={};
+  cats.forEach(c=>{
+    buckets[c]=POOL.filter(r=>r.c===c)
+      .map(r=>({r,miss:missing(r).length,jitter:Math.random()}))
+      .sort((a,b)=>(a.miss-b.miss)||(a.jitter-b.jitter))
+      .map(o=>o.r);
+  });
+  const out=[];
+  while(out.length<12){
+    let added=false;
+    for(const c of cats){
+      if(buckets[c].length&&out.length<12){out.push(buckets[c].shift());added=true}
+    }
+    if(!added) break;
+  }
+  genPool=out; genPicked=new Set();
+}
+function openGen(){buildOptions();paintGen();show("gen-overlay")}
+function paintGen(){
+  const n=genPicked.size, full=n>=7;
+  document.getElementById("gen-overlay").innerHTML=`<div class="sheet">
+    <button class="close" data-close aria-label="Close">×</button>
+    <div class="sheet-head" style="background:var(--ink)">
+      <span class="daytag">Twelve options · pick seven</span>
+      <h2>Build the week</h2>
+      <div class="sheet-meta"><span>Ordered by how little shopping each needs</span></div>
+    </div>
+    <div class="sheet-body">
+      <div class="counter">
+        <b>${n}/7</b><span>${full?"Full — untick one to swap":"chosen"}</span>
+        <button class="reroll" data-reroll>Shuffle twelve</button>
+      </div>
+      ${genPool.map(r=>{
+        const m=missing(r), on=genPicked.has(r.id), dis=!on&&full;
+        return `<label class="opt${on?" on":""}${dis?" disabled":""}">
+          <input type="checkbox" data-pick="${r.id}" ${on?"checked":""} ${dis?"disabled":""}>
+          <span class="opt-main">
+            <h4>${esc(r.t)}</h4>
+            <p>${esc(r.b)}</p>
+            <span class="opt-tags">
+              <span>${r.c}</span><span>${r.time} min</span>
+              <span class="${m.length?"miss":"none"}">${m.length?"Buy: "+m.map(i=>i[2].split(",")[0]).join(", "):"Nothing to buy"}</span>
+            </span>
+          </span></label>`}).join("")}
+      <div class="sheet-actions">
+        <button class="btn" data-use ${full?"":"disabled"}>${full?"Use these seven":`Pick ${7-n} more`}</button>
+        <button class="btn ghost" data-close>Cancel</button>
+      </div>
+    </div></div>`;
+}
+document.getElementById("gen-overlay").onclick=e=>{
+  if(e.target.id==="gen-overlay"||e.target.closest("[data-close]")) return shut("gen-overlay");
+  if(e.target.closest("[data-reroll]")){buildOptions();paintGen();return}
+  const p=e.target.closest("[data-pick]");
+  if(p){
+    const id=+p.dataset.pick;
+    genPicked.has(id)?genPicked.delete(id):(genPicked.size<7&&genPicked.add(id));
+    paintGen();return;
+  }
+  if(e.target.closest("[data-use]")&&genPicked.size===7){
+    // quickest five land on weeknights, the two longest cooks on Sat and Sun
+    const chosen=[...genPicked].map(rec).sort((a,b)=>a.time-b.time);
+    week=chosen.map(r=>r.id);
+    spares=POOL.filter(r=>!genPicked.has(r.id)&&!missing(r).length&&r.time<=25).slice(0,2).map(r=>r.id);
+    custom=true; picked=new Set(week);
+    shut("gen-overlay"); draw();
+    document.getElementById("week-title").scrollIntoView({behavior:"smooth",block:"center"});
+  }
+};
+document.getElementById("open-gen").onclick=openGen;
+
+/* ---------- my kitchen ---------- */
+function paintKitchen(){
+  document.getElementById("kitchen-overlay").innerHTML=`<div class="sheet">
+    <button class="close" data-close aria-label="Close">×</button>
+    <div class="sheet-head" style="background:var(--herb)">
+      <span class="daytag">Updated whenever you shop</span>
+      <h2>My kitchen</h2>
+      <div class="sheet-meta"><span>${kitchen.size} items in</span><span>Untick anything you've run out of</span></div>
+    </div>
+    <div class="sheet-body">
+      <div class="kbar">
+        <button data-all="1">Tick everything</button>
+        <button data-all="0">Clear everything</button>
+        <button data-copy>Copy list as text</button>
+        <button data-wipe>Start again from the original list</button>
+      </div>
+      ${Object.entries(PANTRY).map(([g,items])=>`
+        <p class="section-title">${g}</p>
+        <div class="kgrid">${items.map(([k,l])=>`
+          <label class="kitem${kitchen.has(k)?" on":""}">
+            <input type="checkbox" data-k="${k}" ${kitchen.has(k)?"checked":""}>${l}</label>`).join("")}</div>`).join("")}
+      <p class="section-title">Something not listed</p>
+      <div class="addrow">
+        <input id="newitem" placeholder="e.g. Halloumi" aria-label="Add an item">
+        <button class="btn" data-addnew style="flex:0 0 auto">Add</button>
+      </div>
+      <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin-top:10px">
+        Added items are recorded for your shopping list but won't unlock new recipes on their own.</p>
+      <div class="sheet-actions">
+        <button class="btn" data-close>Done</button>
+      </div>
+    </div></div>`;
+}
+document.getElementById("open-kitchen").onclick=()=>{paintKitchen();show("kitchen-overlay")};
+document.getElementById("kitchen-overlay").onclick=e=>{
+  if(e.target.id==="kitchen-overlay"||e.target.closest("[data-close]")){shut("kitchen-overlay");draw();return}
+  const k=e.target.closest("[data-k]");
+  if(k){ k.checked?kitchen.add(k.dataset.k):kitchen.delete(k.dataset.k);
+    k.closest(".kitem").classList.toggle("on",k.checked);
+    document.querySelector("#kitchen-overlay .sheet-meta span").textContent=kitchen.size+" items in";
+    save(); return }
+  const all=e.target.closest("[data-all]");
+  if(all){ kitchen.clear();
+    if(all.dataset.all==="1") Object.values(PANTRY).flat().forEach(([key])=>kitchen.add(key));
+    save(); paintKitchen(); return }
+  if(e.target.closest("[data-addnew]")){
+    const v=document.getElementById("newitem").value.trim();
+    if(v){ const key="x_"+v.toLowerCase().replace(/\W+/g,"_");
+      if(!PANTRY["Added by you"]) PANTRY["Added by you"]=[];
+      if(!LABEL[key]){PANTRY["Added by you"].push([key,v,1]);LABEL[key]=v}
+      kitchen.add(key); save(); paintKitchen() }
+    return }
+  if(e.target.closest("[data-wipe]")){
+    STORE.wipe(); location.reload(); return }
+  if(e.target.closest("[data-copy]")){
+    const txt=Object.entries(PANTRY).map(([g,items])=>{
+      const have=items.filter(([k])=>kitchen.has(k)).map(([,l])=>l);
+      return have.length?g.toUpperCase()+"\n"+have.map(x=>"- "+x).join("\n"):"";
+    }).filter(Boolean).join("\n\n");
+    const ta=document.createElement("textarea");
+    ta.className="copybox"; ta.value="MY KITCHEN — "+new Date().toLocaleDateString()+"\n\n"+txt;
+    const host=e.target.closest(".kbar");
+    host.insertAdjacentElement("afterend",ta); ta.select();
+    try{navigator.clipboard.writeText(ta.value)}catch(err){}
+    e.target.textContent="Copied — or select the box below";
+    return }
+};
+
+/* ---------- shopping list ---------- */
+function paintList(){
+  const chosen=week.concat(spares).filter(id=>picked.has(id)).map(rec);
+  const dayOf=id=>{const i=week.indexOf(id);return i>-1?DAYS[i]:"Spare"};
+  const buy={},have={};
+  chosen.forEach(r=>r.ing.forEach(i=>{
+    if(!i[3]) return;
+    const bkt=kitchen.has(i[3])?have:buy, k=i[2]+"|"+i[1];
+    if(!bkt[k]) bkt[k]={qty:0,unit:i[1],name:i[2],none:i[0]==null};
+    bkt[k].qty+=(i[0]||0);
+  }));
+  const rows=o=>Object.values(o).map(v=>`<li><label><input type="checkbox">
+    <span class="qty">${v.none?"—":fmt(v.qty,v.unit,1)}</span><span class="iname">${esc(v.name)}</span></label></li>`).join("");
+  document.getElementById("list-overlay").innerHTML=`<div class="sheet">
+    <button class="close" data-close aria-label="Close">×</button>
+    <div class="sheet-head" style="background:var(--ink)">
+      <span class="daytag">${chosen.length} meal${chosen.length===1?"":"s"}</span>
+      <h2>The one shop</h2>
+      <div class="sheet-meta"><span>Quantities for 4 servings of each</span></div>
+    </div>
+    <div class="sheet-body">${chosen.length?`
+      <p class="section-title">What you're cooking</p>
+      <div class="list-recipes">${chosen.map(r=>
+        `<span class="chip">${dayOf(r.id)} · ${esc(r.t)}<button data-rm="${r.id}" aria-label="Remove">×</button></span>`).join("")}</div>
+      <p class="section-title">Buy these</p>
+      ${Object.keys(buy).length?`<ul class="ing">${rows(buy)}</ul>`
+        :`<p class="list-empty">Nothing. It's all in the kitchen already.</p>`}
+      <p class="section-title">Already yours — check before you leave</p>
+      <ul class="ing">${rows(have)}</ul>`
+      :`<p class="list-empty">Nothing selected. Add meals with the <strong>+ List</strong> button on any card.</p>`}
+      <div class="sheet-actions">
+        <button class="btn" data-print>Print list</button>
+        <button class="btn ghost" data-close>Back to the week</button>
+      </div>
+    </div></div>`;
+}
+document.getElementById("open-list").onclick=()=>{paintList();show("list-overlay")};
+document.getElementById("list-overlay").onclick=e=>{
+  if(e.target.id==="list-overlay"||e.target.closest("[data-close]")) return shut("list-overlay");
+  const rm=e.target.closest("[data-rm]");
+  if(rm){toggle(+rm.dataset.rm);paintList();draw();return}
+  if(e.target.closest("[data-print]")) return window.print();
+};
+
+document.addEventListener("keydown",e=>{
+  const cook=document.getElementById("cook");
+  if(e.key==="Escape"){
+    if(cook.classList.contains("open")) return cook.classList.remove("open");
+    ["recipe-overlay","list-overlay","gen-overlay","kitchen-overlay"].forEach(shut); draw();
+  }
+  if(cook.classList.contains("open")){
+    if(e.key==="ArrowRight") document.getElementById("cook-next").click();
+    if(e.key==="ArrowLeft") document.getElementById("cook-prev").click();
+  }
+});
+draw();
+</script>
