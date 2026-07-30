@@ -166,6 +166,12 @@ ol.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--mo
 .kitem .drop{flex:0 0 auto;background:transparent;border:0;color:var(--paprika);font-size:17px;line-height:1;padding:0 1px;opacity:.45}
 .kitem .drop:hover{opacity:1}
 textarea.copybox{width:100%;min-height:150px;font-family:var(--mono);font-size:12.5px;padding:13px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink);resize:vertical}
+.sharebox{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:14px}
+.sharecode{font-family:var(--mono);font-size:19px;font-weight:600;letter-spacing:.1em;margin:0}
+.sharenote{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin:9px 0 0;line-height:1.6}
+.sync-line{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin:6px 0 0;line-height:1.5}
+.sync-line.synced{color:var(--herb)}
+.sync-line.offline,.sync-line.clash{color:var(--paprika)}
 
 .cook{position:fixed;inset:0;background:var(--ink);color:var(--chalk);z-index:60;display:none;flex-direction:column;padding:22px}
 .cook.open{display:flex}
@@ -568,25 +574,129 @@ let picked=new Set(week), filter="All", q="", servings=4, open=null, step=0;
 
 const rec=id=>POOL.find(r=>r.id===id);
 
-const SAVED=STORE.get();
-if(SAVED){
-  if(Array.isArray(SAVED.added)&&SAVED.added.length){
-    // older saves stored [key,label,1] with no section — file those by guess
-    ADDED=SAVED.added.map(a=>Array.isArray(a)
+/* Everything worth keeping, as one document. This is what gets
+   written to the phone and, when sharing is on, to the shared copy. */
+function docOf(){ return {kitchen:[...kitchen],added:ADDED,week,spares,custom,picked:[...picked]} }
+function applyDoc(d){
+  if(!d) return;
+  ADDED=Array.isArray(d.added)?d.added.map(a=>Array.isArray(a)
+      // older saves stored [key,label,1] with no section — file those by guess
       ? {key:a[0],label:a[1],section:typeof a[2]==="string"&&a[2]?a[2]:guessSection(a[1]||"")}
       : {key:a&&a.key,label:a&&a.label,section:(a&&a.section)||guessSection((a&&a.label)||"")}
-    ).filter(a=>a.key&&a.label);
-    applyAdded();
-  }
-  if(Array.isArray(SAVED.kitchen)){kitchen.clear();SAVED.kitchen.forEach(k=>kitchen.add(k))}
-  if(Array.isArray(SAVED.week)&&SAVED.week.length===7&&SAVED.week.every(rec)) week=SAVED.week;
-  if(Array.isArray(SAVED.spares)&&SAVED.spares.every(rec)) spares=SAVED.spares;
-  custom=!!SAVED.custom;
-  picked=new Set(Array.isArray(SAVED.picked)?SAVED.picked.filter(rec):week);
+    ).filter(a=>a.key&&a.label):[];
+  applyAdded();
+  if(Array.isArray(d.kitchen)){kitchen.clear();d.kitchen.forEach(k=>kitchen.add(k))}
+  if(Array.isArray(d.week)&&d.week.length===7&&d.week.every(rec)) week=d.week;
+  if(Array.isArray(d.spares)&&d.spares.every(rec)) spares=d.spares;
+  custom=!!d.custom;
+  picked=new Set(Array.isArray(d.picked)?d.picked.filter(rec):week);
 }
-function save(){
-  STORE.set({kitchen:[...kitchen],added:ADDED,week,spares,custom,picked:[...picked]});
-}
+const SAVED=STORE.get();
+applyDoc(SAVED);
+function saveLocal(){ STORE.set(Object.assign(docOf(),{rev:SYNC.rev,code:SYNC.code})) }
+function save(){ saveLocal(); SYNC.queue() }
+
+/* ============================================================
+   SHARING BETWEEN PHONES
+   The list lives in a Supabase table, one row per household,
+   found by a random code. The code is held on each phone and is
+   deliberately NOT written into this file — the repo is public,
+   so anything in here is readable by anyone. Reaching a row
+   requires the code, which only the two of you have.
+   ============================================================ */
+const SYNC={
+  url:"__SUPABASE_URL__",
+  key:"__SUPABASE_ANON_KEY__",
+  rev:(SAVED&&SAVED.rev|0)||0,
+  state:"idle",                  // idle | saving | synced | offline | clash
+  seen:0, pushTimer:null, pollTimer:null, inflight:false,
+
+  get code(){ try{ return localStorage.getItem("kitchenweek_code")||"" }catch(e){ return "" } },
+  set code(v){ try{ v?localStorage.setItem("kitchenweek_code",v):localStorage.removeItem("kitchenweek_code") }catch(e){} },
+  ready(){ return !/^__/.test(this.url) && !/^__/.test(this.key) },
+  live(){ return this.ready() && !!this.code },
+
+  fresh(){ const a="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s="";
+    const r=(self.crypto&&crypto.getRandomValues)?crypto.getRandomValues(new Uint8Array(12)):null;
+    for(let i=0;i<12;i++) s+=a[(r?r[i]:Math.floor(Math.random()*256))%a.length];
+    return s.slice(0,4)+"-"+s.slice(4,8)+"-"+s.slice(8,12) },
+  tidy(v){ const c=String(v||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+    return c.length===12?c.slice(0,4)+"-"+c.slice(4,8)+"-"+c.slice(8,12):"" },
+
+  async rpc(fn,body){
+    const r=await fetch(this.url+"/rest/v1/rpc/"+fn,{
+      method:"POST", cache:"no-store",
+      headers:{apikey:this.key,Authorization:"Bearer "+this.key,"Content-Type":"application/json"},
+      body:JSON.stringify(body)});
+    if(!r.ok) throw new Error(fn+" returned "+r.status);
+    const j=await r.json();
+    return Array.isArray(j)?j[0]:j;
+  },
+
+  mark(s){ this.state=s; this.paintStatus() },
+  paintStatus(){
+    const el=document.getElementById("sync-line"); if(!el) return;
+    const when=this.seen?new Date(this.seen).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}):"";
+    el.textContent={idle:"Not sharing yet",saving:"Saving…",
+      synced:"In step with the other phone"+(when?" · "+when:""),
+      offline:"Offline — changes are safe here and will go up when you reconnect",
+      clash:"The other phone had newer changes, so those are showing now"}[this.state]||"";
+    el.className="sync-line "+this.state;
+  },
+
+  /* take the shared copy if it has moved on. returns true if we changed. */
+  async pull(){
+    if(!this.live()) return false;
+    const row=await this.rpc("kitchen_get",{p_code:this.code});
+    this.seen=Date.now();
+    if(!row||!row.data) return false;
+    if((row.rev|0)<=this.rev) return false;
+    this.rev=row.rev|0; applyDoc(row.data); saveLocal(); return true;
+  },
+
+  queue(){ if(!this.live()) return;
+    clearTimeout(this.pushTimer); this.mark("saving");
+    this.pushTimer=setTimeout(()=>this.push(),1000) },
+
+  /* Redrawing is kept outside the try blocks below on purpose: a rendering
+     fault must not be reported to the reader as "you are offline". */
+  async push(){
+    if(!this.live()) return;
+    if(this.inflight){ clearTimeout(this.pushTimer); this.pushTimer=setTimeout(()=>this.push(),400); return }
+    this.inflight=true;
+    let adopted=false;
+    try{
+      const row=await this.rpc("kitchen_put",{p_code:this.code,p_data:docOf(),p_rev:this.rev});
+      this.seen=Date.now();
+      if(row){
+        this.rev=row.rev|0;
+        if(row.clash){ applyDoc(row.data); adopted=true }
+        saveLocal(); this.mark(row.clash?"clash":"synced");
+      }
+    }catch(e){ this.mark("offline") }
+    finally{ this.inflight=false }
+    if(adopted) this.refresh();
+  },
+
+  refresh(){ draw();
+    const el=document.getElementById("kitchen-overlay");
+    if(el&&el.classList.contains("open")) paintKitchen();
+    this.paintStatus() },
+
+  async tick(){
+    if(!this.live()||document.hidden) return;
+    let adopted=false;
+    try{ adopted=await this.pull();
+         if(this.state!=="saving") this.mark(this.state==="clash"?"clash":"synced") }
+    catch(e){ this.mark("offline") }
+    if(adopted) this.refresh();
+  },
+  start(){ clearInterval(this.pollTimer);
+    if(!this.live()){ this.mark("idle"); return }
+    this.pollTimer=setInterval(()=>this.tick(),20000);
+    this.tick() }
+};
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) SYNC.tick() });
 let genPool=[], genPicked=new Set();
 const FR={0.25:"¼",0.5:"½",0.75:"¾"};
 
@@ -857,10 +967,35 @@ function paintKitchen(){
       <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin-top:10px">
         The section is guessed as you type — change it if it guesses wrong. Added items are kept
         for good and shared with anyone using your code, but won't unlock new recipes on their own.</p>
+      <p class="section-title">Shared between phones</p>
+      ${!SYNC.ready()?`
+        <p class="sharenote">Sharing isn't switched on in this copy of the page yet.</p>`
+       :SYNC.live()?`
+        <div class="sharebox">
+          <p class="sharecode">${esc(SYNC.code)}</p>
+          <p class="sync-line ${SYNC.state}" id="sync-line"></p>
+          <div class="kbar" style="margin:12px 0 0">
+            <button data-sharecopy>Copy code</button>
+            <button data-sharestop>Stop sharing on this phone</button>
+          </div>
+          <p class="sharenote">Enter this code on the other phone, in this same panel, and both
+            phones will show the same list. Changes appear within about twenty seconds.</p>
+        </div>`:`
+        <div class="sharebox">
+          <p class="sharenote" style="margin:0 0 11px">Start a shared list here, then enter the code
+            it gives you on the other phone.</p>
+          <div class="kbar" style="margin:0 0 10px"><button data-sharenew>Start sharing</button></div>
+          <div class="addrow" style="margin:0">
+            <input id="joincode" placeholder="Or type a code you were given" aria-label="Enter a sharing code" autocomplete="off" spellcheck="false">
+            <button class="btn" data-sharejoin style="flex:0 0 auto">Join</button>
+          </div>
+          <p class="sync-line" id="sync-line"></p>
+        </div>`}
       <div class="sheet-actions">
         <button class="btn" data-close>Done</button>
       </div>
     </div></div>`;
+  SYNC.paintStatus();
 }
 document.getElementById("open-kitchen").onclick=()=>{paintKitchen();show("kitchen-overlay")};
 document.getElementById("kitchen-overlay").onclick=e=>{
@@ -897,6 +1032,34 @@ document.getElementById("kitchen-overlay").onclick=e=>{
       const box=document.getElementById("newitem"); if(box) box.focus();
     }
     return }
+  if(e.target.closest("[data-sharenew]")){
+    SYNC.code=SYNC.fresh(); SYNC.rev=0;
+    saveLocal(); paintKitchen(); SYNC.mark("saving");
+    SYNC.push().then(()=>SYNC.start());
+    return }
+  if(e.target.closest("[data-sharejoin]")){
+    const line=()=>document.getElementById("sync-line");
+    const say=(t,cls)=>{const l=line(); if(l){l.textContent=t; l.className="sync-line "+(cls||"")}};
+    const c=SYNC.tidy(document.getElementById("joincode").value);
+    if(!c){ say("That code doesn't look right — it should be twelve letters and numbers.","offline"); return }
+    if(!confirm("Joining replaces this phone's list with the shared one. Continue?")) return;
+    say("Looking for that list…");
+    const prev=SYNC.code, prevRev=SYNC.rev;
+    SYNC.code=c; SYNC.rev=0;
+    SYNC.pull().then(found=>{
+      if(found){ SYNC.refresh(); SYNC.start(); SYNC.mark("synced") }
+      else { SYNC.code=prev; SYNC.rev=prevRev;
+             say("No list found with that code. Check it and try again.","offline") }
+    }).catch(()=>{ SYNC.code=prev; SYNC.rev=prevRev;
+             say("Couldn't reach the shared list. Check your connection and try again.","offline") });
+    return }
+  if(e.target.closest("[data-sharestop]")){
+    if(!confirm("Stop sharing on this phone? The list stays exactly as it is here, but changes will no longer travel between phones.")) return;
+    SYNC.code=""; SYNC.rev=0; clearInterval(SYNC.pollTimer);
+    saveLocal(); paintKitchen(); SYNC.mark("idle"); return }
+  if(e.target.closest("[data-sharecopy]")){
+    try{navigator.clipboard.writeText(SYNC.code)}catch(err){}
+    e.target.textContent="Copied"; return }
   if(e.target.closest("[data-wipe]")){
     if(!confirm("Put every tick back to the original list? Items you added yourself are kept.")) return;
     kitchen.clear();
@@ -989,4 +1152,5 @@ document.addEventListener("keydown",e=>{
   }
 });
 draw();
+SYNC.start();
 </script>
