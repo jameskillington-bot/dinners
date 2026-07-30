@@ -38,16 +38,11 @@ Added items are recorded for the shopping list but won't unlock new recipes on t
 
 Both phones can share one list, so either of you can add an item or untick something and the other sees it. This needs a small free database, because a page hosted on GitHub Pages has nowhere of its own to store shared data.
 
-**One-off setup:**
+**This is already set up** — the Supabase project exists, `supabase-setup.sql` has been run against it, and the project URL and `anon` key are in the `SYNC` block near the top of the `<script>` in `index.html`. Nothing further is needed unless you ever move to a different Supabase project, in which case re-run that SQL there and swap those two values.
 
-1. Sign up at **supabase.com** and create a project. Any name; the free tier is enough.
-2. Open the **SQL Editor** in the left sidebar, paste in the whole of `supabase-setup.sql`, and press **Run**.
-3. Go to **Settings → API**. Copy the **Project URL** and the **anon / public** key.
-4. Put those two values into `index.html`, replacing `__SUPABASE_URL__` and `__SUPABASE_ANON_KEY__` near the top of the `SYNC` block, then upload the file over the old one.
+Only the **anon / public** key belongs in `index.html`. The **service_role** key and the **database password** must never go near this file, or any file in this repo — it is public. Neither is needed: the anon key alone cannot read the table (see below).
 
-Never put the **service_role** key in this file. It bypasses all the protections below, and this repo is public. Only the `anon` key belongs here.
-
-**Then, on the first phone:** open **My kitchen**, scroll to *Shared between phones*, and tap **Start sharing**. It shows a code like `ZYTL-Y7SX-BQJL`.
+**On the first phone:** open **My kitchen**, scroll to *Shared between phones*, and tap **Start sharing**. It shows a code like `ZYTL-Y7SX-BQJL`.
 
 **On the second phone:** same panel, type that code into the box, and tap **Join**. Joining replaces that phone's list with the shared one, so start from whichever phone has the list you want to keep.
 

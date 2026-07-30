@@ -605,8 +605,12 @@ function save(){ saveLocal(); SYNC.queue() }
    requires the code, which only the two of you have.
    ============================================================ */
 const SYNC={
-  url:"__SUPABASE_URL__",
-  key:"__SUPABASE_ANON_KEY__",
+  // Project URL and the anon/public key. The anon key is meant to be public —
+  // it is what lets the page talk to Supabase at all, and on its own it cannot
+  // read this table (see supabase-setup.sql). The database password and the
+  // service_role key must never appear here.
+  url:"https://jwmdvjwwdwtgnkuxecuo.supabase.co",
+  key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3bWR2and3ZHd0Z25rdXhlY3VvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0MTQ3MzMsImV4cCI6MjEwMDk5MDczM30.M562UZBUiL15lR7ySENlla6R-hG0gZB29FpTYORGGwE",
   rev:(SAVED&&SAVED.rev|0)||0,
   state:"idle",                  // idle | saving | synced | offline | clash
   seen:0, pushTimer:null, pollTimer:null, inflight:false,
@@ -623,8 +627,10 @@ const SYNC={
   tidy(v){ const c=String(v||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
     return c.length===12?c.slice(0,4)+"-"+c.slice(4,8)+"-"+c.slice(8,12):"" },
 
+  // tolerate the URL being pasted with or without the /rest/v1/ tail
+  base(){ return this.url.replace(/\/+$/,"").replace(/\/rest\/v1$/,"") },
   async rpc(fn,body){
-    const r=await fetch(this.url+"/rest/v1/rpc/"+fn,{
+    const r=await fetch(this.base()+"/rest/v1/rpc/"+fn,{
       method:"POST", cache:"no-store",
       headers:{apikey:this.key,Authorization:"Bearer "+this.key,"Content-Type":"application/json"},
       body:JSON.stringify(body)});
