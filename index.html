@@ -614,6 +614,12 @@ const SYNC={
   rev:(SAVED&&SAVED.rev|0)||0,
   state:"idle",                  // idle | saving | synced | offline | clash
   seen:0, pushTimer:null, pollTimer:null, inflight:false,
+  /* The document as the shared copy last had it. draw() ends in save(), and
+     draw() runs on every repaint — including the repaint that follows taking
+     the other phone's changes. Without this, taking a change would send one
+     straight back, and the two phones would volley forever. */
+  lastSent:"",
+  snapshot(){ try{ return JSON.stringify(docOf()) }catch(e){ return "" } },
 
   get code(){ try{ return localStorage.getItem("kitchenweek_code")||"" }catch(e){ return "" } },
   set code(v){ try{ v?localStorage.setItem("kitchenweek_code",v):localStorage.removeItem("kitchenweek_code") }catch(e){} },
@@ -657,10 +663,12 @@ const SYNC={
     this.seen=Date.now();
     if(!row||!row.data) return false;
     if((row.rev|0)<=this.rev) return false;
-    this.rev=row.rev|0; applyDoc(row.data); saveLocal(); return true;
+    this.rev=row.rev|0; applyDoc(row.data); saveLocal();
+    this.lastSent=this.snapshot(); return true;
   },
 
   queue(){ if(!this.live()) return;
+    if(this.snapshot()===this.lastSent) return;      // nothing actually changed
     clearTimeout(this.pushTimer); this.mark("saving");
     this.pushTimer=setTimeout(()=>this.push(),1000) },
 
@@ -668,15 +676,18 @@ const SYNC={
      fault must not be reported to the reader as "you are offline". */
   async push(){
     if(!this.live()) return;
+    const sent=this.snapshot();
+    if(sent===this.lastSent){ if(this.state==="saving") this.mark("synced"); return }
     if(this.inflight){ clearTimeout(this.pushTimer); this.pushTimer=setTimeout(()=>this.push(),400); return }
     this.inflight=true;
     let adopted=false;
     try{
-      const row=await this.rpc("kitchen_put",{p_code:this.code,p_data:docOf(),p_rev:this.rev});
+      const row=await this.rpc("kitchen_put",{p_code:this.code,p_data:JSON.parse(sent),p_rev:this.rev});
       this.seen=Date.now();
       if(row){
         this.rev=row.rev|0;
-        if(row.clash){ applyDoc(row.data); adopted=true }
+        if(row.clash){ applyDoc(row.data); adopted=true; this.lastSent=this.snapshot() }
+        else this.lastSent=sent;
         saveLocal(); this.mark(row.clash?"clash":"synced");
       }
     }catch(e){ this.mark("offline") }
@@ -1051,7 +1062,7 @@ document.getElementById("kitchen-overlay").onclick=e=>{
     if(!confirm("Joining replaces this phone's list with the shared one. Continue?")) return;
     say("Looking for that list…");
     const prev=SYNC.code, prevRev=SYNC.rev;
-    SYNC.code=c; SYNC.rev=0;
+    SYNC.code=c; SYNC.rev=0; SYNC.lastSent="";
     SYNC.pull().then(found=>{
       if(found){ SYNC.refresh(); SYNC.start(); SYNC.mark("synced") }
       else { SYNC.code=prev; SYNC.rev=prevRev;
@@ -1061,7 +1072,7 @@ document.getElementById("kitchen-overlay").onclick=e=>{
     return }
   if(e.target.closest("[data-sharestop]")){
     if(!confirm("Stop sharing on this phone? The list stays exactly as it is here, but changes will no longer travel between phones.")) return;
-    SYNC.code=""; SYNC.rev=0; clearInterval(SYNC.pollTimer);
+    SYNC.code=""; SYNC.rev=0; SYNC.lastSent=""; clearInterval(SYNC.pollTimer);
     saveLocal(); paintKitchen(); SYNC.mark("idle"); return }
   if(e.target.closest("[data-sharecopy]")){
     try{navigator.clipboard.writeText(SYNC.code)}catch(err){}
