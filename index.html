@@ -1,11 +1,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>This Week's Dinners</title>
-<meta name="description" content="Seven dinners a week, built from what's already in the kitchen.">
-<meta name="theme-color" content="#16211B">
+<title>Kate's Kitchen</title>
+<meta name="description" content="Seven high-protein dinners a week, built from what's already in the kitchen.">
+<meta name="theme-color" content="#1C1917">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="This Week">
+<meta name="apple-mobile-web-app-title" content="Kate's Kitchen">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-180.png">
@@ -15,13 +15,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#16211B; --ink-2:#3D4A43; --chalk:#ECEFE8; --paper:#FFFFFF;
-  --turmeric:#F2B705; --herb:#2F6D4F; --paprika:#A8281B; --line:#D3D8CE; --radius:3px;
+  --ink:#1C1917; --ink-2:#6E655A; --chalk:#F4F0E8; --paper:#FFFFFF;
+  --turmeric:#C9AE86; --herb:#7C7F63; --paprika:#A0705A; --line:#E3DCD0;
+  --radius:14px; --radius-sm:10px;
   --display:"Archivo Black","Archivo","Haettenschweiler","Arial Narrow",sans-serif;
   --body:"Archivo","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box}
+/* icons: inline SVG so the page stays a single self-contained file */
+.ico{width:1.05em;height:1.05em;flex:0 0 auto;vertical-align:-.16em;
+     fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.act,.btn,.reroll,.kbar button,.ticket{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.section-title{display:flex;align-items:center;gap:9px}
+.section-title .ico{stroke-width:1.9}
 html,body{margin:0;padding:0}
 body{background:var(--chalk);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
 button{font-family:inherit;cursor:pointer}
@@ -33,15 +40,15 @@ input{font-family:inherit}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--turmeric);margin:0 0 10px}
 .wordmark{font-family:var(--display);font-size:clamp(30px,6.2vw,64px);line-height:.88;letter-spacing:-.02em;text-transform:uppercase;margin:0 0 14px}
 .wordmark em{font-style:normal;color:var(--turmeric)}
-.mast-sub{max-width:56ch;color:#B9C3BB;font-size:15px;margin:0 0 20px}
-.mast-bar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;border-top:1px solid #2E3B34;padding:12px 0}
-.mast-stat{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8FA096;margin-right:16px}
+.mast-sub{max-width:56ch;color:#C3B9A9;font-size:15px;margin:0 0 20px}
+.mast-bar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;border-top:1px solid #332E28;padding:12px 0}
+.mast-stat{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#A79C8D;margin-right:16px}
 .mast-stat b{color:var(--chalk);font-weight:600}
 .mast-bar .spacer{flex:1}
-.act{border:1.5px solid #3E4E45;background:transparent;color:var(--chalk);font-family:var(--mono);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:9px 14px;border-radius:var(--radius)}
+.act{border:1.5px solid #3A342D;background:transparent;color:var(--chalk);font-family:var(--mono);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:9px 14px;border-radius:var(--radius)}
 .act:hover{border-color:var(--turmeric);color:var(--turmeric)}
 .act.primary{background:var(--turmeric);border-color:var(--turmeric);color:var(--ink)}
-.act.primary:hover{background:#ffc93c;color:var(--ink)}
+.act.primary:hover{background:#D8BE97;color:var(--ink)}
 
 .shelf{background:var(--paprika);color:#fff;padding:14px 20px}
 .shelf-inner{max-width:1120px;margin:0 auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
@@ -53,7 +60,7 @@ input{font-family:inherit}
 .wrap{max-width:1120px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-left)) env(safe-area-inset-bottom)}
 .strip{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:20px 0 4px}
 .search{flex:1;min-width:190px;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:12px 15px;font-size:15px;color:var(--ink)}
-.search::placeholder{color:#93A099}
+.search::placeholder{color:#A79C8D}
 .pills{display:flex;flex-wrap:wrap;gap:7px}
 .pill{background:transparent;border:1.5px solid var(--line);color:var(--ink-2);border-radius:100px;padding:8px 14px;font-size:13px;font-weight:500}
 .pill:hover{border-color:var(--ink);color:var(--ink)}
@@ -75,16 +82,16 @@ input{font-family:inherit}
 .card h3{font-family:var(--display);font-size:19px;line-height:1.08;text-transform:uppercase;margin:0 0 8px}
 .blurb{font-size:13.5px;color:var(--ink-2);margin:0 0 13px;flex:1}
 .buy-flag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:4px 8px;border-radius:var(--radius);margin-bottom:12px;align-self:flex-start}
-.buy-none{background:#E4F0E7;color:var(--herb)}
-.buy-some{background:#FDF1CE;color:#7A5B00}
+.buy-none{background:#EAEADF;color:var(--herb)}
+.buy-some{background:#F5EADB;color:#7A6A4E}
 .meta{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--ink-2);border-top:1px solid var(--line);padding-top:10px;margin-bottom:12px}
 .card-actions{display:flex;gap:8px}
 .btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--chalk);border-radius:var(--radius);padding:10px 12px;font-size:13px;font-weight:600;flex:1}
-.btn:hover{background:#0C130F}
+.btn:hover{background:#141210}
 .btn.ghost{background:transparent;color:var(--ink);flex:0 0 auto}
 .btn.ghost:hover{background:var(--turmeric);border-color:var(--turmeric)}
 .btn.ghost[aria-pressed="true"]{background:var(--turmeric);border-color:var(--turmeric)}
-.spare .card-head{background:#3D4A43!important}
+.spare .card-head{background:#6E655A!important}
 .empty{grid-column:1/-1;border:2px dashed var(--line);border-radius:var(--radius);padding:36px 24px;text-align:center;color:var(--ink-2)}
 .empty strong{display:block;font-family:var(--display);text-transform:uppercase;font-size:18px;color:var(--ink);margin-bottom:6px}
 .footnote{font-family:var(--mono);font-size:11px;color:var(--ink-2);padding:30px 0 60px;border-top:1px solid var(--line);margin-top:36px;line-height:1.7}
@@ -105,12 +112,12 @@ input{font-family:inherit}
 .section-title:first-child{margin-top:0}
 
 .dial{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--ink);border-radius:var(--radius);padding:14px 16px;color:var(--chalk)}
-.dial-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#94A69B}
+.dial-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#A79C8D}
 .dial-set{display:flex;border:2px solid var(--turmeric);border-radius:var(--radius);overflow:hidden}
 .dial-set button{background:transparent;color:var(--turmeric);border:0;font-family:var(--mono);font-weight:600;font-size:16px;padding:9px 20px}
 .dial-set button+button{border-left:2px solid var(--turmeric)}
 .dial-set button[aria-pressed="true"]{background:var(--turmeric);color:var(--ink)}
-.dial-note{font-family:var(--mono);font-size:11px;color:#94A69B;margin-left:auto}
+.dial-note{font-family:var(--mono);font-size:11px;color:#A79C8D;margin-left:auto}
 
 ul.ing{list-style:none;margin:0;padding:0}
 ul.ing li{border-bottom:1px solid var(--line)}
@@ -135,26 +142,26 @@ ol.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--mo
 /* menu generator */
 .opt{display:flex;gap:13px;align-items:flex-start;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:13px;margin-bottom:9px;cursor:pointer}
 .opt:hover{border-color:var(--ink-2)}
-.opt.on{border-color:var(--herb);background:#F4FAF5;box-shadow:inset 3px 0 0 var(--herb)}
+.opt.on{border-color:var(--herb);background:#F6F4EC;box-shadow:inset 3px 0 0 var(--herb)}
 .opt.disabled{opacity:.45}
 .opt input{margin:3px 0 0;width:18px;height:18px;accent-color:var(--herb);flex:0 0 auto}
 .opt-main{flex:1;min-width:0}
 .opt-main h4{margin:0 0 3px;font-size:15.5px;font-weight:600}
 .opt-main p{margin:0;font-size:13px;color:var(--ink-2)}
 .opt-tags{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin-top:6px;display:flex;gap:12px;flex-wrap:wrap}
-.opt-tags .miss{color:#7A5B00}
+.opt-tags .miss{color:#7A6A4E}
 .opt-tags .none{color:var(--herb)}
 .counter{position:sticky;top:0;z-index:4;background:var(--ink);color:var(--chalk);border-radius:var(--radius);padding:12px 15px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
 .counter b{font-family:var(--mono);font-size:20px;color:var(--turmeric)}
-.counter span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94A69B}
-.counter .reroll{margin-left:auto;background:transparent;border:1.5px solid #3E4E45;color:var(--chalk);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;border-radius:var(--radius)}
+.counter span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#A79C8D}
+.counter .reroll{margin-left:auto;background:transparent;border:1.5px solid #3A342D;color:var(--chalk);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;border-radius:var(--radius)}
 .counter .reroll:hover{border-color:var(--turmeric);color:var(--turmeric)}
 
 /* kitchen */
 .kgroup{margin-bottom:6px}
 .kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:6px}
 .kitem{display:flex;gap:9px;align-items:center;background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:9px 11px;font-size:13.5px;cursor:pointer}
-.kitem.on{border-color:var(--herb);background:#F4FAF5}
+.kitem.on{border-color:var(--herb);background:#F6F4EC}
 .kitem input{margin:0;width:16px;height:16px;accent-color:var(--herb);flex:0 0 auto}
 .kbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .kbar button{background:transparent;border:1.5px solid var(--line);border-radius:100px;padding:7px 13px;font-size:12.5px;color:var(--ink-2)}
@@ -166,6 +173,10 @@ ol.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--mo
 .kitem .drop{flex:0 0 auto;background:transparent;border:0;color:var(--paprika);font-size:17px;line-height:1;padding:0 1px;opacity:.45}
 .kitem .drop:hover{opacity:1}
 textarea.copybox{width:100%;min-height:150px;font-family:var(--mono);font-size:12.5px;padding:13px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink);resize:vertical}
+.card.done{opacity:.62}
+.card.done .card-head{filter:saturate(.35)}
+.card.done h3{text-decoration:line-through;text-decoration-thickness:1.5px}
+.opt-tags .carried{background:var(--turmeric);color:var(--ink);border-radius:var(--radius-pill,100px);padding:1px 9px;font-weight:600}
 .sharebox{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius);padding:14px}
 .sharecode{font-family:var(--mono);font-size:19px;font-weight:600;letter-spacing:.1em;margin:0}
 .sharenote{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin:9px 0 0;line-height:1.6}
@@ -177,7 +188,7 @@ textarea.copybox{width:100%;min-height:150px;font-family:var(--mono);font-size:1
 .cook.open{display:flex}
 .cook{padding-top:max(22px,env(safe-area-inset-top));padding-bottom:max(22px,env(safe-area-inset-bottom))}
 .cook-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.cook-top h3{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#94A69B;margin:0}
+.cook-top h3{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#A79C8D;margin:0}
 .cook-step{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:740px;margin:0 auto;width:100%}
 .cook-num{font-family:var(--display);font-size:clamp(50px,13vw,112px);line-height:.9;color:var(--turmeric);margin-bottom:16px}
 .cook-text{font-size:clamp(20px,3.5vw,31px);line-height:1.35}
@@ -185,7 +196,7 @@ textarea.copybox{width:100%;min-height:150px;font-family:var(--mono);font-size:1
 .cook-nav button{flex:1;background:transparent;border:2px solid var(--turmeric);color:var(--turmeric);border-radius:var(--radius);padding:16px;font-weight:600;font-size:15px}
 .cook-nav button:hover:not(:disabled){background:var(--turmeric);color:var(--ink)}
 .cook-nav button:disabled{opacity:.3;cursor:not-allowed}
-.progress{height:5px;background:#2E3B34;margin:18px 0;border-radius:100px;overflow:hidden}
+.progress{height:5px;background:#332E28;margin:18px 0;border-radius:100px;overflow:hidden}
 .progress i{display:block;height:100%;background:var(--turmeric);transition:width .2s ease}
 
 .list-recipes{display:flex;flex-wrap:wrap;gap:7px}
@@ -213,15 +224,15 @@ textarea.copybox{width:100%;min-height:150px;font-family:var(--mono);font-size:1
 <header class="masthead">
   <div class="mast-inner">
     <p class="eyebrow">One shop · Seven nights · Built from your kitchen</p>
-    <h1 class="wordmark">The week,<br><em>already</em> in<br>your kitchen</h1>
-    <p class="mast-sub">Seven dinners, one for each night. Tell it what's in the kitchen and it works out the only things you'd need to buy. Generate a fresh menu whenever the week gets repetitive.</p>
+    <h1 class="wordmark">Kate's<br><em>Kitchen</em></h1>
+    <p class="mast-sub">Seven dinners, one for each night. Tell it what's in the kitchen and it works out the only things you'd need to buy. Generate a fresh menu whenever you want something new.</p>
     <div class="mast-bar">
       <span class="mast-stat"><b id="stat-quick">0</b> under 30 min</span>
       <span class="mast-stat"><b id="stat-buy">0</b> to buy</span>
       <span class="spacer"></span>
-      <button class="act" id="open-kitchen">My kitchen</button>
-      <button class="act" id="open-gen">Generate menu</button>
-      <button class="act primary" id="open-list">Shopping list · <span id="list-count">7</span></button>
+      <button class="act" id="open-kitchen"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.6"/><path d="M6 10h12M9.2 6v2.2M9.2 12.8v2.4"/></svg>My kitchen</button>
+      <button class="act" id="open-gen"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 3.5H21v4.5"/><path d="M21 3.5 3.5 21"/><path d="M21 16.5V21h-4.5"/><path d="M14.6 14.6 21 21"/><path d="M3.5 3.5 9 9"/></svg>Generate menu</button>
+      <button class="act primary" id="open-list"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.5" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h2.6l2.6 11.3a1.9 1.9 0 0 0 1.9 1.5h8.1a1.9 1.9 0 0 0 1.9-1.4L21 7.5H5.4"/></svg>Shopping list · <span id="list-count">7</span></button>
     </div>
   </div>
 </header>
@@ -293,13 +304,13 @@ const STORE={
    you own permanently, or use the "My kitchen" panel.
    ============================================================ */
 const PANTRY={
-"Meat & fish":[["chicken","Chicken breasts",1],["mince","Lean beef mince",1],["salmon","Salmon fillets",1],["bacon","Smoked back bacon",1],["tuna","Tuna chunks",1],["seafood","Frozen seafood mix",1],["ham","Ham & cooked meats",1]],
-"Dairy & chilled":[["yogurt","Greek yogurt",1],["cheese","Cheese",1],["parmesan","Parmesan",1],["butter","Butter",1],["mayo","Mayonnaise",1],["eggs","Eggs",0],["milk","Milk",0],["cream","Double cream",0]],
-"Fresh veg & fruit":[["onion","Onions",1],["garlic","Garlic",1],["potatoes","Potatoes",1],["carrots","Carrots",1],["broccoli","Broccoli",1],["tenderstem","Tenderstem broccoli",1],["tomatoes","Tomatoes",1],["cherrytom","Cherry tomatoes",1],["cucumber","Cucumber",1],["lemon","Lemons",1],["lime","Limes",1],["leaves","Salad leaves",1],["avocado","Avocado",1],["peppers","Peppers",1],["spinach","Baby spinach",0],["mushrooms","Mushrooms",0],["springonion","Spring onions",0],["parsley","Parsley",0],["coriander","Coriander",0]],
-"Tins & jars":[["chickpeas","Chickpeas",1],["coconut","Coconut milk",1],["beans","Baked beans",1],["choptom","Chopped tomatoes",1],["pastasauce","Red pasta sauce",1],["pesto","Green pesto",1],["cornichons","Cornichons",1],["sweetcorn","Sweetcorn",0]],
-"Freezer":[["frozenveg","Frozen mixed veg",1],["peas","Frozen peas",1],["greenbeans","Green beans",0]],
-"Store cupboard":[["pasta","Pasta",1],["rice","Rice",1],["couscous","Couscous",1],["oats","Porridge oats",1],["stock","Stock cubes",1],["spices","Spices & dried herbs",1],["oil","Olive oil",1]],
-"Sauces & condiments":[["soy","Soy sauce",1],["sesame","Sesame oil",1],["hotsauce","Hot sauce",1],["fajita","Fajita paste",1],["mustard","Mustard",1],["honey","Honey or sugar",1],["worcs","Worcestershire sauce",1],["vinegar","Vinegar",1],["peanut","Peanut butter",0]]
+"Meat & fish":[["chicken","Chicken breasts",1],["chickenthigh","Chicken thighs",0],["mince","Lean beef mince (5%)",1],["steak","Beef steak",0],["pork","Pork loin or tenderloin",0],["turkey","Turkey mince or breast",0],["chorizo","Chorizo",0],["bacon","Smoked back bacon",1],["ham","Ham & cooked meats",1],["salmon","Salmon fillets",1],["hotsmoked","Hot-smoked salmon",0],["tuna","Tuna",1]],
+"Dairy & chilled":[["yogurt","Greek yogurt",1],["cheese","Cheese",1],["parmesan","Parmesan",1],["feta","Feta",0],["halloumi","Halloumi",0],["mozzarella","Mozzarella",0],["cottagecheese","Cottage cheese",0],["tofu","Tofu",0],["butter","Butter",1],["mayo","Mayonnaise",1],["eggs","Eggs",0],["milk","Milk",0],["cream","Double cream",0],["cremefraiche","Crème fraîche",0],["puffpastry","Puff pastry",0]],
+"Fresh veg & fruit":[["onion","Onions",1],["redonion","Red onions",0],["garlic","Garlic",1],["ginger","Ginger",0],["chilli","Fresh chillies",0],["potatoes","Potatoes",1],["sweetpotato","Sweet potatoes",0],["carrots","Carrots",1],["broccoli","Broccoli",1],["tenderstem","Tenderstem broccoli",1],["cauliflower","Cauliflower",0],["cabbage","Cabbage",0],["courgette","Courgettes",0],["aubergine","Aubergine",0],["butternut","Butternut squash",0],["leeks","Leeks",0],["celery","Celery",0],["tomatoes","Tomatoes",1],["cherrytom","Cherry tomatoes",1],["cucumber","Cucumber",1],["lemon","Lemons",1],["lime","Limes",1],["leaves","Salad leaves",1],["rocket","Rocket",0],["littlegem","Little gem lettuce",0],["radish","Radishes",0],["sugarsnap","Sugarsnap peas",0],["asparagus","Asparagus",0],["beetroot","Beetroot",0],["avocado","Avocado",1],["peppers","Peppers",1],["spinach","Baby spinach",0],["mushrooms","Mushrooms",0],["springonion","Spring onions",0],["parsley","Parsley",0],["coriander","Coriander",0],["basil","Basil",0],["mint","Mint",0]],
+"Tins & jars":[["chickpeas","Chickpeas",1],["lentils","Lentils",0],["butterbeans","Butter beans",0],["kidneybeans","Kidney beans",0],["cannellini","Cannellini beans",0],["coconut","Coconut milk",1],["beans","Baked beans",1],["choptom","Chopped tomatoes",1],["passata","Passata",0],["pastasauce","Red pasta sauce",1],["pesto","Green pesto",1],["olives","Olives",0],["cornichons","Cornichons",1],["jalapenos","Jalapeños",0],["sweetcorn","Sweetcorn",0]],
+"Freezer":[["frozenveg","Frozen mixed veg",1],["peas","Frozen peas",1],["greenbeans","Green beans",0],["edamame","Edamame",0],["frozenspinach","Frozen spinach",0]],
+"Store cupboard":[["pasta","Pasta",1],["orzo","Orzo",0],["noodles","Noodles",0],["gnocchi","Gnocchi",0],["rice","Rice",1],["couscous","Couscous",1],["bulgur","Bulgur wheat",0],["quinoa","Quinoa",0],["oats","Porridge oats",1],["flour","Plain flour",0],["breadcrumbs","Breadcrumbs",0],["tortillas","Tortillas & wraps",0],["flatbread","Flatbreads or naan",0],["bread","Bread",0],["cashews","Cashews or peanuts",0],["stock","Stock cubes",1],["spices","Spices & dried herbs",1],["oil","Olive oil",1]],
+"Sauces & condiments":[["soy","Soy sauce",1],["sesame","Sesame oil",1],["hotsauce","Hot sauce",1],["fajita","Fajita paste",1],["currypaste","Curry paste",0],["harissa","Harissa",0],["tahini","Tahini",0],["mustard","Mustard",1],["ketchup","Ketchup",0],["bbq","BBQ sauce",0],["honey","Honey or sugar",1],["maple","Maple syrup",0],["worcs","Worcestershire sauce",1],["vinegar","Vinegar",1],["balsamic","Balsamic vinegar",0],["peanut","Peanut butter",0]]
 };
 const LABEL={}, kitchen=new Set();
 Object.values(PANTRY).flat().forEach(([k,l,d])=>{LABEL[k]=l; if(d) kitchen.add(k)});
@@ -344,12 +355,29 @@ function applyAdded(){
    pantryKey 0 = salt, pepper and the like: always assumed.
    Quantities are for 4 servings and scale from there.
    ============================================================ */
-const COL={Chicken:"#B5651D",Beef:"#7A2A20",Fish:"#1F5F73",Vegetarian:"#2F6D4F",Comfort:"#5A4A7A"};
+const COL={Chicken:"#A98A66",Beef:"#7C5B4C",Pork:"#94765E",Fish:"#77857F",
+           Vegetarian:"#7C8462",Salads:"#8E9370",Comfort:"#8B7C6C"};
+
+/* ============================================================
+   ICONS — inline SVG, sized in ems so they follow the text
+   ============================================================ */
+const ICON={
+  trolley:'<circle cx="9.5" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h2.6l2.6 11.3a1.9 1.9 0 0 0 1.9 1.5h8.1a1.9 1.9 0 0 0 1.9-1.4L21 7.5H5.4"/>',
+  clipboard:'<path d="M9.5 3.5h5v2.6h-5z"/><path d="M14.5 4.8h2.2a2 2 0 0 1 2 2v12.7a2 2 0 0 1-2 2H7.3a2 2 0 0 1-2-2V6.8a2 2 0 0 1 2-2h2.2"/><path d="M9 11.5h6M9 15.5h4"/>',
+  fridge:'<rect x="6" y="2.5" width="12" height="19" rx="2.6"/><path d="M6 10h12M9.2 6v2.2M9.2 12.8v2.4"/>',
+  shuffle:'<path d="M16.5 3.5H21v4.5"/><path d="M21 3.5 3.5 21"/><path d="M21 16.5V21h-4.5"/><path d="M14.6 14.6 21 21"/><path d="M3.5 3.5 9 9"/>',
+  check:'<path d="M20 6.5 9.5 17 4.5 12"/>',
+  clock:'<circle cx="12" cy="12" r="8.6"/><path d="M12 6.8V12l3.2 2.1"/>',
+  basket:'<path d="M3 8.5h18l-1.7 10a2 2 0 0 1-2 1.7H6.7a2 2 0 0 1-2-1.7z"/><path d="M8.5 8.5 12 3l3.5 5.5"/><path d="M9.5 12.5v4M14.5 12.5v4"/>',
+  leaf:'<path d="M20.5 3.5C10 3.5 4 8.5 4 15.5a5 5 0 0 0 5 5c7 0 11.5-6.5 11.5-17z"/><path d="M4 20.5C7.5 16 12 12.8 17 10.8"/>',
+  plate:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/>'
+};
+const ico=n=>`<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${ICON[n]||""}</svg>`;
 
 const POOL=[
-{id:1,t:"Lemon Chicken & Couscous",c:"Chicken",tags:["Quick","Healthy"],time:25,kcal:468,p:45,cb:47,f:11,
+{id:1,t:"Lemon Chicken & Couscous",c:"Chicken",tags:["Quick","Healthy"],time:25,kcal:472,p:48,cb:49,f:9,
  b:"Bright and fast. The couscous cooks itself in a bowl while you do the chicken.",
- ing:[[4,"","chicken breasts","chicken"],[2,"","lemons","lemon"],[250,"g","couscous","couscous"],[350,"ml","hot chicken stock","stock"],[200,"g","cherry tomatoes, halved","cherrytom"],[1,"","cucumber, diced","cucumber"],[1,"","small bunch parsley","parsley"],[2,"tbsp","olive oil","oil"],[1,"tsp","dried oregano","spices"]],
+ ing:[[600,"g","chicken breasts","chicken"],[2,"","lemons","lemon"],[250,"g","couscous","couscous"],[350,"ml","hot chicken stock","stock"],[200,"g","cherry tomatoes, halved","cherrytom"],[1,"","cucumber, diced","cucumber"],[1,"","small bunch parsley","parsley"],[1,"tbsp","olive oil","oil"],[1,"tsp","dried oregano","spices"]],
  s:["Zest one lemon over the chicken, add its juice, the oregano, half the oil, salt and pepper. Leave it while you sort everything else.",
     "Couscous into a bowl, pour over the hot stock, cover with a plate and forget about it for 8 minutes.",
     "Hot griddle or frying pan. Chicken on, 5–6 minutes a side depending on thickness. Rest it 3 minutes before slicing.",
@@ -358,225 +386,600 @@ const POOL=[
     "Slice the chicken across and lay it over the top with all the resting juices."],
  tip:"Resting juices are half the flavour. Pour them over the couscous, don't leave them on the board."},
 
-{id:2,t:"Chickpea Coconut Curry",c:"Vegetarian",tags:["Quick","One pot","Healthy"],time:30,kcal:512,p:16,cb:71,f:19,
- b:"Cheap, fast, and better than most curries with meat in them.",
- ing:[[800,"g","chickpeas, drained","chickpeas"],[400,"ml","coconut milk","coconut"],[1,"","onion, diced","onion"],[4,"","garlic cloves","garlic"],[150,"g","baby spinach","spinach"],[300,"g","rice","rice"],[200,"g","chopped tomatoes","choptom"],[2,"tsp","ground cumin","spices"],[2,"tsp","ground coriander","spices"],[1,"tsp","turmeric","spices"],[1,"tsp","chilli flakes","spices"],[1,"tbsp","oil","oil"],[1,"","lime","lime"]],
- s:["Onion into the oil on medium, 8 minutes until genuinely soft and golden at the edges.",
-    "Garlic and all the spices in. Thirty seconds, stirring hard — you're toasting them, not burning them.",
-    "Tomatoes in, cook down 3 minutes until they darken.",
-    "Chickpeas and coconut milk in. Simmer 15 minutes uncovered, crushing a ladleful of chickpeas against the side of the pan to thicken it.",
-    "Rice on alongside.",
-    "Spinach stirred through at the end until wilted, lime squeezed in, seasoned to taste."],
- tip:"Crushing some of the chickpeas is what turns thin coconut sauce into something that clings."},
+{id:2,t:"Chicken Shawarma Bowls",c:"Chicken",tags:["Quick","Healthy"],time:30,kcal:498,p:47,cb:46,f:12,
+ b:"All the flavour of the takeaway with a fraction of the fat.",
+ ing:[[650,"g","chicken breasts, sliced","chicken"],[250,"g","bulgur wheat","bulgur"],[300,"g","Greek yogurt","yogurt"],[2,"tsp","ground cumin","spices"],[2,"tsp","smoked paprika","spices"],[1,"","cucumber, diced","cucumber"],[250,"g","tomatoes, diced","tomatoes"],[1,"","red onion, sliced","redonion"],[1,"","lemon","lemon"],[1,"tbsp","olive oil","oil"],[1,"","small bunch parsley","parsley"]],
+ s:["Chicken tossed with the spices, oil, salt and half the lemon juice.",
+    "Bulgur into a pan with double its volume of water, simmered 12 minutes, then left covered off the heat.",
+    "Very hot pan, chicken in a single layer. Leave it alone for 3 minutes so it takes colour, then toss for 3 more.",
+    "Yogurt loosened with the rest of the lemon juice, a splash of water, salt.",
+    "Bulgur into bowls, chicken over, tomato, cucumber and onion around the edge.",
+    "Yogurt sauce spooned across and parsley scattered."],
+ tip:"Slice the chicken before cooking, not after. Thin strips take colour in three minutes and stay juicy."},
 
-{id:3,t:"Teriyaki Salmon",c:"Fish",tags:["Quick","Healthy","BBQ"],time:25,kcal:534,p:39,cb:52,f:18,
- b:"Four ingredients make the glaze. On the table in twenty-five minutes.",
- ing:[[4,"","salmon fillets","salmon"],[4,"tbsp","soy sauce","soy"],[1,"tbsp","sesame oil","sesame"],[2,"tbsp","honey or brown sugar","honey"],[2,"","garlic cloves","garlic"],[250,"g","tenderstem broccoli","tenderstem"],[300,"g","rice","rice"],[2,"","spring onions","springonion"]],
- s:["Rice on. Mix the soy, honey, grated garlic and half the sesame oil in a small bowl.",
-    "Pat the salmon skin bone dry — this is the difference between crisp skin and sad skin. Season it.",
-    "Remaining sesame oil into a hot non-stick pan. Salmon skin-side down, press it flat for 10 seconds, then leave it alone for 4–5 minutes.",
-    "Flip, 2 minutes on the flesh side, then pour the sauce in around the fish.",
-    "Let it bubble and thicken for a minute, spooning it over until the fillets are lacquered.",
-    "Steam or boil the broccoli 3 minutes. Plate up, sauce poured over, spring onions scattered."],
- tip:"The glaze burns fast because of the sugar. It goes in at the end, on a lower heat."},
+{id:3,t:"Chicken & Tenderstem Stir Fry",c:"Chicken",tags:["Quick","Healthy"],time:20,kcal:462,p:46,cb:52,f:8,
+ b:"Twenty minutes, one wok, and the greens stay properly crunchy.",
+ ing:[[600,"g","chicken breasts, sliced","chicken"],[250,"g","rice","rice"],[250,"g","tenderstem broccoli","tenderstem"],[2,"","peppers, sliced","peppers"],[3,"","garlic cloves","garlic"],[1,"tbsp","ginger, grated","ginger"],[4,"tbsp","soy sauce","soy"],[1,"tbsp","honey","honey"],[2,"tsp","sesame oil","sesame"],[3,"","spring onions","springonion"]],
+ s:["Rice on.",
+    "Soy, honey and sesame oil mixed in a mug. There is no time to measure once the wok is hot.",
+    "Screaming hot wok, no oil needed beyond a smear. Chicken in one layer, left 90 seconds, then tossed until coloured. Out.",
+    "Tenderstem and peppers in with a splash of water so they steam-fry. Three minutes, still squeaky.",
+    "Garlic and ginger for 30 seconds only.",
+    "Chicken back in, sauce round the edge of the wok, tossed hard for a minute. Spring onions over."],
+ tip:"A splash of water in the wok steams the greens through without needing more oil."},
 
-{id:4,t:"Bacon, Broccoli & Cheese Pasta",c:"Comfort",tags:["Quick","One pot"],time:22,kcal:648,p:32,cb:70,f:26,
- b:"Nothing clever, always eaten. Twenty-two minutes and one pan.",
- ing:[[400,"g","pasta","pasta"],[8,"","rashers smoked back bacon","bacon"],[350,"g","broccoli florets","broccoli"],[120,"g","cheese, grated","cheese"],[40,"g","parmesan","parmesan"],[150,"g","Greek yogurt","yogurt"],[2,"","garlic cloves","garlic"],[1,"tbsp","olive oil","oil"],[null,"","black pepper",0]],
- s:["Pasta on in salted water. Broccoli joins for the final 4 minutes.",
-    "Chop the bacon and fry it in the oil until the edges are crisp and the fat has rendered out.",
-    "Sliced garlic into the bacon fat for 30 seconds.",
-    "Save a mug of pasta water, then drain the pasta and broccoli.",
-    "Everything into the bacon pan off the heat: pasta, yogurt, both cheeses and a good splash of that water.",
-    "Toss until it turns into a sauce. Then far more black pepper than feels sensible."],
- tip:"Off the heat before the yogurt goes in. Boiling yogurt splits and won't come back."},
+{id:4,t:"Chicken Traybake with Lemon & New Potatoes",c:"Chicken",tags:["One pot"],time:50,kcal:508,p:46,cb:44,f:13,
+ b:"One tin, nothing to wash, and the potatoes take on all the lemon.",
+ ing:[[700,"g","chicken breasts","chicken"],[800,"g","new potatoes, halved","potatoes"],[2,"","lemons","lemon"],[1,"","whole garlic bulb","garlic"],[2,"","red onions, in wedges","redonion"],[1,"tbsp","olive oil","oil"],[2,"tsp","dried oregano","spices"],[200,"g","cherry tomatoes","cherrytom"],[200,"g","green beans","greenbeans"]],
+ s:["Potatoes and onion wedges into a big tin with the oil, oregano and plenty of salt.",
+    "200°C fan, 25 minutes on their own — they need the head start.",
+    "Halve the garlic bulb across the middle and tuck it in. Chicken laid on top, lemons quartered and wedged around.",
+    "Back in for 18 minutes.",
+    "Tomatoes and green beans scattered in for the last 8 minutes.",
+    "Squeeze the soft roasted garlic out of its skins and mash it through the potatoes before serving."],
+ tip:"Give it a bigger tin than feels necessary. Crowded chicken steams instead of roasting."},
 
-{id:5,t:"Chicken Fajita Bowls",c:"Chicken",tags:["Quick","BBQ","Healthy"],time:25,kcal:538,p:44,cb:58,f:14,
- b:"The fajita paste does the heavy lifting. Pan, grill or barbecue.",
- ing:[[4,"","chicken breasts","chicken"],[3,"tbsp","Mexican smoky fajita paste","fajita"],[3,"","peppers, sliced","peppers"],[1,"","red onion, sliced","onion"],[300,"g","rice","rice"],[1,"","avocado","avocado"],[1,"","lime","lime"],[4,"tbsp","Greek yogurt","yogurt"],[1,"tbsp","olive oil","oil"],[null,"","fresh coriander","coriander"]],
- s:["Slice the chicken into thick strips and toss with the fajita paste. Ten minutes on the side is enough; an hour is better.",
-    "Rice on to cook.",
-    "Screaming hot pan, no crowding. Chicken in, undisturbed for 2 minutes so it catches, then keep it moving until cooked. Out onto a plate.",
-    "Peppers and onion into the same pan with the oil. Blistered but still with bite — 5 minutes, not 15.",
-    "Build the bowls: rice, chicken, peppers, sliced avocado.",
-    "Yogurt on top, a hard squeeze of lime over everything, coriander torn on."],
- tip:"Barbecue version: thread onto skewers with pepper chunks, 10–12 minutes over the coals, turning."},
+{id:5,t:"Chicken Fajita Bowls",c:"Chicken",tags:["Quick"],time:30,kcal:512,p:45,cb:54,f:12,
+ b:"Everything in one pan, piled into bowls at the table.",
+ ing:[[650,"g","chicken breasts, sliced","chicken"],[250,"g","rice","rice"],[3,"","peppers, sliced","peppers"],[2,"","onions, sliced","onion"],[2,"tbsp","fajita paste","fajita"],[1,"","tin kidney beans, drained","kidneybeans"],[200,"g","Greek yogurt","yogurt"],[1,"","lime","lime"],[1,"tbsp","oil","oil"],[1,"","small bunch coriander","coriander"]],
+ s:["Rice on.",
+    "Very hot pan with the oil. Peppers and onions in, left to catch and blacken at the edges — 6 minutes, barely stirred.",
+    "Vegetables out. Chicken in with the fajita paste, 6 minutes until cooked and sticky.",
+    "Vegetables back in with the beans, tossed for 2 minutes to heat through.",
+    "Rice into bowls, chicken and peppers over.",
+    "Yogurt, lime and coriander at the table."],
+ tip:"Cook the peppers and chicken separately. Together they release water and everything stews."},
 
-{id:6,t:"Beef Chilli",c:"Beef",tags:["One pot","Batch","Healthy"],time:60,kcal:542,p:38,cb:63,f:15,
- b:"Baked beans in a chilli sounds wrong and tastes right. Makes enough for lunch the next day.",
- ing:[[500,"g","lean beef mince","mince"],[1,"","red onion, diced","onion"],[3,"","garlic cloves","garlic"],[400,"g","baked beans","beans"],[400,"g","chopped tomatoes","choptom"],[300,"g","rice","rice"],[1,"","avocado","avocado"],[1,"","lime","lime"],[4,"tbsp","Greek yogurt","yogurt"],[2,"tsp","ground cumin","spices"],[1,"tsp","smoked paprika","spices"],[1,"tsp","chilli powder","spices"],[1,"tbsp","hot sauce","hotsauce"]],
- s:["Brown the mince in a dry hot pan in two batches. Crowding it steams it grey.",
-    "Onion and garlic in, then the spices straight into the fat for 30 seconds — this wakes them up.",
-    "Tomatoes, baked beans and hot sauce in. Simmer uncovered 40 minutes, stirring now and then.",
-    "Rice on for the last 15 minutes.",
-    "Taste and season, then sharpen the whole thing with a squeeze of lime.",
-    "Serve over the rice with sliced avocado and a spoon of yogurt."],
- tip:"The bean sauce brings its own sweetness, so skip any sugar or ketchup you'd normally add."},
+{id:6,t:"Chicken, Butter Bean & Spinach Pot",c:"Chicken",tags:["Quick","One pot","Healthy"],time:30,kcal:452,p:47,cb:34,f:12,
+ b:"One pan, thirty minutes, and the beans go creamy without any cream.",
+ ing:[[650,"g","chicken breasts","chicken"],[2,"","tins butter beans, drained","butterbeans"],[400,"g","chopped tomatoes","choptom"],[1,"","onion, sliced","onion"],[4,"","garlic cloves","garlic"],[200,"g","spinach","spinach"],[1,"","lemon","lemon"],[1,"tbsp","olive oil","oil"],[2,"tsp","smoked paprika","spices"],[300,"ml","chicken stock","stock"]],
+ s:["Chicken seasoned and seared in the oil, 4 minutes a side. Out onto a plate — it is not cooked through yet.",
+    "Onion and garlic into the same pan, 5 minutes. Paprika for a minute.",
+    "Tomatoes and stock in, simmered 5 minutes.",
+    "Beans in, chicken back on top with its juices. Lid on, 12 minutes on a low simmer.",
+    "Crush a few of the beans against the side of the pan — that is what thickens it.",
+    "Spinach stirred through in handfuls, lemon squeezed over off the heat."],
+ tip:"Crushing a spoonful of the beans thickens the sauce. It is the trick that replaces the cream."},
 
-{id:7,t:"Pesto Chicken & Roast Veg",c:"Chicken",tags:["One pot","BBQ"],time:45,kcal:521,p:47,cb:38,f:20,
- b:"One tray, one spoon of pesto, forty minutes of doing nothing at all.",
- ing:[[4,"","chicken breasts","chicken"],[4,"tbsp","green pesto","pesto"],[600,"g","potatoes, cubed","potatoes"],[1,"","head of broccoli","broccoli"],[1,"","red onion, wedged","onion"],[200,"g","cherry tomatoes","cherrytom"],[2,"tbsp","olive oil","oil"],[null,"","salt and black pepper",0]],
- s:["Oven to 200°C fan. Potatoes into a large roasting tray with the oil, salt and pepper. Twenty minutes on their own — they need the head start.",
-    "Meanwhile rub 2 tablespoons of the pesto all over the chicken.",
-    "Pull the tray out. Push the potatoes to the edges, add the onion, broccoli and tomatoes, and sit the chicken in the middle.",
-    "Back in for 22–25 minutes, until the chicken is cooked through and the broccoli tips are crisping.",
-    "Spoon the remaining pesto over everything while the tray is still hot so it loosens into a sauce."],
- tip:"Cut the potatoes small — 2cm — or they'll still be hard when the chicken is done."},
+{id:7,t:"Chicken Katsu with Baked Crumb",c:"Chicken",tags:[],time:45,kcal:562,p:48,cb:62,f:13,
+ b:"Oven-baked rather than fried, and you would struggle to tell.",
+ ing:[[650,"g","chicken breasts","chicken"],[120,"g","breadcrumbs","breadcrumbs"],[2,"","eggs","eggs"],[50,"g","plain flour","flour"],[250,"g","rice","rice"],[2,"","carrots, diced","carrots"],[1,"","onion, diced","onion"],[2,"tbsp","curry powder","spices"],[600,"ml","chicken stock","stock"],[1,"tbsp","honey","honey"],[2,"tbsp","soy sauce","soy"],[1,"tbsp","oil","oil"]],
+ s:["Sauce first. Onion and carrot in the oil, 10 minutes until properly soft — that is where the sweetness comes from.",
+    "Curry powder for a minute, then stock, honey and soy. Simmer 15 minutes and blend smooth.",
+    "Breadcrumbs toasted in a dry pan until golden. This is the step that makes baked crumb taste fried.",
+    "Chicken flattened between two sheets of paper to about a centimetre. Floured, egged, then pressed into the toasted crumbs.",
+    "Onto a rack over a tray. 200°C fan, 18 minutes.",
+    "Rice cooked meanwhile. Chicken sliced thickly with the sauce alongside."],
+ tip:"Toast the crumbs before they go on. Untoasted crumbs come out of the oven pale and dusty."},
 
-{id:8,t:"Broccoli & Pesto Pasta",c:"Vegetarian",tags:["Quick","One pot"],time:18,kcal:558,p:20,cb:74,f:21,
- b:"Broccoli cooks in the pasta water. One pan, eighteen minutes.",
- ing:[[400,"g","pasta","pasta"],[400,"g","broccoli florets","broccoli"],[5,"tbsp","green pesto","pesto"],[50,"g","parmesan","parmesan"],[1,"","lemon","lemon"],[2,"tbsp","olive oil","oil"],[1,"","garlic clove","garlic"],[null,"","salt and black pepper",0]],
- s:["Pasta into well-salted boiling water.",
-    "Four minutes before the pasta is done, tip the broccoli into the same pan.",
-    "Scoop out a large mug of the cooking water, then drain everything.",
-    "Straight back into the warm pan off the heat with the pesto, grated garlic, oil and half the parmesan.",
-    "Add the cooking water a splash at a time, tossing hard, until the sauce turns creamy and coats every piece.",
-    "Lemon zest and juice, remaining parmesan, a lot of black pepper."],
- tip:"That starchy water is the sauce. Throw it away and you get oily pasta with pesto sitting on top."},
+{id:8,t:"Harissa Chicken with Chickpeas",c:"Chicken",tags:["Quick","One pot","Healthy"],time:30,kcal:478,p:45,cb:41,f:13,
+ b:"Thirty minutes, one pan, and a proper hit of chilli.",
+ ing:[[650,"g","chicken breasts","chicken"],[2,"","tins chickpeas, drained","chickpeas"],[3,"tbsp","harissa","harissa"],[400,"g","chopped tomatoes","choptom"],[1,"","onion, sliced","onion"],[3,"","garlic cloves","garlic"],[200,"g","spinach","spinach"],[1,"","lemon","lemon"],[1,"tbsp","olive oil","oil"],[150,"g","Greek yogurt","yogurt"]],
+ s:["Chicken seared in the oil, 4 minutes a side. Out.",
+    "Onion and garlic, 5 minutes.",
+    "Harissa in for a full minute until it darkens — straight into liquid it tastes raw.",
+    "Tomatoes in, simmered 5 minutes, then the chickpeas.",
+    "Chicken back on top, lid on, 10 minutes.",
+    "Spinach wilted through, lemon squeezed, yogurt spooned over each plate."],
+ tip:"Fry the harissa for a minute before anything wet goes in. It changes from sharp to deep."},
 
-{id:9,t:"Mediterranean Chickpea Salad",c:"Vegetarian",tags:["Quick","Healthy"],time:12,kcal:352,p:13,cb:38,f:17,
- b:"Twelve minutes, no cooking at all. Make it once and eat it for days.",
- ing:[[800,"g","chickpeas, drained","chickpeas"],[1,"","cucumber, diced","cucumber"],[300,"g","cherry tomatoes, halved","cherrytom"],[1,"","red onion, finely diced","onion"],[1,"","lemon","lemon"],[4,"tbsp","olive oil","oil"],[10,"","cornichons, chopped","cornichons"],[1,"tsp","dried oregano","spices"],[null,"","salt and black pepper",0]],
- s:["Soak the diced red onion in cold water for 5 minutes, then drain. This takes the harsh edge off it.",
-    "Everything else into a big bowl.",
-    "Dress with the lemon juice, oil, oregano, salt and plenty of pepper.",
-    "Toss and leave 10 minutes before eating so the chickpeas take on the dressing."],
- tip:"Keeps three days and improves on day two. Add feta or halloumi if you've got it in."},
+{id:9,t:"Chicken & Sweetcorn Noodle Soup",c:"Chicken",tags:["Quick","One pot","Healthy"],time:30,kcal:428,p:44,cb:48,f:7,
+ b:"What you want when nobody can face a real dinner.",
+ ing:[[600,"g","chicken breasts","chicken"],[200,"g","noodles","noodles"],[200,"g","sweetcorn","sweetcorn"],[1500,"ml","chicken stock","stock"],[3,"","carrots, sliced","carrots"],[3,"","garlic cloves","garlic"],[1,"tbsp","ginger, grated","ginger"],[3,"","spring onions","springonion"],[2,"tbsp","soy sauce","soy"],[200,"g","tenderstem broccoli","tenderstem"]],
+ s:["Stock into a big pot with the garlic, ginger and carrots. Simmer 8 minutes.",
+    "Whole chicken breasts lowered in. Barely simmering, 15 minutes, then lifted out and shredded with two forks.",
+    "Noodles and broccoli into the broth for 4 minutes.",
+    "Sweetcorn and the shredded chicken back in.",
+    "Soy sauce in, then taste — broth always needs more salt than it seems to.",
+    "Spring onions over each bowl."],
+ tip:"Poach the breasts whole and shred them after. Diced raw chicken simmered in broth goes stringy."},
 
-{id:10,t:"Creamy Tuscan Chicken",c:"Chicken",tags:["Quick","One pot"],time:30,kcal:412,p:46,cb:11,f:19,
- b:"Yogurt instead of cream — same silk, half the guilt.",
- ing:[[4,"","chicken breasts","chicken"],[250,"g","cherry tomatoes","cherrytom"],[120,"g","baby spinach","spinach"],[40,"g","parmesan, grated","parmesan"],[150,"g","Greek yogurt","yogurt"],[3,"","garlic cloves","garlic"],[1,"tbsp","olive oil","oil"],[1,"tsp","smoked paprika","spices"],[200,"ml","chicken stock","stock"],[null,"","salt and black pepper",0]],
- s:["Butterfly each chicken breast so it cooks flat and fast. Season both sides hard with salt, pepper and the paprika.",
-    "Get a wide pan properly hot with the oil. Sear the chicken 4–5 minutes a side until deep golden, then lift onto a plate.",
-    "Drop the heat. Sliced garlic in for 30 seconds, then the halved cherry tomatoes. Squash a few with the back of a spoon.",
-    "Pour in the stock, scrape up everything stuck to the pan, and let it bubble down by half.",
-    "Take the pan off the heat before the yogurt goes in. Stir in the yogurt and parmesan until glossy.",
-    "Back on a low heat, add the spinach and let it collapse. Return the chicken and its juices, warm through, serve."],
- tip:"Off the heat before the yogurt. Every single time."},
+{id:10,t:"Pesto Chicken & Roast Veg",c:"Chicken",tags:["One pot"],time:40,kcal:486,p:45,cb:36,f:16,
+ b:"One tin, and the pesto goes on at the end so it stays green.",
+ ing:[[650,"g","chicken breasts","chicken"],[2,"","courgettes, chunked","courgette"],[2,"","peppers, chunked","peppers"],[1,"","red onion, in wedges","redonion"],[250,"g","cherry tomatoes","cherrytom"],[3,"tbsp","green pesto","pesto"],[1,"tbsp","olive oil","oil"],[200,"g","new potatoes, halved","potatoes"],[1,"","lemon","lemon"],[40,"g","parmesan","parmesan"]],
+ s:["Potatoes, courgette, peppers and onion tossed with the oil and salt. 200°C fan, 20 minutes.",
+    "Chicken laid on top, tomatoes scattered around. Back in for 18 minutes.",
+    "Check the chicken is cooked through at the thickest point.",
+    "Pesto stirred through the hot vegetables off the heat, never in the oven.",
+    "Lemon squeezed over the lot.",
+    "Parmesan grated across at the table."],
+ tip:"Pesto goes on after the oven. Roasted pesto turns brown and loses everything that makes it pesto."},
 
-{id:11,t:"Chicken Satay Stir Fry",c:"Chicken",tags:["Quick","BBQ"],time:25,kcal:596,p:45,cb:56,f:22,
- b:"Peanut butter, soy and sesame — a five-ingredient sauce that tastes like a takeaway.",
- ing:[[3,"","chicken breasts","chicken"],[4,"tbsp","peanut butter","peanut"],[3,"tbsp","soy sauce","soy"],[1,"tbsp","sesame oil","sesame"],[200,"g","tenderstem broccoli","tenderstem"],[2,"","carrots, matchsticked","carrots"],[300,"g","rice","rice"],[2,"","garlic cloves","garlic"],[1,"","lime","lime"],[120,"ml","hot water",0]],
- s:["Rice on. Slice the chicken thinly across the grain.",
-    "Whisk the peanut butter, soy, half the sesame oil and the hot water into a pourable sauce. It'll look split at first — keep going.",
-    "Remaining sesame oil in a hot wok. Chicken in, spread out, 3–4 minutes until it's got colour.",
-    "Garlic, carrots and broccoli in. Two minutes of constant movement.",
-    "Pour the sauce over, toss so everything is coated, and let it tighten for a minute.",
-    "Lime squeezed over off the heat. Serve on the rice."],
- tip:"Sauce too thick? Splash in more hot water. It thickens as it cools, so don't over-correct in the pan."},
+{id:11,t:"Turkey Meatballs in Tomato Sauce",c:"Chicken",tags:["Batch"],time:45,kcal:512,p:46,cb:56,f:11,
+ b:"Turkey mince keeps these light without making them dry.",
+ ing:[[700,"g","turkey mince","turkey"],[800,"g","chopped tomatoes","choptom"],[350,"g","pasta","pasta"],[1,"","onion, diced","onion"],[4,"","garlic cloves","garlic"],[1,"","egg","eggs"],[60,"g","breadcrumbs","breadcrumbs"],[40,"g","parmesan","parmesan"],[1,"tbsp","olive oil","oil"],[1,"tsp","dried oregano","spices"],[1,"","small bunch basil","basil"]],
+ s:["Turkey, egg, breadcrumbs, half the parmesan, salt and pepper worked together for a full minute until slightly sticky.",
+    "Rolled into 20 balls. Wet hands stop them sticking.",
+    "Browned all over in the oil in a wide pan, 6 minutes. They finish in the sauce.",
+    "Meatballs out. Onion and garlic in for 6 minutes, oregano for one.",
+    "Tomatoes and half a tin of water in. Meatballs back, lid ajar, 20 minutes.",
+    "Pasta cooked and tossed through with the basil and remaining parmesan."],
+ tip:"Work the mince for a full minute before rolling. Turkey has less fat holding it together than beef does."},
 
-{id:12,t:"Proper Spaghetti Bolognese",c:"Beef",tags:["One pot","Batch"],time:75,kcal:612,p:38,cb:71,f:19,
- b:"No shortcuts on the simmer. Ninety minutes if you have it, sixty if you don't.",
- ing:[[500,"g","lean beef mince","mince"],[1,"","onion, finely diced","onion"],[2,"","carrots, finely diced","carrots"],[3,"","garlic cloves","garlic"],[400,"g","red pasta sauce","pastasauce"],[400,"g","chopped tomatoes","choptom"],[400,"g","spaghetti","pasta"],[40,"g","parmesan","parmesan"],[1,"tbsp","olive oil","oil"],[1,"","beef stock cube","stock"],[1,"tsp","dried oregano","spices"]],
- s:["Onion and carrot into the oil on a low heat with a pinch of salt. Ten minutes, soft and sweet, not coloured.",
-    "Garlic in for a minute, then crank the heat and add the mince. Break it up and leave it alone until it browns properly — grey mince makes grey sauce.",
-    "Pasta sauce, chopped tomatoes, crumbled stock cube, a splash of water and the oregano.",
-    "Lid slightly ajar, lowest heat, 60–90 minutes. Stir occasionally. It should reduce and darken.",
-    "Season at the end, not the start. Cook the spaghetti in well-salted water.",
-    "Drain, holding back a mugful of the water. Toss the pasta through the sauce with a splash of that water, then parmesan."],
- tip:"Makes double what you need for four. Freeze half — it's better the second time."},
+{id:12,t:"Chicken Caesar with Courgette Ribbons",c:"Chicken",tags:["Quick","Healthy"],time:25,kcal:412,p:48,cb:18,f:16,
+ b:"The dressing is built on yogurt, so it tastes sharp rather than heavy.",
+ ing:[[650,"g","chicken breasts","chicken"],[2,"","courgettes","courgette"],[2,"","little gem lettuces","littlegem"],[200,"g","Greek yogurt","yogurt"],[40,"g","parmesan","parmesan"],[2,"tsp","mustard","mustard"],[1,"","lemon","lemon"],[2,"","garlic cloves","garlic"],[60,"g","breadcrumbs","breadcrumbs"],[1,"tbsp","olive oil","oil"]],
+ s:["Chicken seasoned and griddled 5–6 minutes a side, then rested and sliced.",
+    "Breadcrumbs toasted in a dry pan with a crushed garlic clove until golden and crisp.",
+    "Dressing: yogurt, mustard, lemon juice, the second garlic clove crushed, most of the parmesan, salt and plenty of pepper. Loosen with water to pouring consistency.",
+    "Courgettes shaved into ribbons with a peeler, stopping at the seedy core.",
+    "Courgette ribbons and torn little gem tossed with most of the dressing.",
+    "Chicken on top, remaining dressing, crumbs and parmesan over."],
+ tip:"Stop peeling the courgette when you reach the seeds. The core is watery and makes the whole bowl wet."},
 
-{id:13,t:"Cottage Pie",c:"Beef",tags:["Batch"],time:80,kcal:578,p:36,cb:52,f:24,
- b:"The Sunday-afternoon one. Freezes beautifully, reheats even better.",
- ing:[[500,"g","lean beef mince","mince"],[1,"","onion, diced","onion"],[2,"","carrots, diced","carrots"],[150,"g","frozen peas","peas"],[1,"kg","potatoes","potatoes"],[60,"g","butter","butter"],[80,"ml","milk","milk"],[400,"g","red pasta sauce","pastasauce"],[1,"","beef stock cube","stock"],[1,"tbsp","Worcestershire sauce","worcs"],[60,"g","cheese, grated","cheese"]],
- s:["Brown the mince hard in a wide pan. Lift it out, then soften the onion and carrot in the fat left behind.",
-    "Mince back in with the pasta sauce, crumbled stock cube, a splash of water and the Worcestershire. Simmer 30 minutes until thick — a wet filling makes a sunken pie.",
-    "Meanwhile boil the potatoes until a knife slides through with no resistance. Drain and let them steam dry for 2 minutes.",
-    "Mash with the butter and milk, season generously.",
-    "Stir the peas through the mince, tip into a baking dish, spread the mash over and rough the top up with a fork.",
-    "Cheese on, 200°C fan for 25 minutes until the peaks are dark and crisp."],
- tip:"Those fork ridges aren't decoration — they're what catches and crisps in the oven."},
+{id:13,t:"Proper Spaghetti Bolognese",c:"Beef",tags:["Batch"],time:90,kcal:548,p:44,cb:64,f:13,
+ b:"Made with 5% mince and given the time it deserves.",
+ ing:[[700,"g","lean beef mince","mince"],[800,"g","chopped tomatoes","choptom"],[350,"g","pasta","pasta"],[2,"","carrots, finely diced","carrots"],[2,"","celery sticks, finely diced","celery"],[1,"","onion, finely diced","onion"],[4,"","garlic cloves","garlic"],[300,"ml","beef stock","stock"],[1,"tbsp","olive oil","oil"],[40,"g","parmesan","parmesan"],[2,"tbsp","tomato purée","passata"]],
+ s:["Mince into a dry hot pan in one layer. Left alone until properly browned, 6 minutes. This is the entire flavour of the dish.",
+    "Mince out. Carrot, celery and onion into the oil, 12 minutes on medium until sweet.",
+    "Garlic and tomato purée for 2 minutes.",
+    "Mince back with the tomatoes and stock. Season.",
+    "Lowest heat, lid ajar, 60 minutes. It should barely move.",
+    "Pasta cooked, drained holding back a mug of water, then tossed into the sauce with a splash of it and the parmesan."],
+ tip:"Brown the mince in a dry pan with no oil, and don't stir it. Stirred mince releases water and boils."},
 
-{id:14,t:"Beef Meatballs in Tomato Sauce",c:"Beef",tags:["Batch"],time:50,kcal:604,p:40,cb:66,f:20,
- b:"Oats instead of breadcrumbs. Nobody has ever noticed.",
- ing:[[500,"g","lean beef mince","mince"],[1,"","egg","eggs"],[50,"g","porridge oats","oats"],[40,"g","parmesan","parmesan"],[2,"","garlic cloves","garlic"],[500,"g","red pasta sauce","pastasauce"],[400,"g","pasta","pasta"],[1,"tbsp","olive oil","oil"],[1,"tsp","dried oregano","spices"],[null,"","salt and black pepper",0]],
- s:["Mince, egg, oats, half the parmesan, grated garlic, oregano and plenty of seasoning into a bowl. Mix with your hands but stop as soon as it comes together — overworked mince goes bouncy.",
-    "Roll into balls slightly smaller than a golf ball. Wet hands make this painless.",
-    "Brown them in the oil in batches, turning for colour on all sides. They don't need to be cooked through yet.",
-    "Pour the pasta sauce in around them, half-fill the empty jar with water and add that too.",
-    "Lid on, gentle simmer, 20 minutes. Don't stir aggressively — shake the pan instead.",
-    "Pasta cooked and drained, meatballs and sauce over, remaining parmesan on top."],
- tip:"Rolling twenty meatballs is the whole job. Do it once, freeze half raw on a tray."},
+{id:14,t:"Beef Chilli with Rice",c:"Beef",tags:["Batch","One pot"],time:60,kcal:542,p:45,cb:66,f:12,
+ b:"Better after an hour than after twenty minutes. Freezes perfectly.",
+ ing:[[700,"g","lean beef mince","mince"],[2,"","tins kidney beans, drained","kidneybeans"],[800,"g","chopped tomatoes","choptom"],[2,"","onions, diced","onion"],[2,"","peppers, diced","peppers"],[4,"","garlic cloves","garlic"],[2,"tbsp","smoked paprika","spices"],[2,"tsp","ground cumin","spices"],[250,"g","rice","rice"],[1,"tbsp","oil","oil"],[150,"g","Greek yogurt","yogurt"]],
+ s:["Mince browned hard in a dry pan, 6 minutes, then lifted out.",
+    "Onions, peppers and garlic into the oil, 8 minutes.",
+    "Spices for a minute, then the tomatoes and a mug of water. Mince back in. Season.",
+    "Lowest heat, lid ajar, 40 minutes.",
+    "Beans in for the last 10 minutes — any earlier and they go mushy.",
+    "Rice cooked at the end. Yogurt on top of each bowl."],
+ tip:"Add the beans near the end. Forty minutes of simmering turns them to paste."},
 
-{id:15,t:"Mediterranean Salmon Tray Bake",c:"Fish",tags:["One pot","Healthy"],time:35,kcal:489,p:38,cb:22,f:27,
- b:"Everything on one tray. Nothing to wash but the tray.",
- ing:[[4,"","salmon fillets","salmon"],[300,"g","cherry tomatoes","cherrytom"],[1,"","red onion, wedged","onion"],[1,"","lemon","lemon"],[250,"g","broccoli florets","broccoli"],[3,"tbsp","olive oil","oil"],[2,"","garlic cloves","garlic"],[1,"tsp","dried oregano","spices"],[null,"","salt and black pepper",0]],
- s:["Oven to 200°C fan. Tomatoes, onion, broccoli and sliced garlic onto a tray with 2 tablespoons of the oil, the oregano and seasoning.",
-    "Fifteen minutes in — the tomatoes need to start collapsing before the fish arrives.",
-    "Make gaps and nestle the salmon in, skin-side down. Remaining oil over the fish, lemon sliced and tucked around.",
-    "Twelve to fourteen minutes, until the salmon flakes when you press it with a fork.",
-    "Squeeze one of the roasted lemon slices over the lot before serving."],
- tip:"Roasted lemon is sweeter and rounder than raw. Don't skip squeezing it at the end."},
+{id:15,t:"Cottage Pie",c:"Beef",tags:["Batch"],time:80,kcal:528,p:42,cb:58,f:14,
+ b:"Sunday food, made with lean mince and mash loosened with stock rather than butter.",
+ ing:[[700,"g","lean beef mince","mince"],[1200,"g","potatoes","potatoes"],[3,"","carrots, diced","carrots"],[2,"","onions, diced","onion"],[500,"ml","beef stock","stock"],[2,"tbsp","tomato purée","passata"],[2,"tbsp","Worcestershire sauce","worcs"],[100,"ml","milk","milk"],[20,"g","butter","butter"],[200,"g","frozen peas","peas"],[2,"tbsp","plain flour","flour"]],
+ s:["Mince browned hard in a dry pan, then lifted out.",
+    "Onions and carrots in, 10 minutes. Flour and tomato purée for 2 minutes.",
+    "Stock and Worcestershire sauce in gradually, mince back. Simmered 30 minutes until thick enough to hold a spoon-trail.",
+    "Peas in at the end.",
+    "Potatoes boiled, drained, steam-dried, then mashed with the milk, butter and a ladle of the hot stock. Season hard.",
+    "Mash forked over the top. 200°C fan, 25 minutes until the ridges brown."],
+ tip:"Loosen the mash with a ladle of stock instead of more butter. You lose nothing and save a lot of fat."},
 
-{id:16,t:"Tuna Pasta Bake",c:"Fish",tags:["Batch"],time:45,kcal:596,p:41,cb:68,f:17,
- b:"Store-cupboard comfort food, kept lighter than the version you grew up on.",
- ing:[[400,"g","pasta","pasta"],[320,"g","tuna chunks, drained","tuna"],[300,"g","Greek yogurt","yogurt"],[150,"g","cheese, grated","cheese"],[200,"g","sweetcorn","sweetcorn"],[1,"","onion, diced","onion"],[2,"","garlic cloves","garlic"],[1,"tbsp","olive oil","oil"],[200,"ml","milk","milk"],[1,"tsp","mustard","mustard"]],
- s:["Cook the pasta two minutes short of the packet time. It finishes in the oven.",
-    "Soften the onion and garlic in the oil while that happens.",
-    "Off the heat, stir the yogurt, milk, mustard and two-thirds of the cheese into the onions until smooth.",
-    "Fold in the drained tuna, sweetcorn and pasta. Season well — tuna bakes are usually under-seasoned.",
-    "Into a baking dish, remaining cheese over the top.",
-    "200°C fan for 20 minutes until blistered and bubbling at the edges."],
- tip:"Off the heat before the yogurt, same as everything else in this book."},
+{id:16,t:"Beef & Black Bean Stir Fry",c:"Beef",tags:["Quick"],time:25,kcal:498,p:44,cb:54,f:12,
+ b:"Lean steak, sliced thin, cooked hot and fast.",
+ ing:[[600,"g","beef steak, sliced thin","steak"],[250,"g","rice","rice"],[2,"","peppers, sliced","peppers"],[1,"","head broccoli, in florets","broccoli"],[4,"","garlic cloves","garlic"],[1,"tbsp","ginger, grated","ginger"],[4,"tbsp","soy sauce","soy"],[1,"tbsp","honey","honey"],[2,"tsp","sesame oil","sesame"],[3,"","spring onions","springonion"]],
+ s:["Rice on. Sauce mixed in a mug: soy, honey, sesame oil.",
+    "Beef sliced across the grain as thinly as you can manage — 20 minutes in the freezer first makes this far easier.",
+    "Screaming hot wok. Beef in one layer, 90 seconds untouched, then tossed for another minute. Out immediately.",
+    "Broccoli and peppers in with a splash of water, 3 minutes.",
+    "Garlic and ginger 30 seconds.",
+    "Beef back in with the sauce round the edge of the wok. Thirty seconds, no more. Spring onions over."],
+ tip:"Slice across the grain, not along it. The same steak is tender one way and chewy the other."},
 
-{id:17,t:"Tuna Niçoise Salad",c:"Fish",tags:["Quick","Healthy"],time:30,kcal:441,p:35,cb:31,f:20,
+{id:17,t:"Beef Ragù with Pappardelle",c:"Beef",tags:["Batch"],time:110,kcal:562,p:45,cb:66,f:14,
+ b:"Two hours mostly unattended, and it makes enough for two dinners.",
+ ing:[[700,"g","lean beef mince","mince"],[800,"g","chopped tomatoes","choptom"],[350,"g","pasta","pasta"],[2,"","carrots, finely diced","carrots"],[2,"","celery sticks, finely diced","celery"],[1,"","onion, finely diced","onion"],[4,"","garlic cloves","garlic"],[250,"ml","milk","milk"],[1,"tbsp","olive oil","oil"],[40,"g","parmesan","parmesan"],[300,"ml","beef stock","stock"]],
+ s:["Carrot, celery and onion in the oil in a heavy pot, 12 minutes until sweet and soft.",
+    "Mince in, broken up and browned properly, 8 minutes. Garlic for the last minute.",
+    "Milk in and simmered until it has almost entirely gone. It sounds odd and it is why this tastes different from a bolognese.",
+    "Tomatoes and stock in. Season.",
+    "Lowest possible heat, lid ajar, 80 minutes.",
+    "Pasta tossed through in the pan with a splash of its water and the parmesan."],
+ tip:"Toss the pasta into the sauce in the pan. Sauce ladled onto naked pasta slides straight off."},
+
+{id:18,t:"Steak with Chimichurri & Potatoes",c:"Beef",tags:[],time:40,kcal:524,p:46,cb:44,f:16,
+ b:"A green sauce instead of a cream one, and you miss nothing.",
+ ing:[[600,"g","beef steaks","steak"],[800,"g","new potatoes","potatoes"],[1,"","large bunch parsley","parsley"],[4,"","garlic cloves","garlic"],[2,"tbsp","vinegar","vinegar"],[2,"tbsp","olive oil","oil"],[1,"tsp","dried oregano","spices"],[200,"g","tenderstem broccoli","tenderstem"],[1,"","fresh chilli","chilli"],[200,"g","cherry tomatoes","cherrytom"]],
+ s:["Potatoes boiled 15 minutes, drained, then crushed lightly and roasted at 220°C fan for 20 minutes.",
+    "Chimichurri: parsley, garlic, chilli, oregano, vinegar and the oil chopped together and seasoned. Make it first so it sits.",
+    "Steaks out of the fridge 30 minutes ahead, dried hard, salted just before cooking.",
+    "Smoking hot dry pan, 3 minutes a side for medium-rare on a 2cm steak.",
+    "Rested a full 5 minutes on a warm plate.",
+    "Broccoli and tomatoes steamed while it rests. Chimichurri spooned over everything."],
+ tip:"Rest the steak for as long as you cooked it, and don't cover it tightly or the crust goes soft."},
+
+{id:19,t:"Pork Loin with Apple & Mustard",c:"Pork",tags:["Quick"],time:30,kcal:462,p:46,cb:38,f:12,
+ b:"Pork loin is as lean as chicken breast and cooks just as fast.",
+ ing:[[650,"g","pork loin steaks","pork"],[200,"g","Greek yogurt","yogurt"],[2,"tbsp","mustard","mustard"],[300,"ml","chicken stock","stock"],[800,"g","new potatoes","potatoes"],[200,"g","green beans","greenbeans"],[1,"","onion, sliced","onion"],[1,"tbsp","olive oil","oil"],[1,"tsp","dried thyme","spices"],[2,"","apples, sliced","tomatoes"]],
+ s:["Potatoes on to boil.",
+    "Pork dried and salted. Hot pan with half the oil, 4 minutes a side. Out to rest — it should still be faintly pink.",
+    "Onion, apple and thyme into the same pan with the rest of the oil, 6 minutes.",
+    "Stock in, scraped up, reduced by half.",
+    "Off the heat, yogurt and mustard stirred in. Never let it boil after the yogurt or it splits.",
+    "Green beans boiled 4 minutes. Pork back in the sauce with its resting juices."],
+ tip:"Yogurt goes in off the heat, always. Boiled yogurt turns grainy and there is no fixing it."},
+
+{id:20,t:"Pork & Ginger Noodles",c:"Pork",tags:["Quick"],time:20,kcal:508,p:42,cb:58,f:12,
+ b:"Twenty minutes, one wok, and a lot of ginger.",
+ ing:[[600,"g","pork tenderloin, sliced","pork"],[250,"g","noodles","noodles"],[2,"tbsp","ginger, grated","ginger"],[4,"","garlic cloves","garlic"],[1,"","head cabbage, shredded","cabbage"],[4,"tbsp","soy sauce","soy"],[2,"tsp","sesame oil","sesame"],[1,"tbsp","honey","honey"],[3,"","spring onions","springonion"],[1,"tsp","oil","oil"],[1,"","fresh chilli","chilli"]],
+ s:["Noodles cooked, drained, rinsed cold so they stop cooking.",
+    "Very hot wok with the oil. Pork in one layer, left 2 minutes to crust, then tossed for 3 more.",
+    "Ginger, garlic and chilli 30 seconds.",
+    "Cabbage in, tossed hard for 3 minutes until it wilts but keeps bite.",
+    "Noodles in, then soy, honey and sesame oil poured round the edge.",
+    "Tossed a minute, spring onions over."],
+ tip:"Press the pork flat and leave it. The crust that forms is the difference between this and boiled pork."},
+
+{id:21,t:"Pork, Fennel & Bean Casserole",c:"Pork",tags:["One pot","Batch"],time:45,kcal:472,p:44,cb:42,f:13,
+ b:"Cheap, filling and almost entirely from the cupboard.",
+ ing:[[650,"g","pork loin, cubed","pork"],[2,"","tins cannellini beans, drained","cannellini"],[800,"g","chopped tomatoes","choptom"],[1,"","onion, sliced","onion"],[4,"","garlic cloves","garlic"],[2,"tsp","fennel seeds","spices"],[2,"tsp","smoked paprika","spices"],[1,"tbsp","olive oil","oil"],[200,"g","spinach","spinach"],[300,"ml","chicken stock","stock"]],
+ s:["Pork browned in batches in the oil in a wide casserole. Crowd the pan and it greys instead of browning. Out.",
+    "Onion in, 8 minutes. Garlic, fennel seeds and paprika for a minute — crush the fennel first, it makes all the difference.",
+    "Tomatoes and stock in, pork back. Simmered 25 minutes uncovered.",
+    "Beans in for the last 8 minutes.",
+    "A few beans crushed against the pan to thicken it.",
+    "Spinach stirred through at the very end."],
+ tip:"Crush the fennel seeds before they go in. Whole, they stay hard and taste of almost nothing."},
+
+{id:22,t:"Sticky BBQ Pork with Slaw",c:"Pork",tags:[],time:35,kcal:492,p:45,cb:48,f:12,
+ b:"Pork tenderloin instead of shoulder, so it is done in half an hour.",
+ ing:[[700,"g","pork tenderloin","pork"],[3,"tbsp","BBQ sauce","bbq"],[1,"tbsp","smoked paprika","spices"],[1,"","head cabbage, shredded","cabbage"],[2,"","carrots, grated","carrots"],[150,"g","Greek yogurt","yogurt"],[1,"tbsp","vinegar","vinegar"],[400,"g","new potatoes","potatoes"],[1,"","red onion, finely sliced","redonion"],[1,"tsp","oil","oil"]],
+ s:["Pork rubbed with the paprika, oil and salt. Seared all over in a hot pan, 4 minutes.",
+    "Into the oven at 200°C fan for 15 minutes.",
+    "BBQ sauce brushed on, back in for 5 minutes until sticky.",
+    "Rested 8 minutes before slicing — tenderloin dries out fast if you cut it straight away.",
+    "Potatoes boiled alongside.",
+    "Slaw: cabbage, carrot and onion with the yogurt, vinegar, salt and pepper, mixed just before serving."],
+ tip:"Glaze only in the last five minutes. Sugar in BBQ sauce burns bitter over a longer roast."},
+
+{id:23,t:"Pork Larb with Rice",c:"Pork",tags:["Quick","Healthy"],time:25,kcal:468,p:43,cb:52,f:11,
+ b:"Sharp, hot and herby. Nothing like as heavy as most mince dishes.",
+ ing:[[650,"g","pork mince","pork"],[250,"g","rice","rice"],[2,"","limes","lime"],[3,"tbsp","soy sauce","soy"],[1,"","fresh chilli","chilli"],[4,"","garlic cloves","garlic"],[1,"tbsp","ginger, grated","ginger"],[1,"","small bunch coriander","coriander"],[1,"","small bunch mint","mint"],[4,"","spring onions","springonion"],[2,"","little gem lettuces","littlegem"]],
+ s:["Rice on.",
+    "Very hot dry pan, pork in and pressed flat. Left 3 minutes to crust before breaking up. Six minutes total, no oil needed.",
+    "Garlic, ginger and chilli in for a minute.",
+    "Off the heat: lime juice and soy stirred through.",
+    "Herbs and spring onions folded in at the last second so they stay fresh.",
+    "Piled into lettuce cups with the rice alongside."],
+ tip:"Herbs go in off the heat. Cooked mint and coriander taste of nothing at all."},
+
+{id:24,t:"Teriyaki Salmon",c:"Fish",tags:["Quick","Healthy"],time:25,kcal:498,p:40,cb:48,f:16,
+ b:"Fifteen minutes of cooking and the glaze does all the work.",
+ ing:[[600,"g","salmon fillets","salmon"],[2,"tbsp","honey","honey"],[4,"tbsp","soy sauce","soy"],[1,"tbsp","ginger, grated","ginger"],[250,"g","rice","rice"],[250,"g","tenderstem broccoli","tenderstem"],[200,"g","frozen peas","peas"],[3,"","spring onions","springonion"],[1,"","lime","lime"],[2,"","garlic cloves","garlic"]],
+ s:["Rice on.",
+    "Honey, soy, ginger and garlic whisked together. Salmon sat in it 10 minutes while the oven heats to 200°C fan.",
+    "Salmon onto a lined tray, glaze spooned over. Twelve minutes — it should still be faintly translucent at the very centre.",
+    "Broccoli and peas boiled 4 minutes.",
+    "Glaze left on the tray poured back over the fish.",
+    "Spring onions and lime at the end."],
+ tip:"Twelve minutes and no more. Salmon carries on cooking on the hot tray, and dry salmon is the easy mistake."},
+
+{id:25,t:"Miso Salmon with Greens",c:"Fish",tags:["Quick","Healthy"],time:25,kcal:486,p:39,cb:44,f:16,
+ b:"Deeply savoury, and almost nothing to wash up.",
+ ing:[[600,"g","salmon fillets","salmon"],[2,"tbsp","honey","honey"],[3,"tbsp","soy sauce","soy"],[2,"tsp","sesame oil","sesame"],[1,"tbsp","ginger, grated","ginger"],[250,"g","rice","rice"],[250,"g","tenderstem broccoli","tenderstem"],[200,"g","edamame","edamame"],[3,"","spring onions","springonion"],[1,"","lime","lime"]],
+ s:["Rice on.",
+    "Honey, soy, sesame oil and ginger whisked into a glaze.",
+    "Salmon on a lined tray, half the glaze over. 200°C fan, 12 minutes.",
+    "Broccoli and edamame steamed 4 minutes.",
+    "Remaining glaze warmed with a splash of water and poured over at the end.",
+    "Spring onions and lime across the top."],
+ tip:"Keep half the glaze back for the end. Anything that spent twelve minutes at 200°C has lost its edge."},
+
+{id:26,t:"Salmon Niçoise",c:"Fish",tags:["Quick","Healthy"],time:30,kcal:452,p:38,cb:30,f:18,
  b:"A proper dinner salad. The potatoes make it a meal rather than a side.",
- ing:[[320,"g","tuna chunks, drained","tuna"],[600,"g","new potatoes","potatoes"],[4,"","eggs","eggs"],[200,"g","green beans","greenbeans"],[250,"g","tomatoes, wedged","tomatoes"],[100,"g","salad leaves","leaves"],[8,"","cornichons, sliced","cornichons"],[3,"tbsp","olive oil","oil"],[1,"tbsp","vinegar","vinegar"],[1,"tsp","mustard","mustard"]],
- s:["Potatoes into salted boiling water, 15 minutes until tender. Green beans join for the last 3 minutes.",
-    "Separate pan: eggs into boiling water for exactly 7 minutes, then straight into cold water. Jammy yolk, not chalky.",
-    "Whisk the oil, vinegar and mustard with salt and pepper into a dressing.",
-    "Dress the potatoes and beans while they're still warm — warm potato drinks dressing, cold potato repels it.",
-    "Build on a platter: leaves, potatoes and beans, tomatoes, flaked tuna, halved eggs.",
-    "Cornichons scattered over, remaining dressing spooned across."],
+ ing:[[550,"g","salmon fillets","salmon"],[600,"g","new potatoes","potatoes"],[4,"","eggs","eggs"],[200,"g","green beans","greenbeans"],[250,"g","tomatoes, wedged","tomatoes"],[100,"g","salad leaves","leaves"],[8,"","cornichons, sliced","cornichons"],[1,"tbsp","olive oil","oil"],[1,"tbsp","vinegar","vinegar"],[1,"tsp","mustard","mustard"]],
+ s:["Salmon skin-side up in a hot dry pan, 4 minutes, then flipped for 3. Cooled a little and broken into big flakes.",
+    "Potatoes into salted boiling water, 15 minutes. Beans join for the last 3.",
+    "Eggs into boiling water for exactly 7 minutes, then straight into cold water.",
+    "Oil, vinegar and mustard whisked with salt and pepper.",
+    "Potatoes and beans dressed while still warm — warm potato drinks dressing, cold potato repels it.",
+    "Built on a platter with the leaves, tomatoes, salmon, halved eggs and cornichons."],
  tip:"Seven minutes for the eggs. Set a timer — this is the one step where thirty seconds shows."},
 
-{id:18,t:"Moroccan Chickpea Couscous",c:"Vegetarian",tags:["Quick","Healthy"],time:20,kcal:436,p:15,cb:69,f:12,
- b:"Twenty minutes, one bowl, barely any real cooking.",
- ing:[[800,"g","chickpeas, drained","chickpeas"],[250,"g","couscous","couscous"],[350,"ml","hot vegetable stock","stock"],[250,"g","tomatoes, diced","tomatoes"],[1,"","lemon","lemon"],[1,"","red onion, finely sliced","onion"],[2,"tsp","ground cumin","spices"],[2,"tsp","smoked paprika","spices"],[1,"tsp","cinnamon","spices"],[3,"tbsp","olive oil","oil"],[1,"","small bunch parsley","parsley"]],
- s:["Couscous into a bowl, hot stock poured over, plate on top. Eight minutes.",
-    "Meanwhile fry the chickpeas in 1 tablespoon of the oil over a high heat with the cumin, paprika and cinnamon. Six minutes, until some have gone crisp and blistered.",
-    "Fork the couscous through until fluffy and separate.",
-    "Fold in the tomatoes, onion, chopped parsley, remaining oil and the juice of the whole lemon.",
-    "Spiced chickpeas over the top, seasoned, served warm or at room temperature."],
- tip:"Frying the chickpeas until they blister is the whole point. Soft chickpeas make a dull bowl."},
+{id:27,t:"Tuna & Butter Bean Bowl",c:"Fish",tags:["Quick","Healthy"],time:15,kcal:412,p:41,cb:38,f:11,
+ b:"Fifteen minutes, no cooking at all, and almost entirely from tins.",
+ ing:[[320,"g","tuna, drained","tuna"],[2,"","tins butter beans, drained","butterbeans"],[1,"","red onion, finely sliced","redonion"],[250,"g","cherry tomatoes, halved","cherrytom"],[1,"","cucumber, diced","cucumber"],[60,"g","olives","olives"],[1,"","lemon","lemon"],[1,"tbsp","olive oil","oil"],[2,"tsp","mustard","mustard"],[1,"","small bunch parsley","parsley"]],
+ s:["Red onion sliced as thinly as you can and left in the lemon juice for 10 minutes. It loses its harshness and turns pink.",
+    "Butter beans into a bowl, a few crushed with a fork so the dressing clings.",
+    "Oil, mustard and the lemony onions whisked together with salt and pepper.",
+    "Beans, tomatoes, cucumber and olives dressed and left 5 minutes.",
+    "Tuna flaked over in big pieces, folded through once only.",
+    "Parsley over the top."],
+ tip:"Soak the raw onion in lemon juice first. Ten minutes takes all the aggression out of it."},
 
-{id:19,t:"Loaded Jacket Potatoes",c:"Comfort",tags:["Batch"],time:80,kcal:624,p:29,cb:72,f:25,
- b:"Ninety minutes of oven, five minutes of work.",
- ing:[[4,"","large baking potatoes","potatoes"],[400,"g","baked beans","beans"],[150,"g","cheese, grated","cheese"],[6,"","rashers smoked back bacon","bacon"],[4,"tbsp","Greek yogurt","yogurt"],[2,"","spring onions","springonion"],[1,"tbsp","olive oil","oil"],[2,"tsp","flaky salt",0]],
- s:["Oven to 200°C fan. Prick the potatoes all over, rub with the oil and roll in the salt.",
-    "Straight onto the oven shelf, not a tray — air all around is what gives you crisp skin. Seventy-five to ninety minutes.",
-    "Grill or fry the bacon until properly crisp, then chop it.",
-    "Heat the beans.",
-    "Split the potatoes, push the flesh up with a fork, and season inside.",
-    "Beans in, cheese over so it melts on contact, bacon and spring onions on top, yogurt to finish."],
- tip:"Salted skin, no foil, no tray. Foil steams the potato and you lose the best part."},
+{id:28,t:"Tuna Pasta with Lemon & Capers",c:"Fish",tags:["Quick"],time:20,kcal:498,p:40,cb:62,f:10,
+ b:"Store-cupboard dinner that tastes like you planned it.",
+ ing:[[320,"g","tuna, drained","tuna"],[350,"g","pasta","pasta"],[2,"","lemons","lemon"],[60,"g","cornichons, chopped","cornichons"],[4,"","garlic cloves","garlic"],[200,"g","frozen peas","peas"],[1,"tbsp","olive oil","oil"],[1,"","small bunch parsley","parsley"],[40,"g","parmesan","parmesan"],[1,"","fresh chilli","chilli"]],
+ s:["Pasta on. Peas in for the last 2 minutes.",
+    "Garlic and chilli gently in the oil while it cooks — soft and fragrant, not browned.",
+    "Lemon zest and juice into the pan off the heat.",
+    "Pasta and peas drained, holding back a big mug of the water.",
+    "Everything tossed together in the pan with enough pasta water to make it glossy.",
+    "Tuna and cornichons folded through at the very end, parsley and parmesan over."],
+ tip:"Fold the tuna in off the heat and barely stir. Cooked and stirred, it turns to paste."},
 
-{id:20,t:"Homemade Fried Rice",c:"Comfort",tags:["Quick","One pot"],time:20,kcal:512,p:33,cb:64,f:14,
+{id:29,t:"Salmon Fishcakes",c:"Fish",tags:["Batch"],time:45,kcal:468,p:36,cb:48,f:14,
+ b:"Baked rather than fried, and they hold together far better than they look like they will.",
+ ing:[[500,"g","salmon fillets","salmon"],[800,"g","potatoes","potatoes"],[80,"g","breadcrumbs","breadcrumbs"],[2,"","eggs","eggs"],[4,"","spring onions","springonion"],[2,"tbsp","Greek yogurt","yogurt"],[1,"","lemon","lemon"],[1,"","small bunch parsley","parsley"],[1,"tbsp","olive oil","oil"],[150,"g","salad leaves","leaves"]],
+ s:["Potatoes boiled until tender, drained, then left in the colander 5 minutes to steam dry. Wet mash makes fishcakes that collapse.",
+    "Salmon poached in barely simmering water 8 minutes, drained and flaked.",
+    "Potatoes mashed with the yogurt, lemon zest, parsley and spring onions. Seasoned hard.",
+    "Salmon folded through gently — big flakes, not paste.",
+    "Shaped into 8 cakes and chilled 15 minutes. Not optional if you want them to survive.",
+    "Egg-washed, crumbed, brushed with the oil. 200°C fan, 20 minutes, turned once."],
+ tip:"Chill the shaped cakes before they go anywhere near heat. Room-temperature fishcakes break up."},
+
+{id:30,t:"Salmon Traybake with Peppers",c:"Fish",tags:["One pot","Healthy"],time:35,kcal:472,p:38,cb:36,f:17,
+ b:"Everything on one tray. Nothing to wash but the tray.",
+ ing:[[600,"g","salmon fillets","salmon"],[3,"","peppers, sliced","peppers"],[2,"","courgettes, chunked","courgette"],[250,"g","cherry tomatoes","cherrytom"],[1,"","red onion, in wedges","redonion"],[400,"g","new potatoes, halved","potatoes"],[1,"tbsp","olive oil","oil"],[2,"tsp","dried oregano","spices"],[1,"","lemon","lemon"],[60,"g","olives","olives"]],
+ s:["Potatoes, peppers, courgette and onion tossed with the oil, oregano and salt.",
+    "200°C fan, 25 minutes.",
+    "Tray pulled out, everything turned, tomatoes and olives scattered in.",
+    "Salmon laid on top and returned for 12 minutes.",
+    "Lemon squeezed across the whole tray as it comes out.",
+    "Rest 2 minutes before serving so the salmon firms up."],
+ tip:"Salmon goes on last, on top of the vegetables. Buried in them it steams and falls apart."},
+
+{id:31,t:"Tuna Niçoise Jacket Potatoes",c:"Fish",tags:["Healthy"],time:70,kcal:452,p:38,cb:56,f:9,
+ b:"Long in the oven, about five minutes of work.",
+ ing:[[320,"g","tuna, drained","tuna"],[4,"","baking potatoes","potatoes"],[4,"","eggs","eggs"],[200,"g","green beans","greenbeans"],[200,"g","Greek yogurt","yogurt"],[8,"","cornichons, chopped","cornichons"],[3,"","spring onions","springonion"],[1,"","lemon","lemon"],[1,"tsp","mustard","mustard"],[150,"g","salad leaves","leaves"]],
+ s:["Potatoes pricked, rubbed with salt, straight onto the oven shelf. 200°C fan, 60 minutes. No foil — foil steams them soft.",
+    "Eggs boiled 7 minutes, cooled and quartered.",
+    "Green beans boiled 4 minutes.",
+    "Yogurt mixed with the mustard, lemon juice, cornichons and spring onions.",
+    "Tuna folded through that dressing in big flakes.",
+    "Potatoes split, fluffed with a fork, filled, with the eggs, beans and leaves alongside."],
+ tip:"No foil on a jacket potato. The whole point is a dry, crisp skin, and foil guarantees the opposite."},
+
+{id:32,t:"Chickpea & Spinach Curry",c:"Vegetarian",tags:["Quick","One pot","Healthy"],time:30,kcal:452,p:31,cb:58,f:12,
+ b:"Yogurt instead of coconut milk, which lifts the protein and drops the fat.",
+ ing:[[3,"","tins chickpeas, drained","chickpeas"],[300,"g","Greek yogurt","yogurt"],[2,"tbsp","curry paste","currypaste"],[400,"g","chopped tomatoes","choptom"],[1,"","onion, diced","onion"],[4,"","garlic cloves","garlic"],[1,"tbsp","ginger, grated","ginger"],[250,"g","spinach","spinach"],[250,"g","rice","rice"],[1,"tbsp","oil","oil"],[1,"","lemon","lemon"]],
+ s:["Rice on.",
+    "Onion in the oil, 8 minutes. Garlic, ginger and curry paste for 2 minutes.",
+    "Tomatoes in with a splash of water, simmered 8 minutes.",
+    "Chickpeas in, a good handful crushed against the pan to thicken everything.",
+    "Spinach wilted through in batches.",
+    "Off the heat, yogurt stirred in with the lemon. It must not boil after this or it will split."],
+ tip:"Crush a handful of the chickpeas. It thickens the sauce far better than simmering it down does."},
+
+{id:33,t:"Red Lentil Dahl",c:"Vegetarian",tags:["Batch","One pot","Healthy"],time:40,kcal:442,p:30,cb:66,f:8,
+ b:"Cheap, filling and freezes into perfect single portions.",
+ ing:[[350,"g","red lentils","lentils"],[2,"tbsp","curry paste","currypaste"],[1,"","onion, diced","onion"],[4,"","garlic cloves","garlic"],[1,"tbsp","ginger, grated","ginger"],[1000,"ml","vegetable stock","stock"],[250,"g","spinach","spinach"],[200,"g","Greek yogurt","yogurt"],[4,"","flatbreads","flatbread"],[1,"","lime","lime"],[1,"tsp","oil","oil"]],
+ s:["Onion in the oil, 8 minutes until soft and going gold.",
+    "Garlic, ginger and curry paste for 2 minutes until the kitchen smells of it.",
+    "Lentils in, stirred to coat, then the stock.",
+    "Simmered 25 minutes. Scrape the bottom regularly — lentils sink, stick and scorch without warning.",
+    "Spinach in at the end until wilted. Seasoned generously and sharpened with lime.",
+    "Yogurt spooned over, flatbreads warmed and torn."],
+ tip:"Stir the base properly every few minutes. A scorched dahl tastes of nothing else, and there is no rescuing it."},
+
+{id:34,t:"Tofu & Edamame Noodles",c:"Vegetarian",tags:["Quick","Healthy"],time:25,kcal:478,p:32,cb:56,f:14,
+ b:"Press the tofu properly and it crisps rather than crumbles.",
+ ing:[[450,"g","firm tofu, cubed","tofu"],[250,"g","noodles","noodles"],[200,"g","edamame","edamame"],[1,"","head broccoli, in florets","broccoli"],[4,"tbsp","soy sauce","soy"],[2,"tsp","sesame oil","sesame"],[1,"tbsp","ginger, grated","ginger"],[4,"","garlic cloves","garlic"],[1,"tbsp","cornflour","flour"],[1,"tbsp","oil","oil"],[3,"","spring onions","springonion"]],
+ s:["Tofu pressed between two plates with a weight on top for 15 minutes, then patted dry and tossed in the cornflour.",
+    "Noodles cooked, drained, rinsed cold.",
+    "Hot pan with the oil, tofu in one layer. Left alone 4 minutes before turning, then turned once. It only crisps if you leave it.",
+    "Tofu out. Broccoli and edamame in with a splash of water, 4 minutes.",
+    "Garlic and ginger 30 seconds, then noodles, soy and sesame oil.",
+    "Tofu folded back through at the end. Spring onions over."],
+ tip:"Press the tofu and coat it in cornflour. Skipping either step gives you a wet, grey scramble."},
+
+{id:35,t:"Halloumi & Chickpea Traybake",c:"Vegetarian",tags:["One pot"],time:40,kcal:492,p:30,cb:44,f:18,
+ b:"Halloumi in late so it stays soft rather than turning to rubber.",
+ ing:[[300,"g","halloumi, thickly sliced","halloumi"],[2,"","tins chickpeas, drained","chickpeas"],[600,"g","sweet potatoes, in chunks","sweetpotato"],[2,"","peppers, sliced","peppers"],[1,"","red onion, in wedges","redonion"],[2,"tbsp","harissa","harissa"],[1,"tbsp","olive oil","oil"],[1,"","lemon","lemon"],[150,"g","salad leaves","leaves"],[150,"g","Greek yogurt","yogurt"]],
+ s:["Sweet potato, peppers and onion tossed with the oil and salt. 200°C fan, 25 minutes.",
+    "Chickpeas and harissa stirred through, everything turned.",
+    "Halloumi laid on top. Back in for 12 minutes only.",
+    "Lemon squeezed over the whole tray as it comes out.",
+    "Leaves scattered over the hot tray so they half wilt.",
+    "Yogurt spooned across at the table."],
+ tip:"Twelve minutes for the halloumi and no longer. Roasted from the start it goes squeaky and tough."},
+
+{id:36,t:"Cottage Cheese & Spinach Pasta",c:"Vegetarian",tags:["Quick"],time:20,kcal:472,p:33,cb:64,f:9,
+ b:"Cottage cheese melts into a sauce that tastes far richer than it is.",
+ ing:[[350,"g","pasta","pasta"],[400,"g","cottage cheese","cottagecheese"],[250,"g","spinach","spinach"],[4,"","garlic cloves","garlic"],[1,"","lemon","lemon"],[40,"g","parmesan","parmesan"],[1,"tbsp","olive oil","oil"],[200,"g","frozen peas","peas"],[1,"","fresh chilli","chilli"],[1,"","small bunch basil","basil"]],
+ s:["Pasta on. Peas in for the last 2 minutes.",
+    "Cottage cheese blended smooth with the lemon zest and a splash of water. Blending is what turns it from lumpy to silky.",
+    "Garlic and chilli softened gently in the oil, not browned.",
+    "Spinach wilted into that pan.",
+    "Pasta drained, holding back a mug of water. Everything combined off the heat with enough pasta water to loosen.",
+    "Parmesan, basil and lemon juice through it."],
+ tip:"Blend the cottage cheese before it goes near the pan. Stirred in as it comes, it stays stubbornly lumpy."},
+
+{id:37,t:"Black Bean Quesadillas",c:"Vegetarian",tags:["Quick"],time:25,kcal:498,p:30,cb:62,f:15,
+ b:"Fifteen minutes and made almost entirely from tins.",
+ ing:[[2,"","tins kidney beans, drained","kidneybeans"],[8,"","tortillas","tortillas"],[150,"g","cheese, grated","cheese"],[1,"","onion, diced","onion"],[2,"tsp","ground cumin","spices"],[2,"tsp","smoked paprika","spices"],[200,"g","sweetcorn","sweetcorn"],[200,"g","cottage cheese","cottagecheese"],[1,"","lime","lime"],[1,"tsp","oil","oil"],[1,"","small bunch coriander","coriander"]],
+ s:["Onion in the oil, 6 minutes. Spices for a minute.",
+    "Beans and sweetcorn in, mashed roughly — about half crushed, half whole. Seasoned well.",
+    "Cottage cheese stirred through the bean mix. It adds protein and keeps the filling from drying out.",
+    "Filling over half of each tortilla, grated cheese on top, folded over.",
+    "Dry pan on medium, two at a time, 3 minutes a side, pressed flat with a spatula.",
+    "Cut into wedges with lime and coriander."],
+ tip:"Medium heat, never high. High heat browns the tortilla before the cheese inside has melted."},
+
+{id:38,t:"Lentil Bolognese",c:"Vegetarian",tags:["Batch","Healthy"],time:50,kcal:482,p:30,cb:72,f:9,
+ b:"Nobody at the table has ever asked where the meat went.",
+ ing:[[350,"g","lentils","lentils"],[800,"g","chopped tomatoes","choptom"],[350,"g","pasta","pasta"],[2,"","carrots, finely diced","carrots"],[2,"","celery sticks, finely diced","celery"],[1,"","onion, finely diced","onion"],[4,"","garlic cloves","garlic"],[300,"g","mushrooms, finely chopped","mushrooms"],[2,"tbsp","tomato purée","passata"],[1,"tbsp","olive oil","oil"],[40,"g","parmesan","parmesan"],[500,"ml","vegetable stock","stock"]],
+ s:["Mushrooms into a dry hot pan on their own until their water has driven off and they squeak, 8 minutes. This is where the savoury depth comes from.",
+    "Oil in with the carrot, celery and onion, 10 minutes.",
+    "Garlic and tomato purée 2 minutes.",
+    "Lentils, tomatoes and stock in. Season.",
+    "Simmered 30 minutes until the lentils are soft and it has gone thick.",
+    "Pasta tossed through with a splash of its water and the parmesan."],
+ tip:"Dry-fry the mushrooms first, with no oil. Driving the water out is what gives this its meatiness."},
+
+{id:39,t:"Roast Cauliflower & Chickpea Bowls",c:"Vegetarian",tags:["Healthy","One pot"],time:40,kcal:462,p:30,cb:52,f:14,
+ b:"The yogurt-tahini sauce is what makes it, so don't skip it.",
+ ing:[[1,"","large cauliflower, in florets","cauliflower"],[2,"","tins chickpeas, drained","chickpeas"],[2,"tbsp","tahini","tahini"],[250,"g","Greek yogurt","yogurt"],[1,"","lemon","lemon"],[2,"tsp","ground cumin","spices"],[2,"tsp","smoked paprika","spices"],[200,"g","quinoa","quinoa"],[1,"tbsp","olive oil","oil"],[1,"","small bunch parsley","parsley"],[1,"","red onion, sliced","redonion"]],
+ s:["Cauliflower and chickpeas tossed with the oil, cumin, paprika and salt, spread across two trays. One tray means steaming.",
+    "220°C fan, 30 minutes, turned once. You want dark brown edges, not pale gold.",
+    "Quinoa cooked meanwhile.",
+    "Yogurt, tahini and lemon juice whisked with a little water into a pourable sauce. Seasoned.",
+    "Bowls built: quinoa, cauliflower and chickpeas, red onion, parsley.",
+    "Sauce spooned over generously."],
+ tip:"Two trays, not one. Crowded cauliflower steams in its own moisture and never browns."},
+
+{id:40,t:"Shakshuka with Butter Beans",c:"Vegetarian",tags:["Quick","One pot","Healthy"],time:30,kcal:432,p:30,cb:40,f:15,
+ b:"Breakfast for dinner, with beans in to make it a proper meal.",
+ ing:[[6,"","eggs","eggs"],[2,"","tins butter beans, drained","butterbeans"],[800,"g","chopped tomatoes","choptom"],[2,"","peppers, sliced","peppers"],[1,"","onion, sliced","onion"],[4,"","garlic cloves","garlic"],[2,"tsp","ground cumin","spices"],[2,"tsp","smoked paprika","spices"],[1,"tbsp","olive oil","oil"],[100,"g","feta","feta"],[4,"","flatbreads","flatbread"]],
+ s:["Onion and peppers in the oil in a wide pan, 10 minutes until soft.",
+    "Garlic and spices for a minute.",
+    "Tomatoes in, simmered 10 minutes until properly thick. Thin sauce and the eggs sink.",
+    "Butter beans stirred in.",
+    "Six wells made with the back of a spoon, an egg cracked into each. Lid on, lowest heat, 7 minutes for set whites and runny yolks.",
+    "Feta crumbled over, flatbreads to mop."],
+ tip:"Reduce the sauce properly before the eggs go in. In a loose sauce the eggs sink and poach into nothing."},
+
+{id:41,t:"Chicken, Avocado & Quinoa Salad",c:"Salads",tags:["Quick","Healthy"],time:25,kcal:462,p:44,cb:36,f:16,
+ b:"A main-course salad with enough in it to keep you going.",
+ ing:[[600,"g","chicken breasts","chicken"],[200,"g","quinoa","quinoa"],[2,"","avocados","avocado"],[250,"g","cherry tomatoes, halved","cherrytom"],[1,"","cucumber, diced","cucumber"],[150,"g","rocket","rocket"],[1,"","lemon","lemon"],[1,"tbsp","olive oil","oil"],[2,"tsp","mustard","mustard"],[3,"","spring onions","springonion"]],
+ s:["Quinoa cooked, drained and spread on a tray to cool quickly. Warm quinoa wilts everything it touches.",
+    "Chicken seasoned and griddled 5–6 minutes a side, rested, then sliced.",
+    "Oil, mustard, lemon juice, salt and pepper whisked into a dressing.",
+    "Quinoa, tomatoes, cucumber and spring onions tossed with most of the dressing.",
+    "Rocket folded through at the last moment.",
+    "Chicken and sliced avocado on top, remaining dressing over."],
+ tip:"Cool the quinoa before it meets the leaves. Warm grains collapse rocket in under a minute."},
+
+{id:42,t:"Tuna, Egg & Green Bean Salad",c:"Salads",tags:["Quick","Healthy"],time:20,kcal:398,p:40,cb:28,f:14,
+ b:"Twenty minutes, mostly boiling, and it holds up perfectly as a packed lunch.",
+ ing:[[320,"g","tuna, drained","tuna"],[4,"","eggs","eggs"],[300,"g","green beans","greenbeans"],[400,"g","new potatoes","potatoes"],[1,"","red onion, finely sliced","redonion"],[150,"g","salad leaves","leaves"],[60,"g","olives","olives"],[1,"tbsp","olive oil","oil"],[1,"tbsp","vinegar","vinegar"],[2,"tsp","mustard","mustard"]],
+ s:["Potatoes into salted boiling water, 15 minutes. Beans join for the last 3.",
+    "Eggs into separate boiling water for 7 minutes, then straight into cold.",
+    "Oil, vinegar and mustard whisked with salt and pepper.",
+    "Potatoes and beans dressed while still warm.",
+    "Leaves, onion and olives folded through once cooled a little.",
+    "Tuna flaked over in large pieces, eggs halved on top."],
+ tip:"Dress the potatoes warm and everything else cold. Warm leaves go limp in the time it takes to sit down."},
+
+{id:43,t:"Chargrilled Chicken & Butter Bean Salad",c:"Salads",tags:["Quick","Healthy"],time:25,kcal:448,p:46,cb:34,f:13,
+ b:"Charred chicken, creamy beans and a lot of lemon.",
+ ing:[[650,"g","chicken breasts","chicken"],[2,"","tins butter beans, drained","butterbeans"],[1,"","red onion, finely sliced","redonion"],[60,"g","olives","olives"],[250,"g","cherry tomatoes, halved","cherrytom"],[150,"g","rocket","rocket"],[2,"","lemons","lemon"],[1,"tbsp","olive oil","oil"],[2,"","garlic cloves","garlic"],[1,"","small bunch parsley","parsley"]],
+ s:["Onion sliced thin and left in the juice of one lemon for 10 minutes.",
+    "Chicken flattened a little, seasoned, and griddled hard 5–6 minutes a side until properly charred. Rested and sliced.",
+    "Butter beans warmed briefly in the oil with the crushed garlic — 3 minutes, just to take the chill off.",
+    "Warm beans dressed with the second lemon and the pickled onions with their juice.",
+    "Tomatoes and parsley folded in.",
+    "Rocket added last, chicken laid over the top."],
+ tip:"Dress the beans while warm. Cold beans out of a tin refuse to take on any flavour at all."},
+
+{id:44,t:"Salmon, Beetroot & Grain Salad",c:"Salads",tags:["Quick","Healthy"],time:30,kcal:472,p:36,cb:42,f:17,
+ b:"Earthy, sharp and a very good-looking plate for the effort involved.",
+ ing:[[550,"g","salmon fillets","salmon"],[200,"g","bulgur wheat","bulgur"],[300,"g","cooked beetroot, diced","beetroot"],[150,"g","rocket","rocket"],[200,"g","Greek yogurt","yogurt"],[1,"","lemon","lemon"],[1,"tbsp","olive oil","oil"],[1,"","small bunch mint","mint"],[3,"","spring onions","springonion"],[2,"tsp","mustard","mustard"]],
+ s:["Bulgur simmered 12 minutes in double its volume of water, then spread out to cool.",
+    "Salmon roasted at 200°C fan for 12 minutes, then flaked into big pieces.",
+    "Yogurt mixed with the mustard, lemon juice and chopped mint, loosened with water.",
+    "Bulgur tossed with the oil, beetroot and spring onions.",
+    "Rocket folded through at the end.",
+    "Salmon over the top, yogurt dressing spooned across."],
+ tip:"Fold the beetroot in at the last minute unless you want everything on the plate turned pink."},
+
+{id:45,t:"Halloumi, Chickpea & Herb Salad",c:"Salads",tags:["Quick"],time:20,kcal:452,p:30,cb:38,f:18,
+ b:"The halloumi goes on hot, straight from the pan, over cold leaves.",
+ ing:[[250,"g","halloumi, sliced","halloumi"],[2,"","tins chickpeas, drained","chickpeas"],[250,"g","cherry tomatoes, halved","cherrytom"],[1,"","cucumber, diced","cucumber"],[1,"","red onion, finely sliced","redonion"],[150,"g","salad leaves","leaves"],[1,"","lemon","lemon"],[1,"tbsp","olive oil","oil"],[1,"","small bunch mint","mint"],[1,"","small bunch parsley","parsley"]],
+ s:["Onion in the lemon juice for 10 minutes.",
+    "Chickpeas dried thoroughly on a tea towel, then fried in half the oil over a high heat until blistered, 6 minutes.",
+    "Tomatoes, cucumber, herbs and leaves tossed with the rest of the oil and the pickled onions.",
+    "Halloumi in a dry hot pan, 2 minutes a side. No oil — it releases plenty of its own.",
+    "Crisp chickpeas through the salad.",
+    "Halloumi laid over while still squeaking hot."],
+ tip:"Dry the chickpeas properly before they hit the pan. Wet chickpeas steam and never blister."},
+
+{id:46,t:"Beef, Rocket & Horseradish Salad",c:"Salads",tags:["Quick","Healthy"],time:25,kcal:428,p:45,cb:30,f:14,
+ b:"Rare steak, sharp dressing, and it takes twenty-five minutes.",
+ ing:[[550,"g","beef steaks","steak"],[500,"g","new potatoes","potatoes"],[150,"g","rocket","rocket"],[200,"g","Greek yogurt","yogurt"],[2,"tbsp","mustard","mustard"],[200,"g","cherry tomatoes, halved","cherrytom"],[1,"","red onion, finely sliced","redonion"],[1,"tbsp","olive oil","oil"],[1,"tbsp","vinegar","vinegar"],[100,"g","radishes, sliced","radish"]],
+ s:["Potatoes boiled 15 minutes, drained and halved.",
+    "Steaks dried, salted, seared in a smoking dry pan 2–3 minutes a side for rare. Rested a full 5 minutes.",
+    "Yogurt whisked with the mustard, vinegar and a splash of water into a sharp dressing.",
+    "Warm potatoes tossed with half the dressing and the onion.",
+    "Rocket, tomatoes and radishes added.",
+    "Steak sliced thinly across the grain and laid over, resting juices poured on."],
+ tip:"Slice the steak across the grain and at an angle. It doubles the tenderness for no extra work."},
+
+{id:47,t:"Chicken, Bacon & Sugarsnap Salad",c:"Salads",tags:["Quick","Healthy"],time:25,kcal:442,p:47,cb:26,f:16,
+ b:"A little bacon goes a long way when everything else is lean.",
+ ing:[[650,"g","chicken breasts","chicken"],[100,"g","smoked back bacon","bacon"],[250,"g","sugarsnap peas","sugarsnap"],[2,"","little gem lettuces","littlegem"],[200,"g","Greek yogurt","yogurt"],[2,"tsp","mustard","mustard"],[1,"","lemon","lemon"],[250,"g","cherry tomatoes, halved","cherrytom"],[3,"","spring onions","springonion"],[1,"tsp","olive oil","oil"]],
+ s:["Bacon crisped in a dry pan, then lifted out and chopped. Fat left in the pan.",
+    "Chicken seasoned and cooked in that pan, 5–6 minutes a side. Rested and sliced.",
+    "Sugarsnaps blanched 90 seconds and dropped into cold water so they stay bright and snapping.",
+    "Yogurt, mustard, lemon juice and the oil whisked into a dressing.",
+    "Little gem torn, tossed with the sugarsnaps, tomatoes and spring onions.",
+    "Chicken over, bacon scattered on top."],
+ tip:"Cook the chicken in the bacon fat and add no oil. You get the flavour without doubling the fat."},
+
+{id:48,t:"Cottage Cheese, Grain & Roast Veg Salad",c:"Salads",tags:["Healthy"],time:40,kcal:412,p:30,cb:48,f:12,
+ b:"A meat-free salad that genuinely fills you up.",
+ ing:[[400,"g","cottage cheese","cottagecheese"],[200,"g","quinoa","quinoa"],[2,"","courgettes, chunked","courgette"],[2,"","peppers, chunked","peppers"],[1,"","red onion, in wedges","redonion"],[1,"","tin chickpeas, drained","chickpeas"],[150,"g","rocket","rocket"],[1,"tbsp","olive oil","oil"],[1,"","lemon","lemon"],[1,"","small bunch basil","basil"],[2,"tsp","balsamic vinegar","balsamic"]],
+ s:["Courgette, peppers, onion and chickpeas tossed with the oil and salt. 220°C fan, 25 minutes until the edges char.",
+    "Quinoa cooked and spread out to cool.",
+    "Roast vegetables dressed with the balsamic while still hot, so they drink it in.",
+    "Quinoa, vegetables and lemon juice combined and left to come to room temperature.",
+    "Rocket and basil folded through at the end.",
+    "Cottage cheese spooned over in generous heaps rather than stirred in."],
+ tip:"Dress the vegetables the moment they leave the oven. Hot vegetables absorb; cold ones just get wet."},
+
+{id:49,t:"Loaded Jacket Potatoes",c:"Comfort",tags:["Batch"],time:75,kcal:478,p:38,cb:62,f:11,
+ b:"An hour in the oven for five minutes of work.",
+ ing:[[4,"","baking potatoes","potatoes"],[400,"g","tin baked beans","beans"],[300,"g","cottage cheese","cottagecheese"],[100,"g","cheese, grated","cheese"],[200,"g","ham, chopped","ham"],[3,"","spring onions","springonion"],[1,"tsp","smoked paprika","spices"],[200,"g","salad leaves","leaves"],[200,"g","cherry tomatoes, halved","cherrytom"],[1,"tsp","mustard","mustard"]],
+ s:["Potatoes pricked all over, rubbed with salt, straight onto the oven shelf. 200°C fan, 60 minutes. No foil.",
+    "Beans warmed with the paprika and mustard.",
+    "Potatoes split and the insides fluffed hard with a fork.",
+    "Cottage cheese in first — it melts into the hot potato and disappears.",
+    "Beans and ham piled on, grated cheese over the top to melt.",
+    "Spring onions, with the leaves and tomatoes alongside."],
+ tip:"Fluff the inside properly before anything goes on. A compact potato tastes half as good for no reason."},
+
+{id:50,t:"Macaroni Cheese, Lightened",c:"Comfort",tags:["Batch"],time:45,kcal:528,p:36,cb:66,f:14,
+ b:"Built on cottage cheese and milk rather than butter and cream. It still pulls into strings.",
+ ing:[[350,"g","pasta","pasta"],[400,"g","cottage cheese","cottagecheese"],[150,"g","cheese, grated","cheese"],[500,"ml","milk","milk"],[30,"g","plain flour","flour"],[20,"g","butter","butter"],[2,"tsp","mustard","mustard"],[100,"g","ham, chopped","ham"],[40,"g","breadcrumbs","breadcrumbs"],[200,"g","frozen peas","peas"],[1,"tsp","smoked paprika","spices"]],
+ s:["Butter melted, flour in, stirred 2 minutes into a paste.",
+    "Milk added a splash at a time, whisking hard between each. Rushing here is exactly how you get lumps. Ten minutes to a smooth sauce.",
+    "Off the heat: cottage cheese blended smooth and stirred in with the grated cheese and mustard. Never boil it after this.",
+    "Pasta cooked 2 minutes short, drained, folded in with the ham and peas.",
+    "Into a dish, breadcrumbs and paprika over the top.",
+    "200°C fan, 20 minutes until blistered."],
+ tip:"Blend the cottage cheese smooth first. Stirred in as it comes, it stays curdled-looking however long you cook it."},
+
+{id:51,t:"Homemade Fried Rice",c:"Comfort",tags:["Quick","One pot"],time:20,kcal:462,p:38,cb:60,f:10,
  b:"Built for leftovers. Yesterday's rice, whatever's in the freezer, done in twenty minutes.",
- ing:[[2,"","chicken breasts","chicken"],[400,"g","cooked cold rice","rice"],[3,"","eggs","eggs"],[300,"g","frozen mixed vegetables","frozenveg"],[3,"tbsp","soy sauce","soy"],[1,"tbsp","sesame oil","sesame"],[3,"","garlic cloves","garlic"],[2,"","spring onions","springonion"],[1,"tbsp","oil","oil"],[1,"tsp","hot sauce","hotsauce"]],
+ ing:[[500,"g","chicken breasts, diced","chicken"],[400,"g","cooked cold rice","rice"],[4,"","eggs","eggs"],[300,"g","frozen mixed vegetables","frozenveg"],[3,"tbsp","soy sauce","soy"],[2,"tsp","sesame oil","sesame"],[3,"","garlic cloves","garlic"],[3,"","spring onions","springonion"],[1,"tsp","oil","oil"],[1,"tsp","hot sauce","hotsauce"],[150,"g","edamame","edamame"]],
  s:["Cold rice only. Warm rice turns to porridge in the wok — cook it the day before or spread it on a tray to cool fast.",
-    "Diced chicken into a very hot wok with the oil. Four minutes until cooked and catching. Out onto a plate.",
-    "Beaten eggs into the wok, scramble hard and fast, break them up, out onto the same plate.",
-    "Garlic and frozen vegetables in, 3 minutes until hot through and the water has driven off.",
-    "Rice in, breaking up any clumps with the back of your spoon. Spread it out and let it sit for 30 seconds at a time so it toasts.",
-    "Chicken and egg back in, soy, sesame oil and hot sauce tossed through. Spring onions on at the end."],
- tip:"Let the rice sit still between stirs. Constant stirring steams it; stillness toasts it."}
+    "Chicken into a very hot wok with the oil, 4 minutes until cooked and catching. Out.",
+    "Beaten eggs in, scrambled hard and fast, broken up, out onto the same plate.",
+    "Garlic, frozen vegetables and edamame in, 3 minutes until the water has driven off.",
+    "Rice in, clumps broken up. Spread out and left still for 30 seconds at a time so it toasts.",
+    "Chicken and egg back in with the soy, sesame oil and hot sauce. Spring onions at the end."],
+ tip:"Let the rice sit still between stirs. Constant stirring steams it; stillness toasts it."},
+
+{id:52,t:"Turkey Keema with Peas",c:"Comfort",tags:["Quick","Batch","Healthy"],time:35,kcal:468,p:44,cb:52,f:10,
+ b:"All the depth of a slow curry from a mince that cooks in half an hour.",
+ ing:[[700,"g","turkey mince","turkey"],[300,"g","frozen peas","peas"],[400,"g","chopped tomatoes","choptom"],[2,"","onions, diced","onion"],[4,"","garlic cloves","garlic"],[1,"tbsp","ginger, grated","ginger"],[2,"tbsp","curry paste","currypaste"],[250,"g","rice","rice"],[150,"g","Greek yogurt","yogurt"],[1,"tbsp","oil","oil"],[1,"","small bunch coriander","coriander"]],
+ s:["Onions in the oil, 10 minutes until genuinely golden. Turkey has little fat of its own, so this is where the body comes from.",
+    "Garlic, ginger and curry paste for 2 minutes.",
+    "Turkey in, broken up and browned, 6 minutes.",
+    "Tomatoes and a splash of water in, simmered 15 minutes.",
+    "Peas in for the last 5 minutes. Rice cooked alongside.",
+    "Off the heat, yogurt stirred through with the coriander."],
+ tip:"Give the onions the full ten minutes. With a lean mince they are the only thing standing between you and a thin, watery curry."}
 ];
 
 const DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-const SUGGESTED=[1,2,3,4,5,6,7], SUGGESTED_SPARES=[8,9];
+/* One from each corner of the collection, quickest first so the long cook
+   lands at the weekend. */
+const SUGGESTED=[20,51,1,24,41,32,14], SUGGESTED_SPARES=[27,42];
 const SHELF=["Avocado","Cherry tomatoes","Salmon","Cucumber","Broccoli","Salad leaves"];
-const FILTERS=["All","Under 30 min","Nothing to buy","Chicken","Fish","Meat-free"];
+const FILTERS=["All","Under 30 min","Nothing to buy","Salads","Chicken","Fish","Meat-free"];
+/* Meat-free is worked out from the ingredients, not the category, so a
+   vegetarian salad counts even though it files under Salads. */
+const MEATKEYS=new Set(["chicken","chickenthigh","mince","steak","pork","turkey","chorizo","bacon","ham","salmon","hotsmoked","tuna"]);
+const meatFree=r=>!r.ing.some(i=>MEATKEYS.has(i[3]));
 
 /* ---------- state ---------- */
 let week=[...SUGGESTED], spares=[...SUGGESTED_SPARES], custom=false;
-let picked=new Set(week), filter="All", q="", servings=4, open=null, step=0;
+let picked=new Set(week), filter="All", q="", open=null, step=0;
+/* Recipe quantities are written for 4. Each recipe carries its own head count,
+   which is what the shopping list totals from. */
+let SERVES={};
+const DEFAULT_SERVES=2, SERVE_RANGE=[2,3,4,5];
+const servesOf=id=>SERVE_RANGE.includes(SERVES[id])?SERVES[id]:DEFAULT_SERVES;
+const scaleOf=id=>servesOf(id)/4;
+/* Ids from recent menus, newest first, so the generator can push them back. */
+let HISTORY=[];
+/* Dishes ticked off as actually cooked this week. Anything still unticked when
+   you build the next menu is carried over rather than quietly lost. */
+let COOKED=new Set();
+const HISTORY_MAX=28;
 
 const rec=id=>POOL.find(r=>r.id===id);
 
 /* Everything worth keeping, as one document. This is what gets
    written to the phone and, when sharing is on, to the shared copy. */
-function docOf(){ return {kitchen:[...kitchen],added:ADDED,week,spares,custom,picked:[...picked]} }
+function docOf(){ return {kitchen:[...kitchen],added:ADDED,week,spares,custom,picked:[...picked],serves:SERVES,history:HISTORY,cooked:[...COOKED]} }
 function applyDoc(d){
   if(!d) return;
   ADDED=Array.isArray(d.added)?d.added.map(a=>Array.isArray(a)
@@ -590,6 +993,11 @@ function applyDoc(d){
   if(Array.isArray(d.spares)&&d.spares.every(rec)) spares=d.spares;
   custom=!!d.custom;
   picked=new Set(Array.isArray(d.picked)?d.picked.filter(rec):week);
+  SERVES={};
+  if(d.serves&&typeof d.serves==="object")
+    Object.keys(d.serves).forEach(k=>{ if(SERVE_RANGE.includes(d.serves[k])) SERVES[k]=d.serves[k] });
+  HISTORY=Array.isArray(d.history)?d.history.filter(id=>rec(id)).slice(0,HISTORY_MAX):[];
+  COOKED=new Set(Array.isArray(d.cooked)?d.cooked.filter(rec):[]);
 }
 const SAVED=STORE.get();
 applyDoc(SAVED);
@@ -718,10 +1126,18 @@ let genPool=[], genPicked=new Set();
 const FR={0.25:"¼",0.5:"½",0.75:"¾"};
 
 const missing=r=>r.ing.filter(i=>i[3]&&!kitchen.has(i[3]));
+/* Cooking a dish uses its ingredients up, so they come out of the kitchen.
+   Un-ticking cannot put them back — there is no way to know what was left. */
+function setCooked(id,on){
+  const r=rec(id); if(!r) return;
+  if(on){ COOKED.add(id); r.ing.forEach(i=>{ if(i[3]) kitchen.delete(i[3]) }) }
+  else COOKED.delete(id);
+  save();
+}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function fmt(v,u,scale){
   if(v==null) return "";
-  let x=v*(scale===undefined?servings/4:scale);
+  let x=v*(scale===undefined?(open?scaleOf(open.id):DEFAULT_SERVES/4):scale);
   x = x<10 ? Math.round(x*4)/4 : Math.round(x);
   const w=Math.floor(x), fr=+(x-w).toFixed(2);
   const num = fr&&FR[fr] ? (w?w:"")+FR[fr] : String(x);
@@ -758,7 +1174,8 @@ function match(r){
   if(filter==="Nothing to buy"&&missing(r).length) return false;
   if(filter==="Chicken"&&r.c!=="Chicken") return false;
   if(filter==="Fish"&&r.c!=="Fish") return false;
-  if(filter==="Meat-free"&&r.c!=="Vegetarian") return false;
+  if(filter==="Salads"&&r.c!=="Salads") return false;
+  if(filter==="Meat-free"&&!meatFree(r)) return false;
   if(q){
     const hay=(r.t+" "+r.c+" "+r.tags.join(" ")+" "+r.b+" "+r.ing.map(i=>i[2]).join(" ")).toLowerCase();
     if(!hay.includes(q)) return false;
@@ -766,11 +1183,11 @@ function match(r){
   return true;
 }
 function card(r,day,spare){
-  const n=missing(r).length;
-  return `<article class="card${spare?" spare":""}">
+  const n=missing(r).length, done=COOKED.has(r.id);
+  return `<article class="card${spare?" spare":""}${done?" done":""}">
     <div class="card-head" style="background:${COL[r.c]}">
       <span class="day">${day}</span>
-      <span class="tagline">${r.c} · ${r.time} min</span>
+      <span class="tagline">${done?ico("check")+"Cooked":r.c+" · "+r.time+" min"}</span>
     </div>
     <div class="card-body">
       <h3>${esc(r.t)}</h3>
@@ -779,6 +1196,7 @@ function card(r,day,spare){
       <div class="meta"><span>${r.kcal} kcal</span><span>${r.p}g protein</span><span>${r.tags[0]}</span></div>
       <div class="card-actions">
         <button class="btn" data-open="${r.id}">Open recipe</button>
+        <button class="btn ghost" data-cooked="${r.id}" aria-pressed="${done}" title="Mark as cooked">${ico("check")}${done?"Cooked":"Cooked?"}</button>
         <button class="btn ghost" data-add="${r.id}" aria-pressed="${picked.has(r.id)}" title="Shopping list">${picked.has(r.id)?"On list":"+ List"}</button>
       </div>
     </div></article>`;
@@ -804,14 +1222,18 @@ function draw(){
   save();
 }
 document.querySelectorAll("#week,#spares").forEach(g=>g.onclick=e=>{
-  const o=e.target.closest("[data-open]"), a=e.target.closest("[data-add]");
+  const o=e.target.closest("[data-open]"), a=e.target.closest("[data-add]"),
+        ck=e.target.closest("[data-cooked]");
+  if(ck){ const id=+ck.dataset.cooked;
+    if(!COOKED.has(id)&&!confirm(`Mark “${rec(id).t}” as cooked? Its ingredients come out of your kitchen list.`)) return;
+    setCooked(id,!COOKED.has(id)); draw(); return }
   if(o) showRecipe(+o.dataset.open);
   if(a){toggle(+a.dataset.add);draw()}
 });
 function toggle(id){picked.has(id)?picked.delete(id):picked.add(id)}
 
 /* ---------- recipe sheet ---------- */
-function showRecipe(id){open=rec(id);servings=4;paint();show("recipe-overlay")}
+function showRecipe(id){open=rec(id);paint();show("recipe-overlay")}
 function paint(){
   const r=open;
   document.getElementById("recipe-overlay").innerHTML=`<div class="sheet">
@@ -824,15 +1246,15 @@ function paint(){
     <div class="sheet-body">
       <div class="dial">
         <span class="dial-label">Cooking for</span>
-        <div class="dial-set">${[2,4,6].map(v=>`<button data-serv="${v}" aria-pressed="${v===servings}">${v}</button>`).join("")}</div>
+        <div class="dial-set">${SERVE_RANGE.map(v=>`<button data-serv="${v}" aria-pressed="${v===servesOf(r.id)}">${v}</button>`).join("")}</div>
         <span class="dial-note">Quantities below rescale instantly</span>
       </div>
-      <p class="section-title">Ingredients — tick as you gather</p>
+      <p class="section-title">${ico("basket")}Ingredients — tick as you gather</p>
       <ul class="ing">${r.ing.map(i=>{
         const buy=i[3]&&!kitchen.has(i[3]);
         return `<li><label><input type="checkbox"><span class="qty">${fmt(i[0],i[1])}</span>
         <span class="iname">${esc(i[2])}${buy?'<span class="buy-chip">buy</span>':""}</span></label></li>`}).join("")}</ul>
-      <p class="section-title">Method</p>
+      <p class="section-title">${ico("clipboard")}Method</p>
       <ol class="steps">${r.s.map(x=>`<li><span>${esc(x)}</span></li>`).join("")}</ol>
       <p class="section-title">Worth knowing</p>
       <p class="tip">${esc(r.tip)}</p>
@@ -842,6 +1264,7 @@ function paint(){
         <div><b>${r.cb}g</b><span>carbs</span></div><div><b>${r.f}g</b><span>fat</span></div></div>
       <div class="sheet-actions">
         <button class="btn" data-cook>Start cooking mode</button>
+        <button class="btn ghost" data-cooked2>${ico("check")}${COOKED.has(r.id)?"Cooked — undo":"Mark as cooked"}</button>
         <button class="btn ghost" data-add2>${picked.has(r.id)?"Remove from list":"Add to list"}</button>
         <button class="btn ghost" data-print>Print card</button>
       </div>
@@ -850,8 +1273,12 @@ function paint(){
 document.getElementById("recipe-overlay").onclick=e=>{
   if(e.target.id==="recipe-overlay"||e.target.closest("[data-close]")) return shut("recipe-overlay");
   const sv=e.target.closest("[data-serv]");
-  if(sv){servings=+sv.dataset.serv;paint();return}
+  if(sv){SERVES[open.id]=+sv.dataset.serv;save();paint();return}
   if(e.target.closest("[data-cook]")) return startCook();
+  if(e.target.closest("[data-cooked2]")){
+    const on=!COOKED.has(open.id);
+    if(on&&!confirm(`Mark “${open.t}” as cooked? Its ingredients come out of your kitchen list.`)) return;
+    setCooked(open.id,on); paint(); draw(); return }
   if(e.target.closest("[data-add2]")){toggle(open.id);paint();draw();return}
   if(e.target.closest("[data-print]")) return window.print();
 };
@@ -873,41 +1300,69 @@ document.getElementById("cook-next").onclick=()=>{
 document.getElementById("cook-close").onclick=()=>document.getElementById("cook").classList.remove("open");
 
 /* ---------- menu generator ---------- */
+/* How many options a batch shows, and how many of those are deliberately
+   things you could cook tonight. The rest need a shop — otherwise a depleted
+   kitchen would only ever offer the same handful of well-stocked dinners. */
+const GEN_SIZE=15, GEN_READY=5;
+
+function shuffled(a){ a=a.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]] }
+  return a }
+
 function buildOptions(){
-  // round-robin across categories so the twelve are never all chicken,
-  // and inside each category the ones needing least shopping come first
-  const cats=["Chicken","Vegetarian","Fish","Beef","Comfort"];
-  const buckets={};
-  cats.forEach(c=>{
-    buckets[c]=POOL.filter(r=>r.c===c)
-      .map(r=>({r,miss:missing(r).length,jitter:Math.random()}))
-      .sort((a,b)=>(a.miss-b.miss)||(a.jitter-b.jitter))
-      .map(o=>o.r);
-  });
-  const out=[];
-  while(out.length<12){
-    let added=false;
-    for(const c of cats){
-      if(buckets[c].length&&out.length<12){out.push(buckets[c].shift());added=true}
+  // anything on the current menu you never ticked off follows you into the
+  // next week, already chosen, rather than quietly disappearing
+  const carried=week.filter(id=>!COOKED.has(id)&&rec(id));
+  // how long ago each recipe was last put on a menu, 0 = most recent week
+  const seen=new Map();
+  HISTORY.forEach((id,i)=>{ if(!seen.has(id)) seen.set(id,i) });
+  const staleness=r=>{ if(!seen.has(r.id)) return 0;      // never had it — best
+    const ago=seen.get(r.id);
+    return ago<7?3:ago<14?2:1 };                          // had it this week — worst
+
+  // shuffle first so equal-staleness recipes come out in a different order
+  // every press; the sort is stable, so the shuffle survives it
+  const all=shuffled(POOL).sort((a,b)=>staleness(a)-staleness(b));
+  const ready=all.filter(r=>missing(r).length<=1);
+  const shop =all.filter(r=>missing(r).length>1);
+
+  const out=[], used=new Set(), perCat={};
+  carried.forEach(id=>{ const r=rec(id);
+    if(r&&!used.has(id)){ out.push(r); used.add(id); perCat[r.c]=(perCat[r.c]||0)+1 } });
+  // round-robin by category so one category can never dominate a batch
+  const take=(list,n)=>{
+    for(let pass=0; pass<8 && n>0; pass++){
+      for(const r of list){
+        if(n<=0) break;
+        if(used.has(r.id)) continue;
+        if((perCat[r.c]||0)>pass) continue;
+        out.push(r); used.add(r.id); perCat[r.c]=(perCat[r.c]||0)+1; n--;
+      }
     }
-    if(!added) break;
-  }
-  genPool=out; genPicked=new Set();
+  };
+  const room=carried.length+GEN_SIZE;    // carried-over dishes are extra, not instead
+  take(ready,GEN_READY);                 // a few you could cook tonight
+  take(shop,room-out.length);            // the rest genuinely new
+  take(all,room-out.length);             // backstop if either side ran dry
+  genPool=out;
+  genPicked=new Set(carried.slice(0,7));
+  CARRIED=new Set(carried);
 }
+let CARRIED=new Set();
 function openGen(){buildOptions();paintGen();show("gen-overlay")}
 function paintGen(){
   const n=genPicked.size, full=n>=7;
   document.getElementById("gen-overlay").innerHTML=`<div class="sheet">
     <button class="close" data-close aria-label="Close">×</button>
     <div class="sheet-head" style="background:var(--ink)">
-      <span class="daytag">Twelve options · pick seven</span>
+      <span class="daytag">${GEN_SIZE} options · pick seven</span>
       <h2>Build the week</h2>
-      <div class="sheet-meta"><span>Ordered by how little shopping each needs</span></div>
+      <div class="sheet-meta"><span>${CARRIED.size?CARRIED.size+" carried over from last week · ":""}a fresh mix each time, skipping what you've eaten lately</span></div>
     </div>
     <div class="sheet-body">
       <div class="counter">
         <b>${n}/7</b><span>${full?"Full — untick one to swap":"chosen"}</span>
-        <button class="reroll" data-reroll>Shuffle twelve</button>
+        <button class="reroll" data-reroll>Show me another ${GEN_SIZE}</button>
       </div>
       ${genPool.map(r=>{
         const m=missing(r), on=genPicked.has(r.id), dis=!on&&full;
@@ -917,7 +1372,7 @@ function paintGen(){
             <h4>${esc(r.t)}</h4>
             <p>${esc(r.b)}</p>
             <span class="opt-tags">
-              <span>${r.c}</span><span>${r.time} min</span>
+              <span>${r.c}</span><span>${r.time} min</span>${CARRIED.has(r.id)?'<span class="carried">Carried over</span>':""}
               <span class="${m.length?"miss":"none"}">${m.length?"Buy: "+m.map(i=>i[2].split(",")[0]).join(", "):"Nothing to buy"}</span>
             </span>
           </span></label>`}).join("")}
@@ -942,6 +1397,9 @@ document.getElementById("gen-overlay").onclick=e=>{
     week=chosen.map(r=>r.id);
     spares=POOL.filter(r=>!genPicked.has(r.id)&&!missing(r).length&&r.time<=25).slice(0,2).map(r=>r.id);
     custom=true; picked=new Set(week);
+    // newest first, so the generator knows how recently each one was eaten
+    HISTORY=[...week,...HISTORY.filter(id=>!week.includes(id))].slice(0,HISTORY_MAX);
+    COOKED=new Set();                    // fresh week, nothing cooked yet
     shut("gen-overlay"); draw();
     document.getElementById("week-title").scrollIntoView({behavior:"smooth",block:"center"});
   }
@@ -973,7 +1431,7 @@ function paintKitchen(){
           </div>`:`
           <label class="kitem${kitchen.has(k)?" on":""}">
             <input type="checkbox" data-k="${k}" ${kitchen.has(k)?"checked":""}>${esc(l)}</label>`).join("")}</div>`).join("")}
-      <p class="section-title">Something not listed</p>
+      <p class="section-title">${ico("basket")}Something not listed</p>
       <div class="addrow">
         <input id="newitem" placeholder="e.g. Halloumi" aria-label="Add an item" autocomplete="off">
         <select id="newsection" aria-label="Which section it belongs in">
@@ -984,7 +1442,7 @@ function paintKitchen(){
       <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-2);margin-top:10px">
         The section is guessed as you type — change it if it guesses wrong. Added items are kept
         for good and shared with anyone using your code, but won't unlock new recipes on their own.</p>
-      <p class="section-title">Shared between phones</p>
+      <p class="section-title">${ico("shuffle")}Shared between phones</p>
       ${!SYNC.ready()?`
         <p class="sharenote">Sharing isn't switched on in this copy of the page yet.</p>`
        :SYNC.live()?`
@@ -1122,7 +1580,7 @@ function paintList(){
     if(!i[3]) return;
     const bkt=kitchen.has(i[3])?have:buy, k=i[2]+"|"+i[1];
     if(!bkt[k]) bkt[k]={qty:0,unit:i[1],name:i[2],none:i[0]==null};
-    bkt[k].qty+=(i[0]||0);
+    bkt[k].qty+=(i[0]||0)*scaleOf(r.id);   // each recipe at its own head count
   }));
   const rows=o=>Object.values(o).map(v=>`<li><label><input type="checkbox">
     <span class="qty">${v.none?"—":fmt(v.qty,v.unit,1)}</span><span class="iname">${esc(v.name)}</span></label></li>`).join("");
@@ -1131,20 +1589,21 @@ function paintList(){
     <div class="sheet-head" style="background:var(--ink)">
       <span class="daytag">${chosen.length} meal${chosen.length===1?"":"s"}</span>
       <h2>The one shop</h2>
-      <div class="sheet-meta"><span>Quantities for 4 servings of each</span></div>
+      <div class="sheet-meta"><span>Totalled at each recipe's own head count</span></div>
     </div>
     <div class="sheet-body">${chosen.length?`
-      <p class="section-title">What you're cooking</p>
+      <p class="section-title">${ico("clipboard")}What you're cooking</p>
       <div class="list-recipes">${chosen.map(r=>
-        `<span class="chip">${dayOf(r.id)} · ${esc(r.t)}<button data-rm="${r.id}" aria-label="Remove">×</button></span>`).join("")}</div>
-      <p class="section-title">Buy these</p>
+        `<span class="chip">${dayOf(r.id)} · ${esc(r.t)} · ${servesOf(r.id)}p<button data-rm="${r.id}" aria-label="Remove">×</button></span>`).join("")}</div>
+      <p class="section-title">${ico("trolley")}Buy these</p>
       ${Object.keys(buy).length?`<ul class="ing">${rows(buy)}</ul>`
         :`<p class="list-empty">Nothing. It's all in the kitchen already.</p>`}
-      <p class="section-title">Already yours — check before you leave</p>
+      <p class="section-title">${ico("fridge")}Already yours — check before you leave</p>
       <ul class="ing">${rows(have)}</ul>`
       :`<p class="list-empty">Nothing selected. Add meals with the <strong>+ List</strong> button on any card.</p>`}
       <div class="sheet-actions">
-        <button class="btn" data-print>Print list</button>
+        <button class="btn" data-ocado>Copy for Ocado</button>
+        <button class="btn ghost" data-print>Print list</button>
         <button class="btn ghost" data-close>Back to the week</button>
       </div>
     </div></div>`;
@@ -1155,6 +1614,31 @@ document.getElementById("list-overlay").onclick=e=>{
   const rm=e.target.closest("[data-rm]");
   if(rm){toggle(+rm.dataset.rm);paintList();draw();return}
   if(e.target.closest("[data-print]")) return window.print();
+  if(e.target.closest("[data-ocado]")){
+    /* Ocado's Shopping Lists box matches one plain product name per line.
+       Quantities and prep notes ("2 onions, finely diced") confuse the
+       matcher, so send it the bare noun and let the site pick the size. */
+    const chosen=week.concat(spares).filter(id=>picked.has(id)).map(rec);
+    const names=[];
+    chosen.forEach(r=>r.ing.forEach(i=>{
+      if(!i[3]||kitchen.has(i[3])) return;                 // skip what you already have
+      const n=i[2].split(",")[0]
+        .replace(/\s*\([^)]*\)/g,"")
+        .replace(/^(?:small|large|whole|fresh)\s+/i,"")   // "large cauliflower" -> "cauliflower"
+        .replace(/^(?:bunch|head|tin|tins|pack)\s+(?:of\s+)?/i,"")
+        .replace(/\s+bulb$/i,"")
+        .trim();
+      if(n&&!names.some(x=>x.toLowerCase()===n.toLowerCase())) names.push(n);
+    }));
+    const txt=names.join("\n");
+    const ta=document.createElement("textarea");
+    ta.className="copybox"; ta.value=txt;
+    const host=e.target.closest(".sheet-actions");
+    const old=host.parentElement.querySelector("textarea.copybox"); if(old) old.remove();
+    host.insertAdjacentElement("beforebegin",ta); ta.select();
+    try{navigator.clipboard.writeText(txt)}catch(err){}
+    e.target.textContent=names.length?`Copied ${names.length} items — paste into Ocado`:"Nothing to buy";
+    return }
 };
 
 document.addEventListener("keydown",e=>{

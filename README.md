@@ -1,4 +1,4 @@
-# This Week's Dinners
+# Kate's Kitchen
 
 Seven dinners a week, built from what's already in the kitchen. One self-contained page — no build step, no dependencies, no server code.
 
@@ -25,6 +25,36 @@ Send the address above by message. On each phone:
 3. Scroll down and tap **Add to Home Screen**, then **Add**.
 
 It gets its own icon and opens full-screen with no browser bar. This is why hosting matters: opening an HTML file from the Files app runs it from a `file://` address, where Safari blocks saving and treats the page as untrusted. A real `https://` address behaves like any other website.
+
+## The food
+
+52 recipes across Chicken, Beef, Pork, Fish, Vegetarian, Salads and Comfort. Every one is built to the same bar: **at least 30g of protein and no more than 18g of fat per serving**, with carbohydrate left at normal levels. The collection averages 34% of its energy from protein, comfortably above the 20% that Waitrose uses as its own high-protein threshold, and averages 13g of fat.
+
+What keeps the fat down: lean mince, pork loin and tenderloin, turkey, and Greek yogurt or cottage cheese wherever a recipe would traditionally reach for cream, butter or a fried crumb.
+
+No lamb anywhere. The only fish are salmon and tuna.
+
+## Generating a menu
+
+**Generate menu** shows 15 options, deliberately mixed: about five you could cook from what's in the kitchen right now, and the rest that need a shop. Without that mix a depleted kitchen would only ever offer the same well-stocked handful, which is what the first version did.
+
+It also remembers the last four weeks of menus and pushes those recipes to the back, so a fresh batch really is fresh. **Show me another 15** reshuffles.
+
+## Marking dishes as cooked
+
+Each day card has a **Cooked?** button, and so does each recipe. Ticking it does two things: the dish is struck through for the week, and **every ingredient in it comes out of My kitchen**, since you have just used them.
+
+Anything you have *not* ticked when you next generate a menu is **carried over automatically** — it appears at the top of the options, already chosen and badged *Carried over*, so a dish you planned but never got round to is not quietly lost. Committing a new week clears the ticks.
+
+Un-ticking a dish cannot put its ingredients back, because there is no way to know what was left, which is why the tick asks for confirmation first.
+
+## Servings and the shopping list
+
+Each recipe carries its own head count, set on the recipe card and starting at 2. The shopping list totals every dish at its own count and shows it on each chip, so a week of mostly-two dinners with one Sunday meal for five adds up correctly.
+
+**Copy for Ocado** outputs just the things you need to buy, as plain product names, one per line, with quantities and preparation notes stripped ("head cabbage, shredded" becomes "cabbage"). Paste that into Ocado's Shopping Lists box — *My Ocado → Shopping Lists* on the site, or *Meals & Lists* in the app — and it matches the products so you can add the lot to your trolley in one go.
+
+There is no way to fill an Ocado basket directly: Ocado publishes no API for it, and the only alternative would be automating a logged-in session with your password.
 
 ## Adding your own items
 
@@ -61,6 +91,10 @@ To change what the page assumes before anyone has touched it, edit the `PANTRY` 
 ```
 
 The last number is `1` for *in the kitchen* and `0` for *not*. Change the numbers, save the file, upload it over the old one on GitHub, done.
+
+## Changing the look
+
+Colours are CSS custom properties at the very top of the `<style>` block — `--ink`, `--chalk`, `--paper`, `--turmeric`, `--herb`, `--paprika`, `--line` — plus `--radius` for how rounded everything is. Category colours live in the `COL` object in the script. Icons are inline SVG in the `ICON` object; the page deliberately loads no icon font or image files, so that it stays one portable file.
 
 ## Privacy
 
